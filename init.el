@@ -300,6 +300,7 @@ regardless of whether the current buffer is in `eww-mode'."
 
 (use-package winum
   :ensure t
+  :bind (("C-x w m" . winum-select-window-0))
   :init
   (winum-mode 1))
 
@@ -651,32 +652,6 @@ If FILE already exists, signal an error."
 
 ;; Make `if' a bit less stupid looking in elisp
 (put 'if 'lisp-indent-function 'defun)
-
-(defun winny/select-minibuffer (&optional focus-other-frame)
-  "Select the minibuffer. Use a prefix argument to select (and focus) 
-a minibuffer in a different frame. "
-  (interactive "P")
-  (let ((w (active-minibuffer-window)))
-    (if w
-      (let* ((f (window-frame w))
-             (feq (eq (selected-frame) f)))
-        (cond
-         ((and (not feq) focus-other-frame)
-          (select-frame-set-input-focus f)
-          (select-window w))
-         ((and (not feq) (not focus-other-frame))
-          (message "Use %s %s to select minibuffer in other frame."
-                 (let ((pfx-keys (where-is-internal 'universal-argument)))
-                   (if pfx-keys
-                     (key-description (car pfx-keys))
-                     "<PREFIX>"))
-                 (key-description (this-command-keys)))
-          (beep))
-         (feq
-          (select-window w))))
-      (beep)))
-  nil)
-(global-set-key (kbd "C-x w m") 'winny/select-minibuffer)
 
 (display-battery-mode (if battery-status-function 1 -1))
 
