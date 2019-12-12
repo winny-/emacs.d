@@ -1,0 +1,8 @@
+* winny's personal .emacs.d
+
+  Things are messy and personal. This should read as an artifact of
+  how yet another Emacs user configures Emacs.
+
+* License
+  Unless otherwise specified in the file or here, files are licensed
+  under Unlicense. See [[file:LICENSE][LICENSE]].
