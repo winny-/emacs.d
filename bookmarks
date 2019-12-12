@@ -1,0 +1,216 @@
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*- 
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("Downloads"
+ (filename . "~/Downloads/")
+ (front-context-string . "11688446_8528659")
+ (rear-context-string . "44 Nov  7  2017 ")
+ (position . 256))
+("cs-557"
+ (filename . "~/docs/uni/classes/cs-557/")
+ (front-context-string . "handouts\n  drwxr")
+ (rear-context-string . "96 Sep  5 15:04 ")
+ (position . 241))
+("(elisp) Minibuffer Windows"
+ (front-context-string . "ent to determine")
+ (rear-context-string . "t is not suffici")
+ (position . 1085592)
+ (filename . "/usr/share/info/emacs-26/elisp")
+ (info-node . "Minibuffer Windows")
+ (handler . Info-bookmark-jump))
+("phy-122"
+ (filename . "~/docs/uni/classes/phy-122/")
+ (front-context-string . "Phy 122-402 syll")
+ (rear-context-string . "48 Sep 10 23:04 ")
+ (position . 250))
+("math-205"
+ (filename . "~/docs/uni/classes/math-205/")
+ (front-context-string . "finance-formulas")
+ (rear-context-string . "96 Sep 17 18:46 ")
+ (position . 244))
+("ie-367"
+ (filename . "~/docs/uni/classes/ie-367/")
+ (front-context-string . "handouts\n  -rw-r")
+ (rear-context-string . "96 Sep 17 18:46 ")
+ (position . 242))
+("classes"
+ (filename . "~/docs/uni/classes/")
+ (front-context-string . "cs-557\n  drwxr-x")
+ (rear-context-string . "96 Sep 13 00:17 ")
+ (position . 235))
+("(elisp) Font Lock Basics"
+ (front-context-string . "\n23.6.1 Font Loc")
+ (rear-context-string . " Font Lock Mode\n")
+ (position . 1449286)
+ (filename . "/usr/share/info/emacs-26/elisp")
+ (info-node . "Font Lock Basics")
+ (handler . Info-bookmark-jump))
+("(elisp) System Environment"
+ (front-context-string . "     a string.  ")
+ (rear-context-string . "ariable VAR, as\n")
+ (position . 3229094)
+ (filename . "/usr/share/info/emacs-26/elisp")
+ (info-node . "System Environment")
+ (handler . Info-bookmark-jump))
+("sxhkdrc"
+ (filename . "~/.config/sxhkd/sxhkdrc")
+ (front-context-string . "#\n# wm independe")
+ (rear-context-string)
+ (position . 1))
+("xbindkeysrc"
+ (filename . "~/.xbindkeysrc.scm")
+ (front-context-string . "(define (path-jo")
+ (rear-context-string)
+ (position . 1))
+("bspwmrc"
+ (filename . "~/.config/bspwm/bspwmrc")
+ (front-context-string . "\n# Keybindings p")
+ (rear-context-string)
+ (position . 12))
+("orgcard.txt"
+ (filename . "~/docs/orgcard.txt")
+ (front-context-string . "capture a new it")
+ (rear-context-string . "===============\n")
+ (position . 2681))
+("sw"
+ (filename . "~/docs/ttrpg/sw/")
+ (front-context-string)
+ (rear-context-string . "79 Apr  8 21:10 ")
+ (position . 1017))
+("i3-config"
+ (filename . "~/.config/i3/config")
+ (front-context-string . " in horizontal o")
+ (rear-context-string . "e right\n\n# split")
+ (position . 2429))
+("ssh-hack.rktd"
+ (filename . "~/.config/ssh-hack.rktd")
+ (front-context-string)
+ (rear-context-string . "[i#C\\\\vw]12aA\"})")
+ (position . 658))
+("99-problems.ml"
+ (filename . "~/code/practice/ocaml-tutorial/99-problems.ml")
+ (front-context-string . "(***************")
+ (rear-context-string)
+ (position . 1))
+("orgcard.pdf"
+ (filename . "~/docs/orgcard.pdf")
+ (front-context-string . "%PDF-1.4\n%\320\324\305\330\n3")
+ (rear-context-string)
+ (position . 1)
+ (page . 1)
+ (handler . doc-view-bookmark-jump))
+("org-capture-last-stored-marker"
+ (filename . "~/docs/todo/todo.org")
+ (front-context-string . "** TODO Get star")
+ (rear-context-string . "erver solution\n\n")
+ (position . 2193))
+("org-refile-last-stored"
+ (filename . "~/docs/todo/todo.org")
+ (front-context-string . "** TODO Get star")
+ (rear-context-string . "erver solution\n\n")
+ (position . 2193))
+("unsorted.org"
+ (filename . "~/docs/unsorted.org")
+ (front-context-string . "\n* 2018\n** 2018-")
+ (rear-context-string)
+ (position . 1))
+("(elisp) Basic Parameters"
+ (front-context-string)
+ (rear-context-string . "will be ‘nil’.\n\n")
+ (position . 1928215)
+ (filename . "/usr/share/info/elisp")
+ (info-node . "Basic Parameters")
+ (handler . Info-bookmark-jump))
+("journal.org"
+ (filename . "~/docs/journal/journal.org")
+ (front-context-string . "* 2018\n** 2018-0")
+ (rear-context-string)
+ (position . 1))
+("org-capture-last-stored"
+ (filename . "~/docs/unsorted.org")
+ (front-context-string . "**** rackfest 20")
+ (rear-context-string . "06-05 Wednesday\n")
+ (position . 50))
+("(org) In-buffer settings"
+ (front-context-string . "f\n\n     Then the")
+ (rear-context-string . "-mode’ turned of")
+ (position . 631650)
+ (filename . "/usr/share/info/org")
+ (info-node . "In-buffer settings")
+ (handler . Info-bookmark-jump))
+("journal"
+ (filename . "~/docs/journal/")
+ (front-context-string . "2015-11-11.txt\n ")
+ (rear-context-string . "62 Nov 15  2015 ")
+ (position . 236))
+("(efaq) Learning how to do something"
+ (front-context-string . "There are severa")
+ (rear-context-string . "==============\n\n")
+ (position . 19877)
+ (filename . "/usr/share/info/efaq")
+ (info-node . "Learning how to do something")
+ (handler . Info-bookmark-jump))
+("refcard.pdf"
+ (filename . "~/docs/refcard.pdf")
+ (front-context-string . "%PDF-1.5\n%\320\324\305\330\n3")
+ (rear-context-string)
+ (position . 1)
+ (page . 1)
+ (handler . doc-view-bookmark-jump))
+("thoughts"
+ (filename . "~/docs/thoughts")
+ (front-context-string)
+ (rear-context-string . "or customize it.")
+ (position . 66))
+("dwm/config.h"
+ (filename . "~/code/dwm-staging-actual/dwm-6.1/config.h")
+ (front-context-string)
+ (rear-context-string . "     {0} },\n};\n\n")
+ (position . 6816))
+("xsession"
+ (filename . "~/.xsession")
+ (front-context-string . "#!/bin/sh\n#exec ")
+ (rear-context-string)
+ (position . 1))
+("todo.org"
+ (filename . "~/docs/todo/todo.org")
+ (front-context-string . "*** TODO Work on")
+ (rear-context-string . "er spring break\n")
+ (position . 678))
+("ssh-config"
+ (filename . "~/.ssh/config")
+ (front-context-string . "ServerAliveInter")
+ (rear-context-string)
+ (position . 1))
+("zshrc"
+ (filename . "~/.zshrc")
+ (front-context-string . "# Path to your o")
+ (rear-context-string)
+ (position . 1))
+("code"
+ (filename . "~/code/")
+ (front-context-string . "and-the-rest.git")
+ (rear-context-string . "96 Feb  7 01:02 ")
+ (position . 232))
+("books"
+ (filename . "~/docs/books/")
+ (front-context-string . "2014_car_hackers")
+ (rear-context-string . "10 Oct 14  2015 ")
+ (position . 250))
+("uni"
+ (filename . "~/docs/uni/")
+ (front-context-string . "cs-317\n  drwxr-x")
+ (rear-context-string . "96 Feb 26 16:32 ")
+ (position . 236))
+("todo"
+ (filename . "~/docs/todo/")
+ (front-context-string . "2017-06-02.org\n ")
+ (rear-context-string . "88 Jun  2 22:26 ")
+ (position . 231))
+("init"
+ (filename . "~/.emacs.d/init.el")
+ (front-context-string . ";;;;;;;;;;;;;;;;")
+ (rear-context-string)
+ (position . 1))
+)
