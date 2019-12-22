@@ -370,6 +370,11 @@ regardless of whether the current buffer is in `eww-mode'."
 
 (use-package fast-scroll
   :ensure t
+  :config
+  ;; Keep `mode-line-format' the same. This addresses a problem with
+  ;; disappearing winum mode-line indicies.
+  (defun fast-scroll-default-mode-line ()
+    mode-line-format)
   :init
   (fast-scroll-config)
   (fast-scroll-mode 1))
