@@ -664,3 +664,21 @@ If FILE already exists, signal an error."
 (display-battery-mode (if battery-status-function 1 -1))
 
 (add-to-list 'Info-directory-list "~/docs/info" t)
+
+(defun winny/check-if-shebang-changed-hook (begin end region)
+  "Hook for `after-change-functions' that checks to see if the
+automatically set mode should be changed, and change it. For
+example changing a shebang from #!/bin/awk to #!/bin/sh will
+change the major mode automatically. Additionally if a -*- mode:
+somemode -*- is inserted into the buffer, automatically apply
+that major mode.
+
+Concern: since this is called every time an edit is made, it
+should be extremely fast. Presently it appears to be a little bit
+slower than electric-pair-mode's hook.
+
+Todo: streamline when the checks take place, for example only if
+line 0 changes, and optionally when a modeline is modified."
+  (when (and (not (minibufferp)) buffer-file-name)
+    (set-auto-mode t)))
+(add-hook 'after-change-functions 'winny/check-if-shebang-changed-hook)
