@@ -307,8 +307,7 @@ regardless of whether the current buffer is in `eww-mode'."
 (use-package default-text-scale
   :ensure t
   :init
-  (default-text-scale-mode 1)
-  )
+  (default-text-scale-mode 1))
 
 (use-package nix-mode
   :ensure t)
