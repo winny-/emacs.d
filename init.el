@@ -310,6 +310,9 @@ regardless of whether the current buffer is in `eww-mode'."
   (default-text-scale-mode 1)
   )
 
+(use-package nix-mode
+  :ensure t)
+
 (use-package paredit
   :ensure t
   :config
