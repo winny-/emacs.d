@@ -652,6 +652,7 @@ If FILE already exists, signal an error."
              '("/etc/portage/package\\.\\(accept_.*\\|use.*\\|unmask\\|mask\\|env\\)"
                . conf-portage-mode))
 (add-to-list 'auto-mode-alist '("/etc/conf\\.d/" . sh-mode))
+(add-to-list 'auto-mode-alist '("/etc/\\(portage/\\)?make.conf" . sh-mode))
 
 (defun remove-from-list (list-var element)
   "Remove element from list-var"
