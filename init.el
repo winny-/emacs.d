@@ -282,7 +282,6 @@ regardless of whether the current buffer is in `eww-mode'."
 ;    (transmission-add (read-string "Magnet URI: "))))
 
 (require 'use-package)
-;;(use-package cyberpunk-theme :defer t :ensure t :load-path "~/code/cyberpunk-theme.el")
 
 (use-package keychain-environment
   :ensure t
@@ -447,7 +446,8 @@ regardless of whether the current buffer is in `eww-mode'."
   :bind (("C-x M-s" . swiper)))
 
 (use-package cyberpunk-theme
-  :ensure t)
+  :ensure t
+  :load-path "~/code/cyberpunk-theme.el")
 
 (use-package undo-tree
   :ensure t

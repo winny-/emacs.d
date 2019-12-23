@@ -244,7 +244,11 @@ static char *gnus-pointer[] = {
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
    (quote
-    ((elisp-lint-indent-specs
+    ((eval when
+           (fboundp
+            (quote rainbow-mode))
+           (rainbow-mode 1))
+     (elisp-lint-indent-specs
       (when-let . 1))
      (org-static-blog-page-header . "
 <link href=\"static/style.css?v=1.5\" rel=\"stylesheet\" type=\"text/css\" />
@@ -425,10 +429,5 @@ blog.winny.tech :: <ul class=\"inline-list\">
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 89)) (:foreground "#d3d3d3" :background "#000000"))))
- '(Info-quoted ((t (:foreground "#ff69b4"))))
- '(diredp-compressed-file-suffix ((t (:foreground "deep sky blue"))))
- '(diredp-symlink ((t (:foreground "magenta3"))))
- '(ivy-current-match ((t (:box (:line-width 3 :color "grey75" :style pressed-button) :weight bold))))
- '(term ((t (:inherit default :background "#000000" :foreground "#d3d3d3"))))
+ '(Info-quoted ((t (:inherit nil))))
  '(variable-pitch ((t (:family "Go Medium")))))
