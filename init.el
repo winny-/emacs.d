@@ -683,3 +683,11 @@ slower than electric-pair-mode's hook.
 
 (add-hook 'find-file-hook 'winny/add-shebang-check-locally)
 (add-hook 'after-change-major-mode-hook 'winny/add-shebang-check-locally)
+
+(defun winny/change-prop-line-mode (mode &optional dont-change-mode)
+  "Change the prop line's major mode. If DONT-CHANGE-MODE is not
+  nil, dont change to that mode first."
+  (interactive "aMajor mode: \nP")
+  (unless dont-change-mode
+    (funcall-interactively mode))
+  (add-file-local-variable-prop-line 'mode mode nil))
