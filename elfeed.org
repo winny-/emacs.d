@@ -13,6 +13,7 @@
 ** https://alex-hhh.github.io/feeds/all.rss.xml :racket:
 ** https://defn.io/index.xml :racket:
 ** https://www.jwz.org/blog/feed/
+** https://dataswamp.org/~solene/rss.xml
 * Projects :elfeed:
 ** https://gentoo.org/feeds/news.xml
 ** https://blog.racket-lang.org/feeds/all.rss.xml :racket:

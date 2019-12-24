@@ -693,4 +693,6 @@ slower than electric-pair-mode's hook.
   (interactive "aMajor mode: \nP")
   (unless dont-change-mode
     (funcall-interactively mode))
-  (add-file-local-variable-prop-line 'mode mode nil))
+  (delete-file-local-variable-prop-line 'mode)
+  (let ((sans-mode (intern (replace-regexp-in-string "-mode$" "" (symbol-name mode)))))
+    (add-file-local-variable-prop-line 'mode sans-mode nil)))
