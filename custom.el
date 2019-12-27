@@ -244,7 +244,11 @@ static char *gnus-pointer[] = {
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
    (quote
-    ((eval when
+    ((org-static-blog-page-header . "
+<link href=\"static/style.css?v=1.6\" rel=\"stylesheet\" type=\"text/css\" />
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+")
+     (eval when
            (fboundp
             (quote rainbow-mode))
            (rainbow-mode 1))
