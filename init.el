@@ -665,27 +665,7 @@ If FILE already exists, signal an error."
 
 (add-to-list 'Info-directory-list "~/docs/info" t)
 
-(defun winny/add-shebang-check-locally ()
-  (interactive)
-  (when (and (let ((f (buffer-file-name))) (and f (not (string-equal (file-name-nondirectory f) "COMMIT_EDITMSG")))))
-    (add-hook 'after-change-functions 'winny/check-if-shebang-changed-hook t t)))
-
-(defun winny/check-if-shebang-changed-hook (beginning end region)
-  "Hook for `after-change-functions' that checks if the shebang has changed, and if a different mode should be used.
-
-Concern: since this is called every time an edit is made, it
-should be extremely fast. Presently it appears to be a little bit
-slower than electric-pair-mode's hook.
-"
-  (when (and (not (minibufferp)) ; omit minibuffer
-             buffer-file-name ; omit indirect buffers
-             (<= beginning (save-excursion (goto-char (point-min)) (point-at-eol))) ; first line only
-             (save-excursion (goto-char (point-min)) (looking-at "#!")) ; Only if first two chars look like a shebang.
-             )
-    (set-auto-mode t)))
-
-(add-hook 'find-file-hook 'winny/add-shebang-check-locally)
-(add-hook 'after-change-major-mode-hook 'winny/add-shebang-check-locally)
+(load "shebang-change.el" nil t t)
 
 (defun winny/change-prop-line-mode (mode &optional dont-change-mode)
   "Change the prop line's major mode. If DONT-CHANGE-MODE is not
