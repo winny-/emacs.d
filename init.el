@@ -385,9 +385,18 @@ regardless of whether the current buffer is in `eww-mode'."
     "Complete ivy with entered text ignoring completions."
     (interactive)
     (ivy-alt-done t))
-  (unless terminal-frame
-    (bind-keys :map ivy-mode-map
-     	       ("<C-return>" . winny/ivy-force-done))))
+  (bind-keys :map ivy-mode-map
+     	       ("<C-return>" . winny/ivy-force-done)))
+
+(use-package ivy-prescient
+  :ensure t
+  :init
+  (ivy-prescient-mode))
+
+(use-package prescient
+  :ensure t
+  :init
+  (prescient-persist-mode 1))
 
 (use-package projectile
   :ensure t
@@ -455,29 +464,9 @@ regardless of whether the current buffer is in `eww-mode'."
   ;(global-undo-tree-mode)
   )
 
-;; XXX: 26.3 appears to cause problems with switching themes in emacs daemon
-(defun winny/switch-theme (the-theme)
-  (interactive
-   (list
-    (intern (completing-read "Load custom theme: "
-			     (mapcar 'symbol-name
-				     (custom-available-themes))))))
-  (mapc #'disable-theme custom-enabled-themes)
-  (load-theme the-theme t)
-  (sml/setup)
-  (mapc #'redraw-frame (frame-list))
-;  (redraw-display)
-;  (redisplay)
-;  (force-window-update)
-;  (keyboard-quit)
-  )
-
-(defun winny/default-theme (&rest ignore)
-  (interactive)
-  (winny/switch-theme 'cyberpunk))
-
-;; Default theme
-(add-hook 'after-init-hook 'winny/default-theme)
+(load "switch-theme.el" t t)
+(add-hook 'winny/after-theme-switch-hook 'sml/setup)
+(setq winny/default-theme 'cyberpunk)
 
 (global-set-key (kbd "C-x c") 'compile)
 (global-set-key (kbd "C-x y") 'browse-kill-ring)
