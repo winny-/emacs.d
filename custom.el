@@ -124,11 +124,6 @@ static char *gnus-pointer[] = {
  '(helm-mode nil)
  '(help-window-select (quote other))
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
- '(highlight-symbol-colors
-   (--map
-    (solarized-color-blend it "#fdf6e3" 0.25)
-    (quote
-     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
  '(highlight-symbol-foreground-color "#586e75")
  '(highlight-tail-colors
    (quote
@@ -370,7 +365,6 @@ blog.winny.tech :: <ul class=\"inline-list\">
  '(scroll-bar-mode nil)
  '(show-paren-delay 0.0)
  '(show-paren-mode t)
- '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
  '(sml/col-number-format "%3c")
  '(sml/line-number-format "%4l")
  '(sml/mode-width (quote right))

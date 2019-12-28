@@ -297,11 +297,13 @@ regardless of whether the current buffer is in `eww-mode'."
   :ensure t
   :mode "\\.[Cc][Ss][Vv]\\'")
 
-(use-package winum
-  :ensure t
-  :bind (("C-x w m" . winum-select-window-0))
-  :init
-  (winum-mode 1))
+;; XXX: this causes load-theme to hang.
+;; XXX: Calling (winum-mode 1) causes similar hang.
+;; (use-package winum
+;;   :ensure t
+;;   :bind (("C-x w m" . winum-select-window-0))
+;;   :init
+;;   (winum-mode 1))
 
 (use-package default-text-scale
   :ensure t
@@ -465,7 +467,11 @@ regardless of whether the current buffer is in `eww-mode'."
   )
 
 (load "switch-theme.el" t t)
-(add-hook 'winny/after-theme-switch-hook 'sml/setup)
+(add-hook 'winny/after-theme-switch-hook 'sml/setup t t)
+(defun winum-enable () (winum-mode 1) (keyboard-quit))
+(defun winum-disable () (winum-mode -1))
+;(add-hook 'winny/before-theme-switch-hook 'winum-disable t t)
+;(add-hook 'winny/after-theme-switch-hook 'winum-enable t t)
 (setq winny/default-theme 'cyberpunk)
 
 (global-set-key (kbd "C-x c") 'compile)
