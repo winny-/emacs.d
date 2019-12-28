@@ -182,7 +182,7 @@ static char *gnus-pointer[] = {
  '(ido-confirm-unique-completion t)
  '(indicate-buffer-boundaries t)
  '(inhibit-startup-screen t)
- '(initial-buffer-choice (lambda nil (get-buffer "*dashboard*")))
+ '(initial-buffer-choice nil)
  '(irfc-assoc-mode t)
  '(irfc-directory "~/docs/RFC")
  '(irfc-download-base-url "https://www.ietf.org/rfc/")
