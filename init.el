@@ -61,8 +61,12 @@
 ;;             `("\\*Async Shell Command\\*.*" (,#'display-buffer-no-window)))
 ;(load "webkit.el" nil t t)
 
-(setq-default frame-title-format '("(Emacs) %b [%m] "
-                                   (:eval (replace-regexp-in-string (regexp-quote (or (getenv "HOME") "")) "~" default-directory))))
+;; Todo: dired+/dired
+(setq-default frame-title-format '("(Emacs) "
+                                   (:eval (if buffer-file-name
+                                            (replace-regexp-in-string (regexp-quote (or (getenv "HOME") "")) "~" buffer-file-name)
+                                            (buffer-name)))
+                                   " [%m]"))
 
 (setq my-backup-directory "~/.emacs.d/backup")
 ;; Sane backup file settings
