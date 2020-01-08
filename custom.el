@@ -242,7 +242,12 @@ static char *gnus-pointer[] = {
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
    (quote
-    ((org-static-blog-page-header . "
+    ((org-export-html-style . "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/stylesheet.css\" />")
+     (org-static-blog-page-header . "
+<link href=\"static/style.css?v=1.7\" rel=\"stylesheet\" type=\"text/css\" />
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+")
+     (org-static-blog-page-header . "
 <link href=\"static/style.css?v=1.6\" rel=\"stylesheet\" type=\"text/css\" />
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 ")

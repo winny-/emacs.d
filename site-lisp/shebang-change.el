@@ -19,7 +19,7 @@ Concern: since this is called every time an edit is made, it
 should be extremely fast. Presently it appears to be a little bit
 slower than electric-pair-mode's hook.
 "
-  (message "%s" winny/removed-shebang)
+;  (message "%s" winny/removed-shebang)
   (when (and (not (minibufferp)) ; omit minibuffer
              buffer-file-name ; omit indirect buffers
              (<= beginning (save-excursion (goto-char (point-min)) (point-at-eol))) ; first line only

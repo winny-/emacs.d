@@ -61,7 +61,8 @@
 ;;             `("\\*Async Shell Command\\*.*" (,#'display-buffer-no-window)))
 ;(load "webkit.el" nil t t)
 
-(setq-default frame-title-format '("(Emacs) %b [%m] %f"))
+(setq-default frame-title-format '("(Emacs) %b [%m] "
+                                   (:eval (replace-regexp-in-string (regexp-quote (or (getenv "HOME") "")) "~" default-directory))))
 
 (setq my-backup-directory "~/.emacs.d/backup")
 ;; Sane backup file settings
@@ -387,7 +388,7 @@ regardless of whether the current buffer is in `eww-mode'."
     "Complete ivy with entered text ignoring completions."
     (interactive)
     (ivy-alt-done t))
-  (bind-keys :map ivy-mode-map
+  (bind-keys :map ivy-minibuffer-map
      	       ("<C-return>" . winny/ivy-force-done)))
 
 (use-package ivy-prescient

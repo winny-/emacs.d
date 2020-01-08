@@ -14,6 +14,7 @@
 ** https://defn.io/index.xml :racket:
 ** https://www.jwz.org/blog/feed/
 ** https://dataswamp.org/~solene/rss.xml
+** https://www.bunniestudios.com/blog/?feed=rss2
 * Projects :elfeed:
 ** https://gentoo.org/feeds/news.xml
 ** https://blog.racket-lang.org/feeds/all.rss.xml :racket:
