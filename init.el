@@ -664,6 +664,8 @@ If FILE already exists, signal an error."
 (display-battery-mode (if battery-status-function 1 -1))
 
 (add-to-list 'Info-directory-list "~/docs/info" t)
+(bind-key "y" #'Info-copy-current-node-name Info-mode-map)
+
 
 (load "shebang-change.el" nil t t)
 
