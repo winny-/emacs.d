@@ -66,7 +66,9 @@
                                    (:eval (if buffer-file-name
                                             (replace-regexp-in-string (regexp-quote (or (getenv "HOME") "")) "~" buffer-file-name)
                                             (buffer-name)))
-                                   " [%m]"))
+                                   " [%m] { "
+                                   (:eval (string-join (mapcar #'(lambda (w) (buffer-name (window-buffer w))) (window-list)) ", "))
+                                   " }"))
 
 (setq my-backup-directory "~/.emacs.d/backup")
 ;; Sane backup file settings
