@@ -680,3 +680,12 @@ If FILE already exists, signal an error."
   (delete-file-local-variable-prop-line 'mode)
   (let ((sans-mode (intern (replace-regexp-in-string "-mode$" "" (symbol-name mode)))))
     (add-file-local-variable-prop-line 'mode sans-mode nil)))
+
+(defun winny/make-shebanged-file-executable ()
+  (interactive)
+  (when (and (save-excursion (goto-char (point-min)) (looking-at "#!"))
+             (not (file-executable-p buffer-file-name)))
+    (message "Making `%s' executable..." buffer-file-name)
+    (executable-chmod)))
+
+(add-hook 'after-save-hook 'winny/make-shebanged-file-executable)
