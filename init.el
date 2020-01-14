@@ -668,6 +668,17 @@ If FILE already exists, signal an error."
 (add-to-list 'Info-directory-list "~/docs/info" t)
 (bind-key "y" #'Info-copy-current-node-name Info-mode-map)
 
+(defun afs/org-replace-link-by-link-description ()
+  "Replace an org link by its description or if empty its address"
+  (interactive)
+  (if (org-in-regexp org-bracket-link-regexp 1)
+      (save-excursion
+        (let ((remove (list (match-beginning 0) (match-end 0)))
+              (description (if (match-end 3)
+                               (org-match-string-no-properties 3)
+                             (org-match-string-no-properties 1))))
+          (apply 'delete-region remove)
+          (insert description)))))
 
 (load "shebang-change.el" nil t t)
 
