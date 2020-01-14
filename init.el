@@ -374,7 +374,10 @@ regardless of whether the current buffer is in `eww-mode'."
 
 (use-package neotree
   :ensure t
-  :bind (([f8] . neotree-toggle)))
+  :bind (([f8] . neotree-toggle))
+  :bind (:map neotree-mode-map
+              ("^" . neotree-select-up-node)
+              ("v" . neotree-select-down-node)))
 
 (use-package fast-scroll
   :ensure t
