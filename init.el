@@ -708,3 +708,4 @@ If FILE already exists, signal an error."
     (executable-chmod)))
 
 (add-hook 'after-save-hook 'winny/make-shebanged-file-executable)
+(put 'narrow-to-region 'disabled nil)
