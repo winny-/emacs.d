@@ -393,7 +393,6 @@ regardless of whether the current buffer is in `eww-mode'."
   (defun fast-scroll-default-mode-line ()
     mode-line-format)
   :init
-  (fast-scroll-config)
   (fast-scroll-mode 1))
 
 (use-package ivy
