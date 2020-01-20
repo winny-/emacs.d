@@ -147,8 +147,14 @@
 (define-key global-map "\C-cc" 'org-capture)
 (global-set-key (kbd "C-x K") 'bury-buffer)
 
-(global-set-key (kbd "M-N") '(lambda () (interactive) (scroll-up 1)))
-(global-set-key (kbd "M-P") '(lambda () (interactive) (scroll-down 1)))
+(defun scroll-up-1 ()
+  (interactive)
+  (scroll-up 1))
+(defun scroll-down-1 ()
+  (interactive)
+  (scroll-down 1))
+(global-set-key (kbd "M-N") 'scroll-up-1)
+(global-set-key (kbd "M-P") 'scroll-down-1)
 
 (define-key org-mode-map (kbd "M-n") 'org-next-visible-heading)
 (define-key org-mode-map (kbd "M-p") 'org-previous-visible-heading)
