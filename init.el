@@ -329,6 +329,15 @@ regardless of whether the current buffer is in `eww-mode'."
   (add-hook 'god-mode-enabled-hook 'my-update-cursor)
   (add-hook 'god-mode-disabled-hook 'my-update-cursor))
 
+(use-package paren-face
+  :ensure t
+  :config
+  (setq paren-face-regexp (rx (any "()[]{}")))
+  (add-to-list 'paren-face-modes 'racket-mode)
+  (add-to-list 'paren-face-modes 'racket-reply-mode)
+  (add-to-list 'paren-face-modes 'emacs-lisp-mode)
+  (add-to-list 'paren-face-modes 'lisp-mode))
+
 (use-package default-text-scale
   :ensure t
   :init
