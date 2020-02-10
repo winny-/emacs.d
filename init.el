@@ -666,7 +666,7 @@ If FILE already exists, signal an error."
 
 (defvar conf-portage-font-lock-keywords
   '(;; package atom
-    ("^[A-Za-z0-9/_:=><.*-]+" 0 'font-lock-function-name-face)
+    ("^[A-Za-z0-9/_:=><.*-~]+" 0 'font-lock-function-name-face)
     ;; -useflag and **
     ("[ \t]+\\(-[~0-9A-Za-z_-]+\\|\\*\\*\\)" 1 'diff-removed)
     ;; useflag +useflag
