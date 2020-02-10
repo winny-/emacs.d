@@ -318,6 +318,17 @@ regardless of whether the current buffer is in `eww-mode'."
 ;;   :init
 ;;   (winum-mode 1))
 
+(use-package god-mode
+  :ensure t
+  :bind (("<escape>" . god-local-mode))
+  :init
+  (defun my-update-cursor ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only)
+                        'hbar
+                        'box)))
+  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
+  (add-hook 'god-mode-disabled-hook 'my-update-cursor))
+
 (use-package default-text-scale
   :ensure t
   :init
