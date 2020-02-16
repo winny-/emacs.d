@@ -296,6 +296,9 @@ regardless of whether the current buffer is in `eww-mode'."
 
 (require 'use-package)
 
+(use-package jade-mode
+  :ensure t)
+
 (use-package keychain-environment
   :ensure t
   :init
