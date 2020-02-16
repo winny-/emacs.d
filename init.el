@@ -542,13 +542,15 @@ regardless of whether the current buffer is in `eww-mode'."
             (revert-buffer t t t))
           (message "Backing file `%s' no longer exists! Skipping." fn))))))
 
-(defun kill-all-missing-buffers ()
+(defun kill-all-missing-buffers (no-ask)
   "Kill all buffers with missing files"
-  (interactive)
+  (interactive "P")
   (dolist (buffer (buffer-list))
     (let ((fn (buffer-file-name buffer)))
       (when (and fn (not (file-exists-p fn)))
-        (kill-buffer-ask buffer)))))
+        (if no-ask
+          (kill-buffer buffer)
+          (kill-buffer-ask buffer))))))
 
 (defun toggle-word-wrap ()
   "Toggle word wrap"
