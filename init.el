@@ -518,7 +518,10 @@ regardless of whether the current buffer is in `eww-mode'."
 (use-package flymake-shellcheck
   :ensure t
   :init
-  (add-hook 'sh-mode-hook 'flymake-shellcheck-load))
+  (add-hook 'sh-mode-hook 'flymake-shellcheck-load)
+  (defun winny/sh-enable-shellcheck-hook ()
+    (flymake-mode (if (member sh-shell '(bash sh ksh88)) 1 -1)))
+  (add-hook 'sh-set-shell-hook 'winny/sh-enable-shellcheck-hook))
 
 (use-package helpful
   :ensure t
@@ -757,6 +760,3 @@ If FILE already exists, signal an error."
 (add-hook 'after-save-hook 'winny/make-shebanged-file-executable)
 (put 'narrow-to-region 'disabled nil)
 
-(defun winny/sh-enable-shellcheck-hook ()
-  (flymake-mode (if (member sh-shell '(bash sh ksh88)) 1 -1)))
-(add-hook 'sh-set-shell-hook 'winny/sh-enable-shellcheck-hook)
