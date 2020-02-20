@@ -1,3 +1,6 @@
+;;; init --- my configuration
+;;; Commentary:
+;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Customize
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -70,7 +73,7 @@
                                    (:eval (string-join (mapcar #'(lambda (w) (buffer-name (window-buffer w))) (window-list)) ", "))
                                    " }"))
 
-(setq my-backup-directory "~/.emacs.d/backup")
+(defvar my-backup-directory "~/.emacs.d/backup")
 ;; Sane backup file settings
 (setq backup-directory-alist
       `((".*" . ,my-backup-directory)))
@@ -84,6 +87,7 @@
 (setq-default indent-tabs-mode nil)
 
 (defun whitespace-hook ()
+  "Hook to make trailing whitespace visible."
   (setq-local show-trailing-whitespace t))
 
 ;; Font
@@ -132,11 +136,11 @@
 (add-hook 'irfc-mode-hook (lambda () (show-paren-local-mode -1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; free up some function keys
+;; free up some function keys
 (global-unset-key (kbd "<f10>"))
 (global-unset-key (kbd "<f3>"))
 (global-unset-key (kbd "<f4>"))
-; move macro keys to f9-f10
+;; move macro keys to f9-f10
 (global-set-key (kbd "<f9>") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "<f10>") 'kmacro-end-or-call-macro)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -148,9 +152,11 @@
 (global-set-key (kbd "C-x K") 'bury-buffer)
 
 (defun scroll-up-1 ()
+  "Scroll up by 1 line."
   (interactive)
   (scroll-up 1))
 (defun scroll-down-1 ()
+  "Scroll down by 1 line."
   (interactive)
   (scroll-down 1))
 (global-set-key (kbd "M-N") 'scroll-up-1)
@@ -193,34 +199,42 @@ regardless of whether the current buffer is in `eww-mode'."
   (set-window-fringes (selected-window) 0 0))
 
 ;; eclim-mode
-;(require 'eclim)
-;(global-eclim-mode)
+;;(require 'eclim)
+;;(global-eclim-mode)
 
 ;; company-mode
-;(require 'company)
-;(require 'company-emacs-eclim)
-;(company-emacs-eclim-setup)
-;(global-company-mode t)
+;;(require 'company)
+;;(require 'company-emacs-eclim)
+;;(company-emacs-eclim-setup)
+;;(global-company-mode t)
 
 (require 'dired+)
 
-;(edit-server-start)
+;;(edit-server-start)
 
 ;; discover
-;(require 'discover)
-;(global-discover-mode 1)
+;;(require 'discover)
+;;(global-discover-mode 1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; smex
-;(require 'smex)
-;(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
-                                        ; when Smex is auto-initialized on its first run.
-;(global-set-key (kbd "M-x") 'smex)
-;(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;;(require 'smex)
+
+;; Can be omitted. This might cause a (minimal) delay when Smex is
+;; auto-initialized on its first run.
+
+;;(smex-initialize)
+
+;;(global-set-key (kbd "M-x") 'smex)
+;;(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 ;; This is your old M-x.
-                                        ;(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+;;(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 (global-set-key (kbd "M-x") 'execute-extended-command)
 
-;(eval-after-load 'image+ '(imagex-global-sticky-mode 1))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;(eval-after-load 'image+ '(imagex-global-sticky-mode 1))
 
 (defun add-to-auto-mode-alist (mm a &rest rest)
   (let ((ls (if (listp a)
@@ -265,11 +279,6 @@ regardless of whether the current buffer is in `eww-mode'."
   (put 'bit-string-case 'racket-indent-function 'defun))
 (add-hook 'racket-mode-hook 'winny/setup-racket)
 
-(add-hook 'go-mode-hook
-          (lambda ()
-            (setq tab-width 4)
-            (setq indent-tabs-mode 1)))
-
 (require 'doc-view)
 ;;(setq doc-view-resolution 144)
 
@@ -284,20 +293,59 @@ regardless of whether the current buffer is in `eww-mode'."
 ;; Activate on focus in
 (add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
 (setq auto-virtualenvwrapper-verbose nil)
-;(add-hook 'python 'winny/jedi-setup-env)
-;(add-hook 'python-mode-hook (lambda ()
-;                              (setq-local column-number-mode t)))
+;;(add-hook 'python 'winny/jedi-setup-env)
+;;(add-hook 'python-mode-hook (lambda ()
+;;                              (setq-local column-number-mode t)))
 
-;(require 'transmission)
-;(define-key transmission-mode-map (kbd "A")
-;  (lambda ()
-;    (interactive)
-;    (transmission-add (read-string "Magnet URI: "))))
+;;(require 'transmission)
+;;(define-key transmission-mode-map (kbd "A")
+;;  (lambda ()
+;;    (interactive)
+;;    (transmission-add (read-string "Magnet URI: "))))
 
 (require 'use-package)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; File format support
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package jade-mode
   :ensure t)
+
+(use-package csv-mode
+  :ensure t
+  :mode "\\.[Cc][Ss][Vv]\\'")
+
+(use-package nix-mode
+  :ensure t)
+
+(use-package pkgbuild-mode
+  :ensure t)
+
+(use-package rust-mode
+  :ensure t)
+
+(use-package csharp-mode
+  :ensure t)
+
+(use-package coffee-mode
+  :ensure t)
+
+(use-package json-mode
+  :ensure t)
+
+(use-package go-mode
+  :ensure t
+  :hook (go-mode-hook
+         .
+         (lambda ()
+           (setq tab-width 4)
+           (setq indent-tabs-mode 1))))
+
+(use-package scala-mode
+  :ensure t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package keychain-environment
   :ensure t
@@ -309,9 +357,7 @@ regardless of whether the current buffer is in `eww-mode'."
   :init
   (mode-line-bell-mode 1))
 
-(use-package csv-mode
-  :ensure t
-  :mode "\\.[Cc][Ss][Vv]\\'")
+
 
 ;; XXX: this causes load-theme to hang.
 ;; XXX: Calling (winum-mode 1) causes similar hang.
@@ -349,9 +395,6 @@ regardless of whether the current buffer is in `eww-mode'."
   :ensure t
   :init
   (default-text-scale-mode 1))
-
-(use-package nix-mode
-  :ensure t)
 
 (use-package paredit
   :ensure t
@@ -430,7 +473,7 @@ regardless of whether the current buffer is in `eww-mode'."
     (interactive)
     (ivy-alt-done t))
   (bind-keys :map ivy-minibuffer-map
-     	       ("<C-return>" . winny/ivy-force-done)))
+             ("<C-return>" . winny/ivy-force-done)))
 
 (use-package ivy-prescient
   :ensure t
@@ -465,8 +508,8 @@ regardless of whether the current buffer is in `eww-mode'."
   :ensure t
   :load-path "~/projects/emacs-dashboard/"
   :bind (:map dashboard-mode-map
-         ("p" . dashboard-previous-line)
-         ("n" . dashboard-next-line))
+              ("p" . dashboard-previous-line)
+              ("n" . dashboard-next-line))
   :init
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
         dashboard-items '((projects . 5)
@@ -505,8 +548,13 @@ regardless of whether the current buffer is in `eww-mode'."
 (use-package undo-tree
   :ensure t
   :init
-  ;(global-undo-tree-mode)
+  ;;(global-undo-tree-mode)
   )
+
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode))
 
 (use-package flymake
   :ensure t
@@ -521,7 +569,8 @@ regardless of whether the current buffer is in `eww-mode'."
   (add-hook 'sh-mode-hook 'flymake-shellcheck-load)
   (defun winny/sh-enable-shellcheck-hook ()
     (flymake-mode (if (member sh-shell '(bash sh ksh88)) 1 -1)))
-  (add-hook 'sh-set-shell-hook 'winny/sh-enable-shellcheck-hook))
+  ;;(add-hook 'sh-set-shell-hook 'winny/sh-enable-shellcheck-hook)
+  )
 
 (use-package helpful
   :ensure t
@@ -533,8 +582,8 @@ regardless of whether the current buffer is in `eww-mode'."
 (add-hook 'winny/after-theme-switch-hook 'sml/setup t t)
 (defun winum-enable () (winum-mode 1) (keyboard-quit))
 (defun winum-disable () (winum-mode -1))
-;(add-hook 'winny/before-theme-switch-hook 'winum-disable t t)
-;(add-hook 'winny/after-theme-switch-hook 'winum-enable t t)
+;;(add-hook 'winny/before-theme-switch-hook 'winum-disable t t)
+;;(add-hook 'winny/after-theme-switch-hook 'winum-enable t t)
 (setq winny/default-theme 'cyberpunk)
 
 (global-set-key (kbd "C-x c") 'compile)
@@ -559,7 +608,7 @@ regardless of whether the current buffer is in `eww-mode'."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun revert-all-buffers ()
-  "Refreshes all open buffers from their respective files"
+  "Refreshes all open buffers from their respective files."
   (interactive)
   (dolist (buffer (buffer-list) (message "Refreshed open files"))
     (let ((fn (buffer-file-name buffer)))
@@ -571,7 +620,10 @@ regardless of whether the current buffer is in `eww-mode'."
           (message "Backing file `%s' no longer exists! Skipping." fn))))))
 
 (defun kill-all-missing-buffers (no-ask)
-  "Kill all buffers with missing files"
+  "Kill all buffers with missing files.
+
+When prefix argument NO-ASK is non-nil, do not ask before killing
+each buffer"
   (interactive "P")
   (dolist (buffer (buffer-list))
     (let ((fn (buffer-file-name buffer)))
@@ -581,8 +633,8 @@ regardless of whether the current buffer is in `eww-mode'."
           (kill-buffer-ask buffer))))))
 
 (defun toggle-word-wrap ()
-  "Toggle word wrap"
- (interactive)
+  "Toggle word wrap."
+  (interactive)
   (message (format
             "Word wrap %s."
             (if (setq word-wrap (not word-wrap))
@@ -595,6 +647,9 @@ regardless of whether the current buffer is in `eww-mode'."
   (message (buffer-file-name)))
 
 (defun what-face (pos)
+  "Describe the face under point.
+
+Prefix argument POS should be a location it the buffer."
   (interactive "d")
   (let ((face (or (get-char-property (pos) 'read-face-name)
                   (get-char-property (pos) 'face))))
@@ -628,7 +683,9 @@ If FILE already exists, signal an error."
            (dired-move-to-filename))))))
 
 (defun winny/raise-or-create-window-system-frame (display)
-  "Raise an existing frame in the window system or create a new one."
+  "Raise an existing frame in the window system or create a new one.
+
+DISPLAY is the X11 DISPLAY variable contents."
   (let ((frames (seq-filter #'(lambda (f) (frame-parameter f 'display)) (frame-list))))
     (if (null frames)
       (make-frame `((window-system . x)
@@ -657,7 +714,7 @@ If FILE already exists, signal an error."
 (add-hook 'racket-mode-hook #'flymake-mode)
 
 (defun describe-current-theme ()
-  "Describe the current theme, ignoring smart-mode-line themes"
+  "Describe the current theme, ignoring smart-mode-line themes."
   (interactive)
   (describe-theme
    (car
@@ -668,9 +725,9 @@ If FILE already exists, signal an error."
 (defun show-trailing-whitespace (n)
   "Toggle the highlight of trailing whitespace for the current buffer.
 
-  When n is nil, toggle the highlight setting.
-  When n is non-negative, enable the highlight setting.
-  When n is negative, disable the highlight setting."
+  When N is nil, toggle the highlight setting.
+  When N is non-negative, enable the highlight setting.
+  When N is negative, disable the highlight setting."
   (interactive "P")
   (setq-local show-trailing-whitespace
               (cond
@@ -685,37 +742,18 @@ If FILE already exists, signal an error."
 (global-set-key (kbd "C-x M-w") 'show-trailing-whitespace)
 
 (defun winny/ensure-XDG_RUNTIME_DIR ()
-  "Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."
+  "Ensure XDG_RUNTIME_DIR is set.
+Used by qutebrowser and other utilities."
   (let ((rd (getenv "XDG_RUNTIME_DIR")))
     (when (or (not rd) (string-empty-p rd))
       (setenv "XDG_RUNTIME_DIR" (format "/run/user/%d" (user-uid))))))
 
 (add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
 
-(require 'diff-mode)
-
-(defvar conf-portage-font-lock-keywords
-  '(;; package atom
-    ("^[A-Za-z0-9/_:=><.*-~]+" 0 'font-lock-function-name-face)
-    ;; -useflag and **
-    ("[ \t]+\\(-[~0-9A-Za-z_-]+\\|\\*\\*\\)" 1 'diff-removed)
-    ;; useflag +useflag
-    ("[ \t]+\\([0-9A-Za-z_.+][0-9A-Za-z_.-]+\\)" 1 'diff-added)
-    ;; ~keyword
-    ("[ \t]+\\(~[0-9A-Za-z_.-]+\\)" 1 'font-lock-string-face)))
-
-(define-derived-mode conf-portage-mode conf-unix-mode "Conf[Portage]"
-  "Conf Mode starter for Portage files"
-  (conf-mode-initialize "#" 'conf-portage-font-lock-keywords))
-
-(add-to-list 'auto-mode-alist
-             '("/etc/portage/package\\.\\(accept_.*\\|use.*\\|unmask\\|mask\\|env\\)"
-               . conf-portage-mode))
-(add-to-list 'auto-mode-alist '("/etc/conf\\.d/" . sh-mode))
-(add-to-list 'auto-mode-alist '("/etc/\\(portage/\\)?make.conf" . sh-mode))
+(load "portage.el" nil t t)
 
 (defun remove-from-list (list-var element)
-  "Remove element from list-var"
+  "Remove ELEMENT from LIST-VAR."
   (setq list-var (delete element list-var)))
 
 ;; Make `if' a bit less stupid looking in elisp
@@ -727,22 +765,22 @@ If FILE already exists, signal an error."
 (bind-key "y" #'Info-copy-current-node-name Info-mode-map)
 
 (defun afs/org-replace-link-by-link-description ()
-  "Replace an org link by its description or if empty its address"
+  "Replace an org link by its description or if empty its address."
   (interactive)
   (if (org-in-regexp org-bracket-link-regexp 1)
-      (save-excursion
-        (let ((remove (list (match-beginning 0) (match-end 0)))
-              (description (if (match-end 3)
-                               (org-match-string-no-properties 3)
-                             (org-match-string-no-properties 1))))
-          (apply 'delete-region remove)
-          (insert description)))))
+    (save-excursion
+      (let ((remove (list (match-beginning 0) (match-end 0)))
+            (description (if (match-end 3)
+                           (org-match-string-no-properties 3)
+                           (org-match-string-no-properties 1))))
+        (apply 'delete-region remove)
+        (insert description)))))
 
 (load "shebang-change.el" nil t t)
 
 (defun winny/change-prop-line-mode (mode &optional dont-change-mode)
-  "Change the prop line's major mode. If DONT-CHANGE-MODE is not
-  nil, dont change to that mode first."
+  "Change the prop line's major MODE.
+If DONT-CHANGE-MODE is not nil, dont change to that MODE first."
   (interactive "aMajor mode: \nP")
   (unless dont-change-mode
     (funcall-interactively mode))
@@ -751,6 +789,7 @@ If FILE already exists, signal an error."
     (add-file-local-variable-prop-line 'mode sans-mode nil)))
 
 (defun winny/make-shebanged-file-executable ()
+  "Make sure scripts with shebang are saved with expected permissions."
   (interactive)
   (when (and (save-excursion (goto-char (point-min)) (looking-at "#!"))
              (not (file-executable-p buffer-file-name)))
