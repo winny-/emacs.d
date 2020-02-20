@@ -341,6 +341,10 @@ regardless of whether the current buffer is in `eww-mode'."
   (add-to-list 'paren-face-modes 'emacs-lisp-mode)
   (add-to-list 'paren-face-modes 'lisp-mode))
 
+(use-package free-keys
+  :ensure t
+  :bind (("C-h Y" . free-keys)))
+
 (use-package default-text-scale
   :ensure t
   :init
@@ -503,6 +507,24 @@ regardless of whether the current buffer is in `eww-mode'."
   :init
   ;(global-undo-tree-mode)
   )
+
+(use-package flymake
+  :ensure t
+  :bind (:map flymake-mode-map
+              ("M-n" . flymake-goto-next-error)
+              ("M-p" . flymake-goto-prev-error)
+              ("C-h E" . flymake-show-diagnostics-buffer)))
+
+(use-package flymake-shellcheck
+  :ensure t
+  :init
+  (add-hook 'sh-mode-hook 'flymake-shellcheck-load))
+
+(use-package helpful
+  :ensure t
+  :bind (("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-h f" . helpful-callable)))
 
 (load "switch-theme.el" t t)
 (add-hook 'winny/after-theme-switch-hook 'sml/setup t t)
@@ -734,3 +756,7 @@ If FILE already exists, signal an error."
 
 (add-hook 'after-save-hook 'winny/make-shebanged-file-executable)
 (put 'narrow-to-region 'disabled nil)
+
+(defun winny/sh-enable-shellcheck-hook ()
+  (flymake-mode (if (member sh-shell '(bash sh ksh88)) 1 -1)))
+(add-hook 'sh-set-shell-hook 'winny/sh-enable-shellcheck-hook)
