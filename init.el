@@ -1,16 +1,13 @@
 ;;; init --- my configuration
 ;;; Commentary:
 ;;; Code:
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Customize
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Customize
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; MELPA+ELPA package setup
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; MELPA+ELPA package setup
 
 (require 'package)
 (add-to-list 'package-archives
@@ -20,16 +17,13 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Cask
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Cask
 
 (require 'cask "~/.cask/cask.el")
 (cask-initialize "~/projects/emacs-dashboard/")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package requires / system loads
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Package requires / system loads
 
 ;; Uncomment for benchmarking emacs initialization.
 ;(require 'benchmark-init)
@@ -46,9 +40,7 @@
 (load "scribble.el" nil t t)
 (load "irfc.el" nil t t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Built-in configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Built-in configuration
 
 ;; Dired ^ in customize (u is provided, but I always forget about it).
 (require 'cus-edit)
@@ -94,12 +86,15 @@
 (let ((my-font (concat ;"Droid Sans Mono Slashed-"
                 "Go Mono-"
                                         ;(if (string-prefix-p "fightclub" system-name t) "10" "11")
-                       "11"
-                       )))
+                "11"
+                )))
   (add-to-list 'default-frame-alist `(font . ,my-font))
   (set-face-attribute 'default t :font my-font))
 
 (defun show-paren-local-mode (&optional arg)
+  "Toggle visibility of matching parenthesis for the current buffer.
+When ARG is positive or not a number, enable function
+`show-paren-mode', else disable it."
   (interactive)
   (setq-local show-paren-mode
               (cond
@@ -146,9 +141,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-set-key (kbd "C-x r v") 'view-register)
-(define-key global-map (kbd "C-c C-p f") 'find-file-at-point)
-(define-key global-map (kbd "C-c C-p u") 'browse-url-at-point)
-(define-key global-map "\C-cc" 'org-capture)
+(define-key global-map (kbd "C-c P f") 'find-file-at-point)
+(define-key global-map (kbd "C-c P u") 'browse-url-at-point)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-switchb)
 (global-set-key (kbd "C-x K") 'bury-buffer)
 
 (defun scroll-up-1 ()
@@ -179,9 +177,7 @@
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
 (require 'ox-twbs)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Package configuration
 
 ;; Create multiple eww buffers
 ;; Via https://emacs.stackexchange.com/a/24477/9163
@@ -192,7 +188,7 @@ regardless of whether the current buffer is in `eww-mode'."
   (if current-prefix-arg
     (with-temp-buffer
       (apply orig-fun args))
-    (apply orig-fun args)))  
+    (apply orig-fun args)))
 (advice-add 'eww :around #'modi/force-new-eww-buffer)
 
 (defun hide-fringes ()
@@ -236,12 +232,15 @@ regardless of whether the current buffer is in `eww-mode'."
 
 ;;(eval-after-load 'image+ '(imagex-global-sticky-mode 1))
 
-(defun add-to-auto-mode-alist (mm a &rest rest)
-  (let ((ls (if (listp a)
-              (append a rest)
-              (cons a rest))))
-    (dolist (extension rest)
-      (add-to-list 'auto-mode-alist (cons (concat "\\." extension "\\'") mm)))))
+(defun add-to-auto-mode-alist (mm extension &rest extensions)
+  "Add major mode MM for EXTENSION and EXTENSIONS to the `auto-mode-alist'.
+EXTENSION may also be a list."
+  (let ((ls (if (listp extension)
+              (append extension extensions)
+              (cons extension extensions))))
+    (dolist (ext ls)
+      (add-to-list 'auto-mode-alist (cons (concat "\\." ext "\\'") mm)))
+    auto-mode-alist))
 
 ;; web-mode
 (require 'web-mode)
@@ -258,9 +257,6 @@ regardless of whether the current buffer is in `eww-mode'."
 ;;                            (setq web-mode-code-indent-offset 2)))
 
 (add-to-auto-mode-alist 'sh-mode "ebuild")
-
-;; lisp-mode
-(add-to-auto-mode-alist 'lisp-mode "[cC][lL]")
 
 ;; enh-ruby-mode
 (autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
@@ -305,9 +301,7 @@ regardless of whether the current buffer is in `eww-mode'."
 
 (require 'use-package)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; File format support
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; File format support
 
 (use-package jade-mode
   :ensure t)
@@ -345,7 +339,9 @@ regardless of whether the current buffer is in `eww-mode'."
 (use-package scala-mode
   :ensure t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package graphviz-dot-mode
+  :ensure t)
+
 
 (use-package keychain-environment
   :ensure t
@@ -356,8 +352,6 @@ regardless of whether the current buffer is in `eww-mode'."
   :ensure t
   :init
   (mode-line-bell-mode 1))
-
-
 
 ;; XXX: this causes load-theme to hang.
 ;; XXX: Calling (winum-mode 1) causes similar hang.
@@ -580,8 +574,8 @@ regardless of whether the current buffer is in `eww-mode'."
 
 (load "switch-theme.el" t t)
 (add-hook 'winny/after-theme-switch-hook 'sml/setup t t)
-(defun winum-enable () (winum-mode 1) (keyboard-quit))
-(defun winum-disable () (winum-mode -1))
+;;(defun winum-enable () (winum-mode 1) (keyboard-quit))
+;;(defun winum-disable () (winum-mode -1))
 ;;(add-hook 'winny/before-theme-switch-hook 'winum-disable t t)
 ;;(add-hook 'winny/after-theme-switch-hook 'winum-enable t t)
 (setq winny/default-theme 'cyberpunk)
@@ -603,9 +597,7 @@ regardless of whether the current buffer is in `eww-mode'."
 (when window-system
   (global-unset-key (kbd "C-z")))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Custom interactive functions
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Custom interactive functions
 
 (defun revert-all-buffers ()
   "Refreshes all open buffers from their respective files."
