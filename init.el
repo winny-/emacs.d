@@ -39,6 +39,7 @@
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 (load "scribble.el" nil t t)
 (load "irfc.el" nil t t)
+(load "dired+.el" nil t t)
 
 ;;; Built-in configuration
 
