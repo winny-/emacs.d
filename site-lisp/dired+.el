@@ -12264,27 +12264,27 @@ Also abbreviate `mode-name', using \"Dired/\" instead of \"Dired by\"."
                                           ""))
                                       nb-flagged)
                               'face 'diredp-mode-line-flagged))))
-                  (:eval (save-excursion
-                           (let ((this   0)
-                                 (total  0)
-                                 (o-pt   (line-beginning-position))
-                                 (e-pt   (or (condition-case nil
-                                                 (let ((diredp-wrap-around-flag  nil))
-                                                   (save-excursion
-                                                     (diredp-next-subdir 1)
-                                                     (line-beginning-position)))
-                                               (error nil))
-                                             (save-excursion (goto-char (point-max)) (line-beginning-position)))))
-                             (when dired-subdir-alist (dired-goto-subdir (dired-current-directory)))
-                             (while (and (<= (point) e-pt)
-                                         (< (point) (point-max))) ; Hack to work around Emacs display-engine bug.
-                               (when (condition-case nil
-                                         (dired-get-filename nil diredp-count-.-and-..-flag)
-                                       (error nil))
-                                 (when (<= (line-beginning-position) o-pt) (setq this  (1+ this)))
-                                 (setq total  (1+ total)))
-                               (forward-line 1))
-                             (if (not (> this 0)) (format " %d" total) (format " %d/%d" this total)))))))))))
+                  (:eval (or "" (save-excursion
+                                  (let ((this   0)
+                                        (total  0)
+                                        (o-pt   (line-beginning-position))
+                                        (e-pt   (or (condition-case nil
+                                                        (let ((diredp-wrap-around-flag  nil))
+                                                          (save-excursion
+                                                            (diredp-next-subdir 1)
+                                                            (line-beginning-position)))
+                                                      (error nil))
+                                                    (save-excursion (goto-char (point-max)) (line-beginning-position)))))
+                                    (when dired-subdir-alist (dired-goto-subdir (dired-current-directory)))
+                                    (while (and (<= (point) e-pt)
+                                                (< (point) (point-max))) ; Hack to work around Emacs display-engine bug.
+                                      (when (condition-case nil
+                                                (dired-get-filename nil diredp-count-.-and-..-flag)
+                                              (error nil))
+                                        (when (<= (line-beginning-position) o-pt) (setq this  (1+ this)))
+                                        (setq total  (1+ total)))
+                                      (forward-line 1))
+                                    (if (not (> this 0)) (format " %d" total) (format " %d/%d" this total))))))))))))
 
   (add-hook 'dired-after-readin-hook 'diredp-nb-marked-in-mode-name)
   ;; This one is needed for `find-dired', because it does not call `dired-readin'.
