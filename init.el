@@ -175,7 +175,6 @@ When ARG is positive or not a number, enable function
                ("\\section\{%s\}" . "\\section*\{%s\}")
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
-(require 'ox-twbs)
 
 ;;; Package configuration
 
@@ -203,8 +202,6 @@ regardless of whether the current buffer is in `eww-mode'."
 ;;(require 'company-emacs-eclim)
 ;;(company-emacs-eclim-setup)
 ;;(global-company-mode t)
-
-(require 'dired+)
 
 ;;(edit-server-start)
 
@@ -242,20 +239,6 @@ EXTENSION may also be a list."
       (add-to-list 'auto-mode-alist (cons (concat "\\." ext "\\'") mm)))
     auto-mode-alist))
 
-;; web-mode
-(require 'web-mode)
-(add-to-auto-mode-alist 'web-mode "php" "phtml" "tpl" "[agj]sp" "as[cp]x"
-                        "erb" "mustache" "d?html" "jsx")
-(defadvice web-mode-highlight-part (around tweak-jsx activate)
-  (if (equal web-mode-content-type "jsx")
-    (let ((web-mode-enable-part-face nil))
-      ad-do-it)
-    ad-do-it))
-;; (add-hook 'web-mode-hook (lambda ()
-;;                            (setq web-mode-markup-indent-offset 2)
-;;                            (setq web-mode-css-indent-offset 2)
-;;                            (setq web-mode-code-indent-offset 2)))
-
 (add-to-auto-mode-alist 'sh-mode "ebuild")
 
 ;; enh-ruby-mode
@@ -278,30 +261,38 @@ EXTENSION may also be a list."
 (require 'doc-view)
 ;;(setq doc-view-resolution 144)
 
-;; python-mode
-(require 'python-mode)
-(require 'auto-virtualenvwrapper)
-(add-hook 'python-mode-hook 'jedi:setup)
-(add-hook 'python-mode-hook 'auto-virtualenvwrapper-activate)
-
-;; Activate on changing buffers
-(add-hook 'window-configuration-change-hook #'auto-virtualenvwrapper-activate)
-;; Activate on focus in
-(add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
-(setq auto-virtualenvwrapper-verbose nil)
-;;(add-hook 'python 'winny/jedi-setup-env)
-;;(add-hook 'python-mode-hook (lambda ()
-;;                              (setq-local column-number-mode t)))
-
 ;;(require 'transmission)
 ;;(define-key transmission-mode-map (kbd "A")
 ;;  (lambda ()
 ;;    (interactive)
 ;;    (transmission-add (read-string "Magnet URI: "))))
 
-(require 'use-package)
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (package-install 'use-package)
+  (require 'use-package))
 
 ;;; File format support
+
+(use-package python-mode
+  :ensure t)
+
+(use-package auto-virtualenvwrapper
+  :ensure t
+  :after python-mode
+  :config
+  (setq auto-virtualenvwrapper-verbose nil)
+  ;; Activate on focus in
+  (add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
+  ;; Activate on changing buffers
+  (add-hook 'window-configuration-change-hook #'auto-virtualenvwrapper-activate)
+  (add-hook 'python-mode-hook 'auto-virtualenvwrapper-activate))
+
+(use-package jedi
+  :ensure t
+  :after python-mode
+  :config
+  (add-hook 'python-mode-hook 'jedi:setup))
 
 (use-package jade-mode
   :ensure t)
@@ -483,13 +474,34 @@ EXTENSION may also be a list."
   :ensure t
   :bind-keymap ("C-c p" . projectile-command-map)
   :init
-  (setq projectile-project-search-path '("~/projects" "~/code" "~/docs"))
+  ;;(setq projectile-project-search-path '("~/projects" "~/code" "~/docs"))
+  (setq projectile-project-search-path '("~/"))
   (projectile-mode 1))
 
 (use-package editorconfig
   :ensure t
   :init
   (editorconfig-mode 1))
+
+(use-package ox-twbs
+  :ensure t)
+
+(use-package web-mode
+  :ensure t
+  :config
+  ;; web-mode
+  (add-to-auto-mode-alist 'web-mode "php" "phtml" "tpl" "[agj]sp" "as[cp]x"
+                          "erb" "mustache" "d?html" "jsx")
+  (defadvice web-mode-highlight-part (around tweak-jsx activate)
+    (if (equal web-mode-content-type "jsx")
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
+      ad-do-it))
+;; (add-hook 'web-mode-hook (lambda ()
+;;                            (setq web-mode-markup-indent-offset 2)
+;;                            (setq web-mode-css-indent-offset 2)
+;;                            (setq web-mode-code-indent-offset 2)))
+  )
 
 ;; I have a fork
 ;; (add-to-list 'load-path "~/projects/org-static-blog")
@@ -573,12 +585,17 @@ EXTENSION may also be a list."
          ("C-h f" . helpful-callable)))
 
 (load "switch-theme.el" t t)
-(add-hook 'winny/after-theme-switch-hook 'sml/setup t t)
+(setq winny/default-theme 'cyberpunk)
+(use-package smart-mode-line
+  :ensure t
+  :config
+  (add-hook 'winny/after-theme-switch-hook 'sml/setup t t))
+
 ;;(defun winum-enable () (winum-mode 1) (keyboard-quit))
 ;;(defun winum-disable () (winum-mode -1))
 ;;(add-hook 'winny/before-theme-switch-hook 'winum-disable t t)
 ;;(add-hook 'winny/after-theme-switch-hook 'winum-enable t t)
-(setq winny/default-theme 'cyberpunk)
+
 
 (global-set-key (kbd "C-x c") 'compile)
 (global-set-key (kbd "C-x y") 'browse-kill-ring)
@@ -701,9 +718,9 @@ DISPLAY is the X11 DISPLAY variable contents."
     (eww-mode)
     (eww url)))
 
-(with-eval-after-load 'flymake
-  (flymake-racket-setup))
-(add-hook 'racket-mode-hook #'flymake-mode)
+;; (with-eval-after-load 'flymake
+;;   (flymake-racket-setup))
+;; (add-hook 'racket-mode-hook #'flymake-mode)
 
 (defun describe-current-theme ()
   "Describe the current theme, ignoring smart-mode-line themes."
