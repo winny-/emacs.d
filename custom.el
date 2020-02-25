@@ -442,4 +442,5 @@ blog.winny.tech :: <ul class=\"inline-list\">
  ;; If there is more than one, they won't work right.
  '(default ((((class color) (min-colors 89)) (:foreground "#d3d3d3" :background "#000000"))))
  '(Info-quoted ((t (:inherit nil))))
+ '(diredp-omit-file-name ((t (:inherit diredp-ignored-file-name))))
  '(variable-pitch ((t (:family "Go Medium")))))
