@@ -549,8 +549,7 @@ EXTENSION may also be a list."
   :bind (("C-x M-s" . swiper)))
 
 (use-package cyberpunk-theme
-  :ensure t
-  :load-path "~/code/cyberpunk-theme.el")
+  :ensure t)
 
 (use-package undo-tree
   :ensure t
