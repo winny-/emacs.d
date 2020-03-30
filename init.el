@@ -441,6 +441,9 @@ EXTENSION may also be a list."
               ("^" . neotree-select-up-node)
               ("v" . neotree-select-down-node)))
 
+(use-package sunrise
+  :load-path "~/.emacs.d/sunrise-commander")
+
 (use-package fast-scroll
   :ensure t
   :config
