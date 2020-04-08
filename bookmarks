@@ -2,16 +2,26 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("Downloads"
+(("math-240"
+ (filename . "~/docs/uni/classes/math-240/")
+ (front-context-string)
+ (rear-context-string . "96 Mar 30 15:48 ")
+ (position . 244))
+("cs-655"
+ (filename . "~/docs/uni/classes/cs-655/")
+ (front-context-string . "handouts\n  drwxr")
+ (rear-context-string . "96 Mar  6 20:33 ")
+ (position . 242))
+("cs-654"
+ (filename . "~/docs/uni/classes/cs-654/")
+ (front-context-string . "handouts\n  drwxr")
+ (rear-context-string . "96 Mar  6 20:33 ")
+ (position . 242))
+("Downloads"
  (filename . "~/Downloads/")
  (front-context-string . "11688446_8528659")
  (rear-context-string . "44 Nov  7  2017 ")
  (position . 256))
-("cs-557"
- (filename . "~/docs/uni/classes/cs-557/")
- (front-context-string . "handouts\n  drwxr")
- (rear-context-string . "96 Sep  5 15:04 ")
- (position . 241))
 ("(elisp) Minibuffer Windows"
  (front-context-string . "ent to determine")
  (rear-context-string . "t is not suffici")
@@ -19,16 +29,6 @@
  (filename . "/usr/share/info/emacs-26/elisp")
  (info-node . "Minibuffer Windows")
  (handler . Info-bookmark-jump))
-("phy-122"
- (filename . "~/docs/uni/classes/phy-122/")
- (front-context-string . "Phy 122-402 syll")
- (rear-context-string . "48 Sep 10 23:04 ")
- (position . 250))
-("math-205"
- (filename . "~/docs/uni/classes/math-205/")
- (front-context-string . "finance-formulas")
- (rear-context-string . "96 Sep 17 18:46 ")
- (position . 244))
 ("ie-367"
  (filename . "~/docs/uni/classes/ie-367/")
  (front-context-string . "handouts\n  -rw-r")

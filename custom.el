@@ -244,6 +244,71 @@ static char *gnus-pointer[] = {
  '(safe-local-variable-values
    (quote
     ((org-static-blog-page-header . "
+<link href=\"static/style.css?v=1.11\" rel=\"stylesheet\" type=\"text/css\" />
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+")
+     (org-static-blog-page-preamble . "
+<nav>
+<div class=\"flexcontainer\">
+<div class=\"smallitem\">
+<ul class=\"inline-list\">
+<li><a href=\".\">blog.winny.tech</a></li>
+<li><a href=\"https://winny.tech/\">About</a></li>
+</ul>
+</div>
+<div class=\"bigitem\">
+<ul class=\"inline-list\">
+<li><a href=\"archive.html\">Archive</a></li>
+<li><a href=\"tags.html\">Tags</a></li>
+<li><a href=\"rss.xml\">RSS Feed</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<hr/>
+")
+     (org-static-blog-page-preamble . "
+<nav>
+<div class=\"flexcontainer\">
+<div class=\"smallitem\">
+<ul class=\"inline-list\">
+<li><a href=\".\">blog.winny.tech</a></li>
+<li><a href=\"https://winny.tech/\">About Me</a></li>
+</ul>
+</div>
+<div class=\"bigitem\">
+<ul class=\"inline-list\">
+<li><a href=\"archive.html\">Archive</a></li>
+<li><a href=\"tags.html\">Tags</a></li>
+<li><a href=\"rss.xml\">RSS Feed</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<hr/>
+")
+     (org-static-blog-page-preamble . "
+<nav>
+<div class=\"flexcontainer\">
+<div class=\"smallitem\">
+<ul class=\"inline-list\">
+<li><a href=\".\">blog.winny.tech</a></li>
+<li><a href=\"https://winny.tech/\">About Me</a></li>
+</ul>
+blog.winny.tech
+</div>
+<div class=\"bigitem\">
+<ul class=\"inline-list\">
+<li><a href=\"archive.html\">Archive</a></li>
+<li><a href=\"tags.html\">Tags</a></li>
+<li><a href=\"rss.xml\">RSS Feed</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<hr/>
+")
+     (org-static-blog-page-header . "
 <link href=\"static/style.css?v=1.10\" rel=\"stylesheet\" type=\"text/css\" />
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 ")
