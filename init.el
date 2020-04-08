@@ -84,13 +84,13 @@
   (setq-local show-trailing-whitespace t))
 
 ;; Font
-(let ((my-font (concat ;"Droid Sans Mono Slashed-"
-                "Go Mono-"
-                                        ;(if (string-prefix-p "fightclub" system-name t) "10" "11")
-                "11"
-                )))
-  (add-to-list 'default-frame-alist `(font . ,my-font))
-  (set-face-attribute 'default t :font my-font))
+;; (let ((my-font (concat ;"Droid Sans Mono Slashed-"
+;;                 "Go Mono-"
+;;                                         ;(if (string-prefix-p "fightclub" system-name t) "10" "11")
+;;                 "11"
+;;                 )))
+;;   (add-to-list 'default-frame-alist `(font . ,my-font))
+;;   (set-face-attribute 'default t :font my-font))
 
 (defun show-paren-local-mode (&optional arg)
   "Toggle visibility of matching parenthesis for the current buffer.
