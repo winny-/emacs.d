@@ -58,7 +58,7 @@
 ;(load "webkit.el" nil t t)
 
 ;; Todo: dired+/dired
-(setq-default frame-title-format '("(Emacs) "
+(setq-default frame-title-format '("Emacs "
                                    (:eval (if buffer-file-name
                                             (replace-regexp-in-string (regexp-quote (or (getenv "HOME") "")) "~" buffer-file-name)
                                             (buffer-name)))
