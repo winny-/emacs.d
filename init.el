@@ -240,8 +240,6 @@ EXTENSION may also be a list."
       (add-to-list 'auto-mode-alist (cons (concat "\\." ext "\\'") mm)))
     auto-mode-alist))
 
-(add-to-auto-mode-alist 'sh-mode "ebuild")
-
 ;; enh-ruby-mode
 (autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
 (add-to-auto-mode-alist 'enh-ruby-mode "rb")
