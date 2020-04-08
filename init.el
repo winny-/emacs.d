@@ -385,7 +385,8 @@ EXTENSION may also be a list."
   :config
   (dolist (m '(emacs-lisp-mode-hook
      	       racket-mode-hook
-     	       racket-repl-mode-hook))
+     	       racket-repl-mode-hook
+               lisp-mode-hook))
     (add-hook m #'paredit-mode))
   (bind-keys :map paredit-mode-map
      	     ("{"   . paredit-open-curly)
