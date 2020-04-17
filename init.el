@@ -328,7 +328,8 @@ EXTENSION may also be a list."
            (setq indent-tabs-mode 1))))
 
 (use-package scala-mode
-  :ensure t)
+  :ensure t
+  :mode "\\.cool\\'")
 
 (use-package graphviz-dot-mode
   :ensure t)
