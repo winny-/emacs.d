@@ -832,3 +832,10 @@ https://stackoverflow.com/a/18814469/2720026"
     (when new-kill-string
       (message "%s copied" new-kill-string)
       (kill-new new-kill-string))))
+
+(defun other-window-reverse (offset &optional all-frames)
+  "`other-window' but in reverse."
+  (interactive "p")
+  (other-window (- (if (numberp offset) offset 1)) all-frames))
+
+(global-set-key (kbd "C-x O") 'other-window-reverse)
