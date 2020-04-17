@@ -40,6 +40,7 @@
 (load "scribble.el" nil t t)
 (load "irfc.el" nil t t)
 (load "dired+.el" nil t t)
+(load "aps-mode.el" nil t t)
 
 ;;; Built-in configuration
 
