@@ -329,7 +329,7 @@ EXTENSION may also be a list."
 
 (use-package scala-mode
   :ensure t
-  :mode "\\.cool\\'")
+  :mode "\\.coo[lp]\\'")
 
 (use-package graphviz-dot-mode
   :ensure t)
