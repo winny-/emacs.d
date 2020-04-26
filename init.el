@@ -440,7 +440,8 @@ EXTENSION may also be a list."
   :bind (([f8] . neotree-toggle))
   :bind (:map neotree-mode-map
               ("^" . neotree-select-up-node)
-              ("v" . neotree-select-down-node)))
+              ("v" . neotree-select-down-node))
+  :config (setq neo-filepath-sort-function 'string</extension))
 
 (use-package sunrise
   :load-path "~/.emacs.d/sunrise-commander")
@@ -840,3 +841,14 @@ https://stackoverflow.com/a/18814469/2720026"
   (other-window (- (if (numberp offset) offset 1)) all-frames))
 
 (global-set-key (kbd "C-x O") 'other-window-reverse)
+
+(defun string</extension (x y)
+  "Using the file extension, indicate if X is less than Y."
+  (let ((x-ext (f-ext x))
+        (y-ext (f-ext y)))
+    (cond
+     ((string= x-ext y-ext) (string< x y))
+     ((not x-ext) t)
+     ((not y-ext) nil)
+     (t (string< x-ext y-ext)))))
+
