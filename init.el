@@ -854,3 +854,5 @@ https://stackoverflow.com/a/18814469/2720026"
      ((not y-ext) nil)
      (t (string< x-ext y-ext)))))
 
+(provide 'init)
+;;; init.el ends here
