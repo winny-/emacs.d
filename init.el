@@ -250,6 +250,8 @@ EXTENSION may also be a list."
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq word-wrap t)))
 
+(winner-mode 1)
+
 ;; racket-mode
 ;;(add-hook 'racket-mode-hook (lambda ()
 ;;                              (put 'new 'racket-indent-function 'defun)))
