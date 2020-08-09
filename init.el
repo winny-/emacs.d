@@ -21,7 +21,7 @@
 ;;; Cask
 
 (require 'cask "~/.cask/cask.el")
-(cask-initialize "~/projects/emacs-dashboard/")
+;;(cask-initialize "~/projects/emacs-dashboard/")
 
 ;;; Package requires / system loads
 
@@ -141,6 +141,17 @@ When ARG is positive or not a number, enable function
 (global-set-key (kbd "<f9>") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "<f10>") 'kmacro-end-or-call-macro)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; This is valuable because it ensures toggle-debug-on-error will
+;; always be available.
+(defun winny/toggle-debug-on-error-or-quit (&optional on-quit)
+  "Toggle debug on error, or quit with non-nil prefix argument.
+When ON-QUIT is non-nil toggle debug on quit instead."
+  (interactive "P")
+  (if on-quit
+    (toggle-debug-on-quit)
+    (toggle-debug-on-error)))
+(global-set-key (kbd "C-x \\") 'winny/toggle-debug-on-error-or-quit)
 
 (global-set-key (kbd "C-x r v") 'view-register)
 (define-key global-map (kbd "C-c P f") 'find-file-at-point)
@@ -276,6 +287,11 @@ EXTENSION may also be a list."
 
 ;;; File format support
 
+(use-package lua-mode
+  :ensure t
+  :custom
+  ((lua-indent-level 2)))
+
 (use-package python-mode
   :ensure t)
 
@@ -331,7 +347,8 @@ EXTENSION may also be a list."
 
 (use-package scala-mode
   :ensure t
-  :mode "\\.coo[lp]\\'")
+  :mode "\\.coo[lp]\\'"
+  :mode "\\.scalpp\\'")
 
 (use-package graphviz-dot-mode
   :ensure t)
@@ -346,6 +363,12 @@ EXTENSION may also be a list."
   :ensure t
   :init
   (mode-line-bell-mode 1))
+
+(use-package esup
+  :ensure t
+  ;; To use MELPA Stable use ":pin mepla-stable",
+  :pin melpa
+  :commands (esup))
 
 ;; XXX: this causes load-theme to hang.
 ;; XXX: Calling (winum-mode 1) causes similar hang.
@@ -406,6 +429,9 @@ EXTENSION may also be a list."
          ("C-x M-g" . magit-dispatch)
          ("C-x M-c" . magit-clone)))
 
+(use-package forge
+  :ensure t)
+
 (use-package magithub
   :ensure t)
 
@@ -420,7 +446,12 @@ EXTENSION may also be a list."
   )
 
 (use-package elfeed
-  :ensure t)
+  :ensure t
+  ;; :after writeroom-mode
+  ;; :hook (elfeed-show-mode . (lambda ()
+  ;;               (writeroom-mode 1)
+  ;;               (setq-local shr-width (writeroom--calculate-width))))
+  )
 
 (use-package elfeed-org
   :ensure t
