@@ -389,6 +389,9 @@ EXTENSION may also be a list."
   (add-hook 'god-mode-enabled-hook 'my-update-cursor)
   (add-hook 'god-mode-disabled-hook 'my-update-cursor))
 
+(use-package yafolding
+  :ensure t)
+
 (use-package paren-face
   :ensure t
   :config
@@ -621,6 +624,9 @@ EXTENSION may also be a list."
   :bind (("C-h v" . helpful-variable)
          ("C-h k" . helpful-key)
          ("C-h f" . helpful-callable)))
+
+(use-package ansible
+  :ensure t)
 
 (load "switch-theme.el" t t)
 (setq winny/default-theme 'cyberpunk)
