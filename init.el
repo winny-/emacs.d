@@ -1,11 +1,17 @@
 ;;; init --- my configuration
 ;;; Commentary:
+;; See https://github.com/jwiegley/use-package for more information on
+;; use-package.
 ;;; Code:
 
 ;;; Customize
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
+
+
+;; (setq debug-on-message "Eager macro-expansion failure:")
+
 
 ;;; MELPA+ELPA package setup
 
@@ -32,8 +38,8 @@
 ;(add-to-list 'load-path "~/.emacs.d/custom/emacs-eclim")
 
 ;; Packaged by Gentoo
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+;; (load "auctex.el" nil t t)
+;; (load "preview-latex.el" nil t t)
 
 ;; Stuff not packaged elsewhere
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
@@ -52,6 +58,7 @@
 (defalias 'list-buffers 'ibuffer)
 
 (setq auto-window-vscroll nil)
+(setq-default fill-column 79)
 ;(setq source-directory "~/code/emacs-24.5")
 
 ;;(add-to-list 'display-buffer-alist
@@ -153,6 +160,16 @@ When ON-QUIT is non-nil toggle debug on quit instead."
     (toggle-debug-on-error)))
 (global-set-key (kbd "C-x \\") 'winny/toggle-debug-on-error-or-quit)
 
+
+(global-set-key (kbd "C-x M-x") 'execute-extended-command)  ;; Keep original
+                                                            ;; execute-extended-command
+                                                            ;; around when
+                                                            ;; using helm.
+
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(add-hook 'text-mode-hook 'flyspell-mode)
+
+(global-set-key (kbd "C-M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-x r v") 'view-register)
 (define-key global-map (kbd "C-c P f") 'find-file-at-point)
 (define-key global-map (kbd "C-c P u") 'browse-url-at-point)
@@ -202,6 +219,9 @@ regardless of whether the current buffer is in `eww-mode'."
       (apply orig-fun args))
     (apply orig-fun args)))
 (advice-add 'eww :around #'modi/force-new-eww-buffer)
+
+;; Use writeroom to limit the width of eww buffers
+(add-hook 'eww-mode-hook 'writeroom-mode)
 
 (defun hide-fringes ()
   (set-window-fringes (selected-window) 0 0))
@@ -298,7 +318,7 @@ EXTENSION may also be a list."
 (use-package auto-virtualenvwrapper
   :ensure t
   :after python-mode
-  :config
+  :init
   (setq auto-virtualenvwrapper-verbose nil)
   ;; Activate on focus in
   (add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
@@ -309,8 +329,21 @@ EXTENSION may also be a list."
 (use-package jedi
   :ensure t
   :after python-mode
-  :config
-  (add-hook 'python-mode-hook 'jedi:setup))
+  :init
+  (add-hook 'python-mode-hook 'jedi:setup t)
+  :bind (:map jedi-mode-map
+              ("M-." . jedi:goto-definition)
+              ("M-," . jedi:goto-definition-pop-marker)
+              ("C-c d" . jedi:show-doc)
+              ("C-c r" . helm-jedi-related-names)))
+
+(use-package jedi-direx
+  :ensure t
+  :after python-mode
+  :after jedi
+  :init
+  (define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer)
+  (add-hook 'jedi-mode-hook 'jedi-direx:setup))
 
 (use-package jade-mode
   :ensure t)
@@ -332,6 +365,12 @@ EXTENSION may also be a list."
   :ensure t)
 
 (use-package coffee-mode
+  :ensure t)
+
+(use-package svelte-mode
+  :ensure t)
+
+(use-package kotlin-mode
   :ensure t)
 
 (use-package json-mode
@@ -378,6 +417,10 @@ EXTENSION may also be a list."
 ;;   :init
 ;;   (winum-mode 1))
 
+(use-package expand-region
+  :ensure t
+  :bind (("C-=" . er/expand-region)))
+
 (use-package god-mode
   :ensure t
   :bind (("<escape>" . god-local-mode))
@@ -389,8 +432,36 @@ EXTENSION may also be a list."
   (add-hook 'god-mode-enabled-hook 'my-update-cursor)
   (add-hook 'god-mode-disabled-hook 'my-update-cursor))
 
-(use-package yafolding
-  :ensure t)
+(defun winny/mark-defun ()
+  (interactive)
+  (mark-defun)
+  (when (or (comment-only-p (region-beginning) (region-end))
+            (looking-at-p "[[:space:]]*$"))
+    (forward-line 1)))
+
+(use-package vimish-fold
+  :ensure t
+  :after expand-region
+  :init
+  (defun winny/vimish-fold-defun ()
+    "Fold the defun around point."
+    (interactive)
+    (lexical-let ((r (save-excursion (er/mark-defun) (list (region-beginning) (region-end)))))
+      (vimish-fold (car r) (cadr r))))
+  (defun winny/vimish-fold-delete (entire-buffer)
+    "Fold region or entire buffer when ENTIRE-BUFFER is not nil."
+    (interactive "P")
+    (if entire-buffer
+      (vimish-fold-delete-all)
+      (vimish-fold-delete)))
+  (global-set-key (kbd "M-g f") #'vimish-fold)
+  (global-set-key (kbd "M-g M-f") #'vimish-fold)
+  (global-set-key (kbd "M-g u") #'vimish-fold-unfold)
+  (global-set-key (kbd "M-g M-u") #'vimish-fold-unfold)
+  (global-set-key (kbd "M-g t") #'vimish-fold-toggle)
+  (global-set-key (kbd "M-g M-t") #'vimish-fold-toggle)
+  (global-set-key (kbd "M-g d") #'vimish-fold-delete)
+  (global-set-key (kbd "M-g M-d") #'vimish-fold-delete))
 
 (use-package paren-face
   :ensure t
@@ -412,19 +483,22 @@ EXTENSION may also be a list."
 
 (use-package paredit
   :ensure t
-  :config
+  :init
   (dolist (m '(emacs-lisp-mode-hook
      	       racket-mode-hook
      	       racket-repl-mode-hook
                lisp-mode-hook))
     (add-hook m #'paredit-mode))
-  (bind-keys :map paredit-mode-map
-     	     ("{"   . paredit-open-curly)
-     	     ("}"   . paredit-close-curly))
-  (unless terminal-frame
+  (defun winny/add-paredit-keystrokes ()
+    "Ensure custom keys are enabled in paredit."
     (bind-keys :map paredit-mode-map
-     	       ("M-[" . paredit-wrap-square)
-     	       ("M-{" . paredit-wrap-curly))))
+               ("{"   . paredit-open-curly)
+               ("}"   . paredit-close-curly))
+    (unless terminal-frame
+      (bind-keys :map paredit-mode-map
+                 ("M-[" . paredit-wrap-square)
+                 ("M-{" . paredit-wrap-curly))))
+  (add-hook 'paredit-mode-hook 'winny/add-paredit-keystrokes))
 
 (use-package magit
   :ensure t
@@ -469,7 +543,22 @@ EXTENSION may also be a list."
 (use-package counsel-projectile
   :ensure t
   :init
-  (counsel-projectile-mode 1))
+  (counsel-projectile-mode 1)
+  )
+
+(use-package helm-mode
+  :init
+  ;; (helm-mode 1)
+  ;; (global-set-key (kbd "M-x") 'helm-M-x)
+  ;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  )
+
+(use-package helm-projectile
+  :ensure t
+  :after helm-mode
+  :init
+  ;; (helm-projectile-mode 1)
+  )
 
 (use-package neotree
   :ensure t
@@ -481,6 +570,8 @@ EXTENSION may also be a list."
 
 (use-package sunrise
   :load-path "~/.emacs.d/sunrise-commander")
+
+
 
 (use-package fast-scroll
   :ensure t
@@ -499,13 +590,48 @@ EXTENSION may also be a list."
     "Complete ivy with entered text ignoring completions."
     (interactive)
     (ivy-alt-done t))
+  (defun winny/ivy-ding (&rest ignored)
+    "Ring the bell doing nothing with IGNORED."
+    (ding t))
   (bind-keys :map ivy-minibuffer-map
-             ("<C-return>" . winny/ivy-force-done)))
+             ("<C-return>" . winny/ivy-force-done))
+  (setq ivy-height 10
+        ivy-count-format "(%d/%d) "
+        ivy-on-del-error-function 'winny/ivy-ding
+        ivy-read-action-format-function 'ivy-read-action-format-default
+        ivy-use-virtual-buffers t)
+  :init
+  (ivy-mode 1))
+
+(use-package counsel
+  :ensure t
+  :init
+  (counsel-mode 1))
+
+(use-package counsel-etags
+  :ensure t)
+
+(use-package counsel-tramp
+  :ensure t)
+
+(use-package dash-docs
+  :ensure t
+  :init
+  (defun winny/dash-docs-activate-all-docsets ()
+    (interactive)
+    (loop for docset in (directory-files dash-docs-docsets-path nil "^.+\\.docset$")
+          do (dash-docs-activate-docset (string-remove-suffix ".docset" docset))))
+  (winny/dash-docs-activate-all-docsets))
+
+(use-package counsel-dash
+  :ensure t
+  :after dash-docs)
+
 
 (use-package ivy-prescient
   :ensure t
   :init
-  (ivy-prescient-mode))
+  (ivy-prescient-mode 1))
 
 (use-package prescient
   :ensure t
@@ -601,7 +727,7 @@ EXTENSION may also be a list."
 (use-package flycheck
   :ensure t
   :init
-  (global-flycheck-mode))
+  (global-flycheck-mode 1))
 
 (use-package flymake
   :ensure t
@@ -625,6 +751,11 @@ EXTENSION may also be a list."
          ("C-h k" . helpful-key)
          ("C-h f" . helpful-callable)))
 
+(use-package markdown-mode
+  :ensure t
+  :config
+  (setq markdown-asymmetric-header t))
+
 (use-package ansible
   :ensure t)
 
@@ -632,7 +763,7 @@ EXTENSION may also be a list."
 (setq winny/default-theme 'cyberpunk)
 (use-package smart-mode-line
   :ensure t
-  :config
+  :init
   (add-hook 'winny/after-theme-switch-hook 'sml/setup t t))
 
 ;;(defun winum-enable () (winum-mode 1) (keyboard-quit))
@@ -830,6 +961,7 @@ Used by qutebrowser and other utilities."
         (insert description)))))
 
 (load "shebang-change.el" nil t t)
+;;(winny/add-shebang-change-hooks)
 
 (defun winny/change-prop-line-mode (mode &optional dont-change-mode)
   "Change the prop line's major MODE.
@@ -890,6 +1022,67 @@ https://stackoverflow.com/a/18814469/2720026"
      ((not x-ext) t)
      ((not y-ext) nil)
      (t (string< x-ext y-ext)))))
+
+(defun buffer-local-set-key (key func)
+  (interactive "KSet key on this buffer: \naCommand: ")
+  (let ((name (format "%s-magic" (buffer-name))))
+    (eval
+     `(define-minor-mode ,(intern name)
+        "Automagically built minor mode to define buffer-local keys."))
+    (let* ((mapname (format "%s-map" name))
+           (map (intern mapname)))
+      (unless (boundp (intern mapname))
+        (set map (make-sparse-keymap)))
+      (eval
+       `(define-key ,map ,key func)))
+    (funcall (intern name) t)))
+
+(defun traverse-page--recenter-top (&optional count)
+  "Recenter top, ignoring COUNT."
+  (when (get-buffer-window)
+    (recenter-top-bottom 0)))
+
+(advice-add 'forward-page :after #'traverse-page--recenter-top)
+(advice-add 'backward-page :after #'traverse-page--recenter-top)
+(global-set-key (kbd "<C-M-next>") 'forward-page)
+(global-set-key (kbd "<C-M-prior>") 'backward-page)
+
+;; Having to type the default repeat key is torture.  C-x z requires FOUR
+;; actions.  Hold down C, then type x.  Release C.  Type z.  So instead, just
+;; Bind C-x C-z which means one can rapid-fire repeat with only two keystrokes
+;; per repeat.
+(global-set-key (kbd "C-x C-z") 'repeat)
+
+;;; macros
+(defun winny/org-table-line-to-definition-list (&optional arg)
+  "Keyboard macro."
+  (interactive "p")
+  (kmacro-exec-ring-item (quote ([4 45 19 124 return 2 2 134217760 4 58 58 5 2 134217760 4 backspace return 11] 0 "%d")) arg))
+
+
+(defconst winny/child-widget-regex "^\\(Hide\\|Show Value\\)")
+
+(defun winny/forward-child-widget (&optional arg)
+  "Navigate to next child widget by ARG.
+
+Use a Negative ARG to navigate backwards."
+  (interactive "p")
+  (when (and (looking-at winny/child-widget-regex) (> arg 0))
+    (setq arg (+ 1 arg)))
+  (re-search-forward winny/child-widget-regex nil nil arg)
+  ;; Ensure point is at the beginning of the line.
+  (move-beginning-of-line nil))
+
+(defun winny/backward-child-widget (&optional arg)
+  "Navigate to previous child widget by ARG.
+
+Use a Negative ARG to navigate forwards."
+  (interactive "p")
+  (winny/forward-child-widget (- arg)))
+
+(define-key custom-mode-map (kbd "M-n") 'winny/forward-child-widget)
+(define-key custom-mode-map (kbd "M-p") 'winny/backward-child-widget)
+(define-key custom-mode-map (kbd "M-RET") 'Custom-newline)
 
 (provide 'init)
 ;;; init.el ends here

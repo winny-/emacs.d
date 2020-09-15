@@ -1,3 +1,6 @@
+;;; shebang-change --- Detect shebang change and switch major mode.
+;;; Commentary:
+;;; Code:
 (defun winny/add-shebang-check-locally ()
   (interactive)
   (when (and (let ((f (buffer-file-name))) (and f (not (string-equal (file-name-nondirectory f) "COMMIT_EDITMSG")))))
@@ -7,10 +10,9 @@
 (defvar-local winny/removed-shebang nil)
 
 (defun winny/watch-for-shebang-removal-hook (beginning end)
-  (lexical-let ((a (<= beginning (+ 1 (point-min))))
-                (b (save-excursion (goto-char (point-min)) (looking-at "#!"))))
-;    (message "%s %s" a b)
-    (setq-local winny/removed-shebang (and a b))))
+  (setq-local winny/removed-shebang
+              (and (< beginning (point-min))
+                   (save-excursion (goto-char (point-min)) (looking-at "#!")))))
 
 (defun winny/check-if-shebang-changed-hook (beginning end region)
   "Hook for `after-change-functions' that checks if the shebang has changed, and if a different mode should be used.
@@ -27,5 +29,16 @@ slower than electric-pair-mode's hook.
                  winny/removed-shebang))
     (set-auto-mode t)))
 
-(add-hook 'find-file-hook 'winny/add-shebang-check-locally)
-(add-hook 'after-change-major-mode-hook 'winny/add-shebang-check-locally)
+(defun winny/add-shebang-change-hooks ()
+  (interactive)
+  (add-hook 'find-file-hook 'winny/add-shebang-check-locally)
+  (add-hook 'after-change-major-mode-hook 'winny/add-shebang-check-locally)
+  nil)
+
+(defun winny/remove-shebang-change-hooks ()
+  (interactive)
+  (remove-hook 'find-file-hook 'winny/add-shebang-check-locally)
+  (remove-hook 'after-change-major-mode-hook 'winny/add-shebang-check-locally))
+
+(provide 'shebang-change)
+;;; shebang-change.el ends here

@@ -2,7 +2,19 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("math-240"
+(("misc-sync/org"
+ (filename . "/var/lib/syncthing/misc-sync/org/")
+ (front-context-string . "day2day.org\n  -r")
+ (rear-context-string . " 0 Sep 14 02:53 ")
+ (position . 249))
+("(web-server) File Server"
+ (front-context-string . "(lexical-let ((d")
+ (rear-context-string . "undation, Inc.\n\n")
+ (position . 10409)
+ (filename . "/home/winston/.emacs.d/elpa/web-server-20200330.1407/web-server")
+ (info-node . "File Server")
+ (handler . Info-bookmark-jump))
+("math-240"
  (filename . "~/docs/uni/classes/math-240/")
  (front-context-string)
  (rear-context-string . "96 Mar 30 15:48 ")

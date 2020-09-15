@@ -30,7 +30,7 @@
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
  '(compilation-message-face (quote default))
- '(counsel-mode nil)
+ '(css-indent-offset 2)
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#657b83")
  '(cua-overwrite-cursor-color "#b58900")
@@ -41,6 +41,7 @@
  '(custom-safe-themes
    (quote
     ("947190b4f17f78c39b0ab1ea95b1e6097cc9202d55c73a702395fc817f899393" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "6bc387a588201caf31151205e4e468f382ecc0b888bac98b2b525006f7cb3307" "d1cc05d755d5a21a31bced25bed40f85d8677e69c73ca365628ce8024827c9e3" "9fe1540491fcf692b8c639a3abacd32b29233bc4cb834a12a0fd1e01cbd0a128" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "f0d8af755039aa25cd0792ace9002ba885fd14ac8e8807388ab00ec84c9497d7" "c86f868347919095aa44d2a6129dd714cbcf8feaa88ba954f636295b14ceff8f" default)))
+ '(dash-docs-browser-func (quote eww))
  '(debug-on-error nil)
  '(desktop-path (quote ("~/.emacs.d/desktop")))
  '(diary-entry-marker (quote font-lock-variable-name-face))
@@ -121,7 +122,6 @@ static char *gnus-pointer[] = {
           (nntp-port-number 563))))
  '(haskell-interactive-popup-errors nil)
  '(helm-dash-browser-func (quote eww))
- '(helm-mode nil)
  '(help-window-select (quote other))
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-foreground-color "#586e75")
@@ -181,8 +181,7 @@ static char *gnus-pointer[] = {
  '(irfc-assoc-mode t)
  '(irfc-directory "~/docs/RFC")
  '(irfc-download-base-url "https://www.ietf.org/rfc/")
- '(ivy-height 8)
- '(ivy-mode t)
+ '(js-indent-level 2)
  '(lua-indent-level 2)
  '(magit-diff-use-overlays nil)
  '(magithub-clone-default-directory "~/code/")
@@ -236,7 +235,7 @@ static char *gnus-pointer[] = {
  '(org-trello-current-prefix-keybinding "C-c o")
  '(package-selected-packages
    (quote
-    (ansible org-static-blog prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll undo-tree elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line solarized-theme spacemacs-theme ssh-config-mode steam swiper tuareg use-package web-mode winum yaml-mode zenburn-theme bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode writeroom-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii)))
+    (counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible org-static-blog prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll undo-tree elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line solarized-theme spacemacs-theme ssh-config-mode steam swiper tuareg use-package web-mode winum yaml-mode zenburn-theme bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode writeroom-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii)))
  '(pdf-view-midnight-colors (quote ("#655370" . "#fbf8ef")))
  '(plantuml-default-exec-mode (quote executable))
  '(pos-tip-background-color "#eee8d5")
@@ -244,7 +243,46 @@ static char *gnus-pointer[] = {
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
    (quote
-    ((eval ansible)
+    ((eval progn
+           (auto-revert-mode 1)
+           (org-indent-mode 1))
+     (eval progn
+           (auto-revert-mode 1)
+           (org-indent-mode))
+     (org-hide-emphasis-markers . t)
+     (org-static-blog-page-header . "
+<link href=\"static/style.css?v=1.13\" rel=\"stylesheet\" type=\"text/css\" />
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+")
+     (eval progn
+           (use-local-map
+            (copy-keymap text-mode-map))
+           (local-set-key "<next>"
+                          (quote
+                           (lambda nil
+                             (interactive)
+                             (forward-page)
+                             (recenter-top-bottom 0))))
+           (local-set-key "<prev>"
+                          (quote
+                           (lambda nil
+                             (interactive)
+                             (backward-page)
+                             (recenter-top-bottom 0)))))
+     (eval load
+           (concat
+            (projectile-project-root)
+            "private/setup")
+           nil t)
+     (eval load
+           (concat
+            (projectile-project-root)
+            "private/setup"))
+     (org-static-blog-page-header . "
+<link href=\"static/style.css?v=1.12\" rel=\"stylesheet\" type=\"text/css\" />
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+")
+     (eval ansible)
      (eval c-set-offset
            (quote arglist-cont-nonempty)
            (quote
@@ -468,6 +506,7 @@ blog.winny.tech :: <ul class=\"inline-list\">
      (org-static-blog-publish-title . "blog.winny.tech"))))
  '(same-window-regexps (quote ("\\*Man .*\\*")))
  '(scroll-bar-mode nil)
+ '(sgml-basic-offset 2)
  '(show-paren-delay 0.0)
  '(show-paren-mode t)
  '(sml/col-number-format "%3c")
@@ -535,8 +574,6 @@ blog.winny.tech :: <ul class=\"inline-list\">
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 89)) (:foreground "#d3d3d3" :background "#000000"))))
  '(Info-quoted ((t (:inherit nil))))
  '(diredp-omit-file-name ((t (:inherit diredp-ignored-file-name))))
- '(sunrise-active-path-face ((t (:background "#04aa04" :foreground "yellow"))))
- '(variable-pitch ((t (:family "Go Medium")))))
+ '(sunrise-active-path-face ((t (:background "#04aa04" :foreground "yellow")))))
