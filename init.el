@@ -617,6 +617,7 @@ EXTENSION may also be a list."
 (use-package dash-docs
   :ensure t
   :init
+  (require 'dash-docs)                  ; Gives error when line not present.
   (defun winny/dash-docs-activate-all-docsets ()
     (interactive)
     (loop for docset in (directory-files dash-docs-docsets-path nil "^.+\\.docset$")
