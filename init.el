@@ -50,10 +50,6 @@
 
 ;;; Built-in configuration
 
-;; Dired ^ in customize (u is provided, but I always forget about it).
-(require 'cus-edit)
-(define-key custom-mode-map "^" 'Custom-goto-parent)
-
 ;; Better buffer list
 (defalias 'list-buffers 'ibuffer)
 
@@ -1065,12 +1061,11 @@ https://stackoverflow.com/a/18814469/2720026"
   (interactive "p")
   (kmacro-exec-ring-item (quote ([4 45 19 124 return 2 2 134217760 4 58 58 5 2 134217760 4 backspace return 11] 0 "%d")) arg))
 
-
+;;; custom-mode tweaks
+(require 'cus-edit)
 (defconst winny/child-widget-regex "^\\(Hide\\|Show Value\\|Show\\)")
-
 (defun winny/forward-child-widget (&optional arg)
   "Navigate to next child widget by ARG.
-
 Use a Negative ARG to navigate backwards."
   (interactive "p")
   (when (and (looking-at winny/child-widget-regex) (> arg 0))
@@ -1081,16 +1076,17 @@ Use a Negative ARG to navigate backwards."
         ;; Ensure point is at the beginning of the line.
         (move-beginning-of-line nil))
     (error (ding))))
-
 (defun winny/backward-child-widget (&optional arg)
   "Navigate to previous child widget by ARG.
-
 Use a Negative ARG to navigate forwards."
   (interactive "p")
   (winny/forward-child-widget (- arg)))
 
+;; Dired ^ in customize (u is provided, but I always forget about it).
+(define-key custom-mode-map "^" 'Custom-goto-parent)
 (define-key custom-mode-map (kbd "M-n") 'winny/forward-child-widget)
 (define-key custom-mode-map (kbd "M-p") 'winny/backward-child-widget)
+;; Make it extra easy to expand child widgets without dancing around META.
 (define-key custom-mode-map (kbd "M-RET") 'Custom-newline)
 
 (provide 'init)
