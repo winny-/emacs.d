@@ -724,6 +724,11 @@ EXTENSION may also be a list."
   ;;(global-undo-tree-mode)
   )
 
+(use-package hl-todo
+  :ensure t
+  :init
+  (global-hl-todo-mode 1))
+
 (use-package flycheck
   :ensure t
   :init
