@@ -1065,7 +1065,7 @@ https://stackoverflow.com/a/18814469/2720026"
   (kmacro-exec-ring-item (quote ([4 45 19 124 return 2 2 134217760 4 58 58 5 2 134217760 4 backspace return 11] 0 "%d")) arg))
 
 
-(defconst winny/child-widget-regex "^\\(Hide\\|Show Value\\)")
+(defconst winny/child-widget-regex "^\\(Hide\\|Show Value\\|Show\\)")
 
 (defun winny/forward-child-widget (&optional arg)
   "Navigate to next child widget by ARG.
@@ -1074,9 +1074,12 @@ Use a Negative ARG to navigate backwards."
   (interactive "p")
   (when (and (looking-at winny/child-widget-regex) (> arg 0))
     (setq arg (+ 1 arg)))
-  (re-search-forward winny/child-widget-regex nil nil arg)
-  ;; Ensure point is at the beginning of the line.
-  (move-beginning-of-line nil))
+  (condition-case nil
+      (progn
+        (re-search-forward winny/child-widget-regex nil nil arg)
+        ;; Ensure point is at the beginning of the line.
+        (move-beginning-of-line nil))
+    (error (ding))))
 
 (defun winny/backward-child-widget (&optional arg)
   "Navigate to previous child widget by ARG.
