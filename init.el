@@ -230,11 +230,11 @@ regardless of whether the current buffer is in `eww-mode'."
 ;;(require 'eclim)
 ;;(global-eclim-mode)
 
-;; company-mode
-;;(require 'company)
-;;(require 'company-emacs-eclim)
-;;(company-emacs-eclim-setup)
-;;(global-company-mode t)
+(use-package company
+  :ensure t
+  :init
+  (global-set-key (kbd "<C-tab>") 'company-complete)
+  (add-hook 'after-init-hook 'global-company-mode))
 
 ;;(edit-server-start)
 
@@ -359,6 +359,23 @@ EXTENSION may also be a list."
   :ensure t)
 
 (use-package rust-mode
+  :ensure t)
+
+(use-package dotnet
+  :ensure t
+  :after csharp-mode
+  :init
+  (add-hook 'csharp-mode-hook 'dotnet-mode))
+
+(use-package omnisharp
+  :ensure t
+  :after csharp-mode
+  :after company
+  :init
+  (add-hook 'csharp-mode-hook 'omnisharp-mode)
+  (add-to-list 'company-backends 'company-omnisharp))
+
+(use-package csproj-mode
   :ensure t)
 
 (use-package csharp-mode
