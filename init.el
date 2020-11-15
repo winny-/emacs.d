@@ -360,6 +360,16 @@ EXTENSION may also be a list."
 (use-package csharp-mode
   :ensure t)
 
+(use-package powershell
+  :ensure t
+  :hook (powershell-mode
+         .
+         (lambda ()
+           ;; No don't override a standard emacs key, really what were they thinking?
+           (local-unset-key (kbd "M-`"))
+           ;; Todo: bind powershell-escape-selection to something else...
+           )))
+
 (use-package coffee-mode
   :ensure t)
 
@@ -370,6 +380,9 @@ EXTENSION may also be a list."
   :ensure t)
 
 (use-package json-mode
+  :ensure t)
+
+(use-package yaml-mode
   :ensure t)
 
 (use-package go-mode
@@ -506,7 +519,9 @@ EXTENSION may also be a list."
          ("C-x M-c" . magit-clone)))
 
 (use-package which-key
-  :ensure t)
+  :ensure t
+  :init
+  (which-key-mode 1))
 
 (use-package forge
   :ensure t)
