@@ -279,14 +279,6 @@ EXTENSION may also be a list."
 
 (winner-mode 1)
 
-;; racket-mode
-;;(add-hook 'racket-mode-hook (lambda ()
-;;                              (put 'new 'racket-indent-function 'defun)))
-
-(defun winny/setup-racket ()
-  (put 'bit-string-case 'racket-indent-function 'defun))
-(add-hook 'racket-mode-hook 'winny/setup-racket)
-
 (require 'doc-view)
 ;;(setq doc-view-resolution 144)
 
@@ -302,6 +294,15 @@ EXTENSION may also be a list."
   (require 'use-package))
 
 ;;; File format support
+
+(use-package racket-mode
+  :ensure t
+  :hook
+  ((racket-mode-hook
+    .
+    (lambda ()
+      (put 'bit-string-case 'racket-indent-function 'defun)))
+   (racket-mode-hook . 'racket-xp-mode)))
 
 (use-package lua-mode
   :ensure t

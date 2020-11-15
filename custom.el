@@ -576,4 +576,5 @@ blog.winny.tech :: <ul class=\"inline-list\">
  ;; If there is more than one, they won't work right.
  '(Info-quoted ((t (:inherit nil))))
  '(diredp-omit-file-name ((t (:inherit diredp-ignored-file-name))))
+ '(racket-xp-unused-face ((t nil)))
  '(sunrise-active-path-face ((t (:background "#04aa04" :foreground "yellow")))))
