@@ -605,6 +605,7 @@ blog.winny.tech :: <ul class=\"inline-list\">
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Info-quoted ((t (:inherit nil))))
+ '(abl-preprocessor-face ((t (:inherit font-lock-preprocessor-face :foreground "#ff69b4"))))
  '(diredp-omit-file-name ((t (:inherit diredp-ignored-file-name))))
  '(hl-line ((t (:inherit highlight :background "#4c004c"))))
  '(racket-xp-unused-face ((t nil)))

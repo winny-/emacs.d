@@ -679,6 +679,9 @@ EXTENSION may also be a list."
 (use-package ox-twbs
   :ensure t)
 
+(use-package rainbow-mode
+  :ensure t)
+
 (use-package web-mode
   :ensure t
   :config
