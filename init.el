@@ -23,7 +23,6 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-
 ;;; Cask
 
 (require 'cask "~/.cask/cask.el")
@@ -543,8 +542,7 @@ EXTENSION may also be a list."
 (use-package counsel-projectile
   :ensure t
   :init
-  (counsel-projectile-mode 1)
-  )
+  (counsel-projectile-mode 1))
 
 (use-package helm-mode
   :init
