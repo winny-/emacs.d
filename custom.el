@@ -91,6 +91,7 @@ static char *note[] = {
 \"#######..#\" };")))
  '(epresent-text-scale 200)
  '(fci-rule-color "#383838")
+ '(global-hl-line-mode t)
  '(gnus-logo-colors (quote ("#4c8383" "#bababa")) t)
  '(gnus-mode-line-image-cache
    (quote
@@ -243,7 +244,35 @@ static char *gnus-pointer[] = {
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
    (quote
-    ((eval progn
+    ((eval add-to-list
+           (quote auto-mode-alist)
+           (\`
+            ((\,
+              (concat default-directory "[^/]+\\.\\(i\\|p\\|t\\)\\'"))
+             . abl-mode)))
+     (eval when
+           (and
+            (not
+             (boundp
+              (quote winny/dirlocal-hack)))
+            (buffer-file-name)
+            (string-match "\\.\\(i\\|p\\|t\\)$"
+                          (buffer-file-name)))
+           (setq-local winny/dirlocal-hack t)
+           (abl-mode))
+     (eval when
+           (and
+            (buffer-file-name)
+            (string-match "\\.\\(i\\|p\\|t\\)$"
+                          (buffer-file-name)))
+           (abl-mode))
+     (eval when
+           (and
+            (buffer-file-name)
+            (string-match "\\.\\(i\\|p\\|t\\)$"
+                          (buffer-file-name)))
+           (fundamental-mode 1))
+     (eval progn
            (auto-revert-mode 1)
            (org-indent-mode 1))
      (eval progn
@@ -576,4 +605,5 @@ blog.winny.tech :: <ul class=\"inline-list\">
  ;; If there is more than one, they won't work right.
  '(Info-quoted ((t (:inherit nil))))
  '(diredp-omit-file-name ((t (:inherit diredp-ignored-file-name))))
+ '(hl-line ((t (:inherit highlight :background "#4c004c"))))
  '(sunrise-active-path-face ((t (:background "#04aa04" :foreground "yellow")))))

@@ -23,11 +23,7 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-
-;;; Cask
-
-(require 'cask "~/.cask/cask.el")
-;;(cask-initialize "~/projects/emacs-dashboard/")
+(load "~/.emacs.d/host.el" nil t t)
 
 ;;; Package requires / system loads
 
@@ -55,7 +51,6 @@
 
 (setq auto-window-vscroll nil)
 (setq-default fill-column 79)
-;(setq source-directory "~/code/emacs-24.5")
 
 ;;(add-to-list 'display-buffer-alist
 ;;             `("\\*Async Shell Command\\*.*" (,#'display-buffer-no-window)))
@@ -86,15 +81,6 @@
 (defun whitespace-hook ()
   "Hook to make trailing whitespace visible."
   (setq-local show-trailing-whitespace t))
-
-;; Font
-;; (let ((my-font (concat ;"Droid Sans Mono Slashed-"
-;;                 "Go Mono-"
-;;                                         ;(if (string-prefix-p "fightclub" system-name t) "10" "11")
-;;                 "11"
-;;                 )))
-;;   (add-to-list 'default-frame-alist `(font . ,my-font))
-;;   (set-face-attribute 'default t :font my-font))
 
 (defun show-paren-local-mode (&optional arg)
   "Toggle visibility of matching parenthesis for the current buffer.
@@ -131,9 +117,19 @@ When ARG is positive or not a number, enable function
 ;; javascript-mode
 (setq js-indent-level 2)
 
+(global-hl-line-mode 1)
+
 (require 'org)
 
 (add-hook 'irfc-mode-hook (lambda () (show-paren-local-mode -1)))
+
+(defun unfill-region (beg end)
+  "Unfill the region, joining text paragraphs into a single
+    logical line.  This is useful, e.g., for use with
+    `visual-line-mode'."
+  (interactive "*r")
+  (let ((fill-column (point-max)))
+    (fill-region beg end)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; free up some function keys
@@ -301,6 +297,12 @@ EXTENSION may also be a list."
   (package-install 'use-package)
   (require 'use-package))
 
+(use-package highlight
+  :ensure t)
+
+(use-package ag
+  :ensure t)
+
 ;;; File format support
 
 (use-package lua-mode
@@ -448,6 +450,7 @@ EXTENSION may also be a list."
             (looking-at-p "[[:space:]]*$"))
     (forward-line 1)))
 
+;; XXX does not appear to run
 (use-package vimish-fold
   :ensure t
   :after expand-region
@@ -523,9 +526,6 @@ EXTENSION may also be a list."
 (use-package forge
   :ensure t)
 
-(use-package magithub
-  :ensure t)
-
 (use-package writeroom-mode
   :ensure t
   ;; :hook
@@ -584,6 +584,9 @@ EXTENSION may also be a list."
 
 (use-package sunrise
   :load-path "~/.emacs.d/sunrise-commander")
+
+(use-package abl-mode
+  :load-path "~/.emacs.d/abl-mode")
 
 
 
@@ -794,6 +797,10 @@ EXTENSION may also be a list."
 
 (global-set-key (kbd "C-x c") 'compile)
 (global-set-key (kbd "C-x y") 'browse-kill-ring)
+
+(defun winny/kill-whitespace-right ()
+  (interactive)
+  (delete-region (point) (save-excursion (skip-chars-forward "\\s-") (point))))
 
 (mapc (lambda (m) (add-hook (intern (concat (symbol-name m) "-mode-hook"))
                             'whitespace-hook))
