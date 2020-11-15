@@ -275,14 +275,6 @@ EXTENSION may also be a list."
 
 (winner-mode 1)
 
-;; racket-mode
-;;(add-hook 'racket-mode-hook (lambda ()
-;;                              (put 'new 'racket-indent-function 'defun)))
-
-(defun winny/setup-racket ()
-  (put 'bit-string-case 'racket-indent-function 'defun))
-(add-hook 'racket-mode-hook 'winny/setup-racket)
-
 (require 'doc-view)
 ;;(setq doc-view-resolution 144)
 
@@ -304,6 +296,15 @@ EXTENSION may also be a list."
   :ensure t)
 
 ;;; File format support
+
+(use-package racket-mode
+  :ensure t
+  :hook
+  ((racket-mode-hook
+    .
+    (lambda ()
+      (put 'bit-string-case 'racket-indent-function 'defun)))
+   (racket-mode-hook . 'racket-xp-mode)))
 
 (use-package lua-mode
   :ensure t
@@ -475,6 +476,9 @@ EXTENSION may also be a list."
   (global-set-key (kbd "M-g d") #'vimish-fold-delete)
   (global-set-key (kbd "M-g M-d") #'vimish-fold-delete))
 
+(use-package pass
+  :ensure t)
+
 (use-package paren-face
   :ensure t
   :config
@@ -557,8 +561,7 @@ EXTENSION may also be a list."
 (use-package counsel-projectile
   :ensure t
   :init
-  (counsel-projectile-mode 1)
-  )
+  (counsel-projectile-mode 1))
 
 (use-package helm-mode
   :init
@@ -659,6 +662,8 @@ EXTENSION may also be a list."
 (use-package projectile
   :ensure t
   :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  (setq projectile-mode-line-prefix " Pro")
   :init
   ;;(setq projectile-project-search-path '("~/projects" "~/code" "~/docs"))
   (setq projectile-project-search-path '("~/"))
@@ -666,6 +671,8 @@ EXTENSION may also be a list."
 
 (use-package editorconfig
   :ensure t
+  :config
+  (setq editorconfig-mode-lighter " EdC")
   :init
   (editorconfig-mode 1))
 
