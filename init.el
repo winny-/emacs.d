@@ -643,6 +643,8 @@ EXTENSION may also be a list."
 (use-package projectile
   :ensure t
   :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  (setq projectile-mode-line-prefix " Pro")
   :init
   ;;(setq projectile-project-search-path '("~/projects" "~/code" "~/docs"))
   (setq projectile-project-search-path '("~/"))
@@ -650,6 +652,8 @@ EXTENSION may also be a list."
 
 (use-package editorconfig
   :ensure t
+  :config
+  (setq editorconfig-mode-lighter " EdC")
   :init
   (editorconfig-mode 1))
 
