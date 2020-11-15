@@ -459,6 +459,9 @@ EXTENSION may also be a list."
   (global-set-key (kbd "M-g d") #'vimish-fold-delete)
   (global-set-key (kbd "M-g M-d") #'vimish-fold-delete))
 
+(use-package pass
+  :ensure t)
+
 (use-package paren-face
   :ensure t
   :config
