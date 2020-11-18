@@ -170,6 +170,8 @@ When ON-QUIT is non-nil toggle debug on quit instead."
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 (global-set-key (kbd "C-x K") 'bury-buffer)
+(define-key occur-mode-map (kbd "p") 'previous-line)
+(define-key occur-mode-map (kbd "n") 'next-line)
 
 (defun scroll-up-1 ()
   "Scroll up by 1 line."
