@@ -2,7 +2,14 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("misc-sync/org"
+(("(elisp) Faces for Font Lock"
+ (front-context-string . "’\n     for the n")
+ (rear-context-string . "riable-name-face")
+ (position . 1477576)
+ (filename . "/usr/share/info/emacs-26/elisp")
+ (info-node . "Faces for Font Lock")
+ (handler . Info-bookmark-jump))
+("misc-sync/org"
  (filename . "/var/lib/syncthing/misc-sync/org/")
  (front-context-string . "day2day.org\n  -r")
  (rear-context-string . " 0 Sep 14 02:53 ")
