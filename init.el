@@ -593,7 +593,8 @@ EXTENSION may also be a list."
 (use-package abl-mode
   :load-path "~/.emacs.d/abl-mode")
 
-
+(use-package unison
+  :load-path "~/.emacs.d/site-lisp")
 
 (use-package fast-scroll
   :ensure t
@@ -1118,6 +1119,17 @@ Use a Negative ARG to navigate backwards."
 Use a Negative ARG to navigate forwards."
   (interactive "p")
   (winny/forward-child-widget (- arg)))
+
+(defun winny/reload-feature (feature &optional force) ; Why the HECK is this
+                                                      ; not standard?
+  "Reload FEATURE optionally FORCE the `unload-feature' call."
+  (interactive
+   (list
+    (read-feature "Unload feature: " t)
+    current-prefix-arg))
+  (let ((f (feature-file feature)))
+    (unload-feature feature force)
+    (load f)))
 
 ;; Dired ^ in customize (u is provided, but I always forget about it).
 (define-key custom-mode-map "^" 'Custom-goto-parent)
