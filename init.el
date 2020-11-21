@@ -297,6 +297,9 @@ EXTENSION may also be a list."
 (use-package ag
   :ensure t)
 
+(use-package rg
+  :ensure t)
+
 ;;; File format support
 
 (use-package racket-mode
@@ -591,7 +594,11 @@ EXTENSION may also be a list."
   :load-path "~/.emacs.d/sunrise-commander")
 
 (use-package abl-mode
-  :load-path "~/.emacs.d/abl-mode")
+  :load-path "~/.emacs.d/abl-mode"
+  ;; :hook (abl-mode-hook . (defun winny/abl-mode-hook ()
+  ;;                          "Hook for `abl-mode'"
+  ;;                          (font-lock-add-keywords 'abl-mode '(("/\\*+ [a-zA-Z]+ *:[^*]*\\*+\\(?:[^/*][^*]*\\*+\\)*/" . font-lock-doc-face)))))
+  )
 
 (use-package unison
   :load-path "~/.emacs.d/site-lisp")
