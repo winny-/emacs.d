@@ -1138,6 +1138,18 @@ Use a Negative ARG to navigate forwards."
     (unload-feature feature force)
     (load f)))
 
+(defun winny/reload-major-mode ()
+  "Reload the current major mode.
+
+TODO: This should reload the other buffers with the given major mode."
+  (interactive)
+  (letrec ((mode major-mode)
+           (f (cdr (find-function-library mode))))
+    (loop for feature in (file-provides f)
+          do (unload-feature feature t))
+    (load f)
+    (funcall mode)))
+
 ;; Dired ^ in customize (u is provided, but I always forget about it).
 (define-key custom-mode-map "^" 'Custom-goto-parent)
 (define-key custom-mode-map (kbd "M-n") 'winny/forward-child-widget)
