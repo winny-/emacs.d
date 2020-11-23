@@ -275,6 +275,8 @@ EXTENSION may also be a list."
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq word-wrap t)))
 
+(add-to-list 'auto-mode-alist '("\\.DotSettings\\'" . xml-mode))
+
 (winner-mode 1)
 
 (require 'doc-view)
@@ -366,6 +368,9 @@ EXTENSION may also be a list."
   :ensure t)
 
 (use-package csharp-mode
+  :ensure t)
+
+(use-package csproj-mode
   :ensure t)
 
 (use-package powershell
