@@ -23,7 +23,11 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-(load "~/.emacs.d/host.el" nil t t)
+(message "Loading host.el...")
+(condition-case err
+    (load "~/.emacs.d/host.el" nil t t)
+  (error (message "Failed to load host.el: %s" (error-message-string err))))
+
 
 ;;; Package requires / system loads
 
