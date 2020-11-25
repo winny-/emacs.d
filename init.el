@@ -556,6 +556,9 @@ EXTENSION may also be a list."
          ("C-x M-g" . magit-dispatch)
          ("C-x M-c" . magit-clone)))
 
+(use-package gitignore-mode
+  :ensure t)
+
 (use-package which-key
   :ensure t
   :init
