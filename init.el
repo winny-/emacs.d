@@ -23,11 +23,7 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-
-;;; Cask
-
-(require 'cask "~/.cask/cask.el")
-;;(cask-initialize "~/projects/emacs-dashboard/")
+(load "~/.emacs.d/host.el" nil t t)
 
 ;;; Package requires / system loads
 
@@ -50,16 +46,11 @@
 
 ;;; Built-in configuration
 
-;; Dired ^ in customize (u is provided, but I always forget about it).
-(require 'cus-edit)
-(define-key custom-mode-map "^" 'Custom-goto-parent)
-
 ;; Better buffer list
 (defalias 'list-buffers 'ibuffer)
 
 (setq auto-window-vscroll nil)
 (setq-default fill-column 79)
-;(setq source-directory "~/code/emacs-24.5")
 
 ;;(add-to-list 'display-buffer-alist
 ;;             `("\\*Async Shell Command\\*.*" (,#'display-buffer-no-window)))
@@ -90,15 +81,6 @@
 (defun whitespace-hook ()
   "Hook to make trailing whitespace visible."
   (setq-local show-trailing-whitespace t))
-
-;; Font
-;; (let ((my-font (concat ;"Droid Sans Mono Slashed-"
-;;                 "Go Mono-"
-;;                                         ;(if (string-prefix-p "fightclub" system-name t) "10" "11")
-;;                 "11"
-;;                 )))
-;;   (add-to-list 'default-frame-alist `(font . ,my-font))
-;;   (set-face-attribute 'default t :font my-font))
 
 (defun show-paren-local-mode (&optional arg)
   "Toggle visibility of matching parenthesis for the current buffer.
@@ -135,9 +117,19 @@ When ARG is positive or not a number, enable function
 ;; javascript-mode
 (setq js-indent-level 2)
 
+(global-hl-line-mode 1)
+
 (require 'org)
 
 (add-hook 'irfc-mode-hook (lambda () (show-paren-local-mode -1)))
+
+(defun unfill-region (beg end)
+  "Unfill the region, joining text paragraphs into a single
+    logical line.  This is useful, e.g., for use with
+    `visual-line-mode'."
+  (interactive "*r")
+  (let ((fill-column (point-max)))
+    (fill-region beg end)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; free up some function keys
@@ -178,6 +170,8 @@ When ON-QUIT is non-nil toggle debug on quit instead."
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 (global-set-key (kbd "C-x K") 'bury-buffer)
+(define-key occur-mode-map (kbd "p") 'previous-line)
+(define-key occur-mode-map (kbd "n") 'next-line)
 
 (defun scroll-up-1 ()
   "Scroll up by 1 line."
@@ -281,15 +275,9 @@ EXTENSION may also be a list."
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq word-wrap t)))
 
+(add-to-list 'auto-mode-alist '("\\.DotSettings\\'" . xml-mode))
+
 (winner-mode 1)
-
-;; racket-mode
-;;(add-hook 'racket-mode-hook (lambda ()
-;;                              (put 'new 'racket-indent-function 'defun)))
-
-(defun winny/setup-racket ()
-  (put 'bit-string-case 'racket-indent-function 'defun))
-(add-hook 'racket-mode-hook 'winny/setup-racket)
 
 (require 'doc-view)
 ;;(setq doc-view-resolution 144)
@@ -305,7 +293,25 @@ EXTENSION may also be a list."
   (package-install 'use-package)
   (require 'use-package))
 
+(use-package highlight
+  :ensure t)
+
+(use-package ag
+  :ensure t)
+
+(use-package rg
+  :ensure t)
+
 ;;; File format support
+
+(use-package racket-mode
+  :ensure t
+  :hook
+  ((racket-mode-hook
+    .
+    (lambda ()
+      (put 'bit-string-case 'racket-indent-function 'defun)))
+   (racket-mode-hook . 'racket-xp-mode)))
 
 (use-package lua-mode
   :ensure t
@@ -381,6 +387,19 @@ EXTENSION may also be a list."
 (use-package csharp-mode
   :ensure t)
 
+(use-package csproj-mode
+  :ensure t)
+
+(use-package powershell
+  :ensure t
+  :hook (powershell-mode
+         .
+         (lambda ()
+           ;; No don't override a standard emacs key, really what were they thinking?
+           (local-unset-key (kbd "M-`"))
+           ;; Todo: bind powershell-escape-selection to something else...
+           )))
+
 (use-package coffee-mode
   :ensure t)
 
@@ -391,6 +410,9 @@ EXTENSION may also be a list."
   :ensure t)
 
 (use-package json-mode
+  :ensure t)
+
+(use-package yaml-mode
   :ensure t)
 
 (use-package go-mode
@@ -456,6 +478,7 @@ EXTENSION may also be a list."
             (looking-at-p "[[:space:]]*$"))
     (forward-line 1)))
 
+;; XXX does not appear to run
 (use-package vimish-fold
   :ensure t
   :after expand-region
@@ -479,6 +502,9 @@ EXTENSION may also be a list."
   (global-set-key (kbd "M-g M-t") #'vimish-fold-toggle)
   (global-set-key (kbd "M-g d") #'vimish-fold-delete)
   (global-set-key (kbd "M-g M-d") #'vimish-fold-delete))
+
+(use-package pass
+  :ensure t)
 
 (use-package paren-face
   :ensure t
@@ -523,10 +549,12 @@ EXTENSION may also be a list."
          ("C-x M-g" . magit-dispatch)
          ("C-x M-c" . magit-clone)))
 
-(use-package forge
-  :ensure t)
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode 1))
 
-(use-package magithub
+(use-package forge
   :ensure t)
 
 (use-package writeroom-mode
@@ -560,8 +588,7 @@ EXTENSION may also be a list."
 (use-package counsel-projectile
   :ensure t
   :init
-  (counsel-projectile-mode 1)
-  )
+  (counsel-projectile-mode 1))
 
 (use-package helm-mode
   :init
@@ -588,7 +615,15 @@ EXTENSION may also be a list."
 (use-package sunrise
   :load-path "~/.emacs.d/sunrise-commander")
 
+(use-package abl-mode
+  :load-path "~/.emacs.d/abl-mode"
+  ;; :hook (abl-mode-hook . (defun winny/abl-mode-hook ()
+  ;;                          "Hook for `abl-mode'"
+  ;;                          (font-lock-add-keywords 'abl-mode '(("/\\*+ [a-zA-Z]+ *:[^*]*\\*+\\(?:[^/*][^*]*\\*+\\)*/" . font-lock-doc-face)))))
+  )
 
+(use-package unison
+  :load-path "~/.emacs.d/site-lisp")
 
 (use-package fast-scroll
   :ensure t
@@ -634,6 +669,7 @@ EXTENSION may also be a list."
 (use-package dash-docs
   :ensure t
   :init
+  (require 'dash-docs)                  ; Gives error when line not present.
   (defun winny/dash-docs-activate-all-docsets ()
     (interactive)
     (loop for docset in (directory-files dash-docs-docsets-path nil "^.+\\.docset$")
@@ -658,6 +694,8 @@ EXTENSION may also be a list."
 (use-package projectile
   :ensure t
   :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  (setq projectile-mode-line-prefix " Pro")
   :init
   ;;(setq projectile-project-search-path '("~/projects" "~/code" "~/docs"))
   (setq projectile-project-search-path '("~/"))
@@ -665,10 +703,15 @@ EXTENSION may also be a list."
 
 (use-package editorconfig
   :ensure t
+  :config
+  (setq editorconfig-mode-lighter " EdC")
   :init
   (editorconfig-mode 1))
 
 (use-package ox-twbs
+  :ensure t)
+
+(use-package rainbow-mode
   :ensure t)
 
 (use-package web-mode
@@ -741,6 +784,11 @@ EXTENSION may also be a list."
   ;;(global-undo-tree-mode)
   )
 
+(use-package hl-todo
+  :ensure t
+  :init
+  (global-hl-todo-mode 1))
+
 (use-package flycheck
   :ensure t
   :init
@@ -791,6 +839,10 @@ EXTENSION may also be a list."
 
 (global-set-key (kbd "C-x c") 'compile)
 (global-set-key (kbd "C-x y") 'browse-kill-ring)
+
+(defun winny/kill-whitespace-right ()
+  (interactive)
+  (delete-region (point) (save-excursion (skip-chars-forward "\\s-") (point))))
 
 (mapc (lambda (m) (add-hook (intern (concat (symbol-name m) "-mode-hook"))
                             'whitespace-hook))
@@ -1076,12 +1128,11 @@ https://stackoverflow.com/a/18814469/2720026"
   (interactive "p")
   (kmacro-exec-ring-item (quote ([4 45 19 124 return 2 2 134217760 4 58 58 5 2 134217760 4 backspace return 11] 0 "%d")) arg))
 
-
+;;; custom-mode tweaks
+(require 'cus-edit)
 (defconst winny/child-widget-regex "^\\(Hide\\|Show Value\\|Show\\)")
-
 (defun winny/forward-child-widget (&optional arg)
   "Navigate to next child widget by ARG.
-
 Use a Negative ARG to navigate backwards."
   (interactive "p")
   (when (and (looking-at winny/child-widget-regex) (> arg 0))
@@ -1092,16 +1143,40 @@ Use a Negative ARG to navigate backwards."
         ;; Ensure point is at the beginning of the line.
         (move-beginning-of-line nil))
     (error (ding))))
-
 (defun winny/backward-child-widget (&optional arg)
   "Navigate to previous child widget by ARG.
-
 Use a Negative ARG to navigate forwards."
   (interactive "p")
   (winny/forward-child-widget (- arg)))
 
+(defun winny/reload-feature (feature &optional force) ; Why the HECK is this
+                                                      ; not standard?
+  "Reload FEATURE optionally FORCE the `unload-feature' call."
+  (interactive
+   (list
+    (read-feature "Unload feature: " t)
+    current-prefix-arg))
+  (let ((f (feature-file feature)))
+    (unload-feature feature force)
+    (load f)))
+
+(defun winny/reload-major-mode ()
+  "Reload the current major mode.
+
+TODO: This should reload the other buffers with the given major mode."
+  (interactive)
+  (letrec ((mode major-mode)
+           (f (cdr (find-function-library mode))))
+    (loop for feature in (file-provides f)
+          do (unload-feature feature t))
+    (load f)
+    (funcall mode)))
+
+;; Dired ^ in customize (u is provided, but I always forget about it).
+(define-key custom-mode-map "^" 'Custom-goto-parent)
 (define-key custom-mode-map (kbd "M-n") 'winny/forward-child-widget)
 (define-key custom-mode-map (kbd "M-p") 'winny/backward-child-widget)
+;; Make it extra easy to expand child widgets without dancing around META.
 (define-key custom-mode-map (kbd "M-RET") 'Custom-newline)
 
 (provide 'init)

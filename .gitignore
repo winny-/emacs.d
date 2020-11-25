@@ -25,3 +25,6 @@
 /deepin-emacs/
 /elpa/
 /forge-database.sqlite
+/host.el
+/\#*\#
+/.emacs.desktop

@@ -30,6 +30,7 @@
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
  '(compilation-message-face (quote default))
+ '(counsel-mode t)
  '(css-indent-offset 2)
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#657b83")
@@ -91,6 +92,7 @@ static char *note[] = {
 \"#######..#\" };")))
  '(epresent-text-scale 200)
  '(fci-rule-color "#383838")
+ '(global-hl-line-mode t)
  '(gnus-logo-colors (quote ("#4c8383" "#bababa")) t)
  '(gnus-mode-line-image-cache
    (quote
@@ -235,7 +237,7 @@ static char *gnus-pointer[] = {
  '(org-trello-current-prefix-keybinding "C-c o")
  '(package-selected-packages
    (quote
-    (counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible org-static-blog prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll undo-tree elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line solarized-theme spacemacs-theme ssh-config-mode steam swiper tuareg use-package web-mode winum yaml-mode zenburn-theme bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode writeroom-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii)))
+    (csproj-mode rg password-store which-key hl-todo counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible org-static-blog prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line steam swiper tuareg use-package winum yaml-mode bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii)))
  '(pdf-view-midnight-colors (quote ("#655370" . "#fbf8ef")))
  '(plantuml-default-exec-mode (quote executable))
  '(pos-tip-background-color "#eee8d5")
@@ -243,7 +245,35 @@ static char *gnus-pointer[] = {
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
    (quote
-    ((eval progn
+    ((eval add-to-list
+           (quote auto-mode-alist)
+           (\`
+            ((\,
+              (concat default-directory "[^/]+\\.\\(i\\|p\\|t\\)\\'"))
+             . abl-mode)))
+     (eval when
+           (and
+            (not
+             (boundp
+              (quote winny/dirlocal-hack)))
+            (buffer-file-name)
+            (string-match "\\.\\(i\\|p\\|t\\)$"
+                          (buffer-file-name)))
+           (setq-local winny/dirlocal-hack t)
+           (abl-mode))
+     (eval when
+           (and
+            (buffer-file-name)
+            (string-match "\\.\\(i\\|p\\|t\\)$"
+                          (buffer-file-name)))
+           (abl-mode))
+     (eval when
+           (and
+            (buffer-file-name)
+            (string-match "\\.\\(i\\|p\\|t\\)$"
+                          (buffer-file-name)))
+           (fundamental-mode 1))
+     (eval progn
            (auto-revert-mode 1)
            (org-indent-mode 1))
      (eval progn
@@ -576,4 +606,6 @@ blog.winny.tech :: <ul class=\"inline-list\">
  ;; If there is more than one, they won't work right.
  '(Info-quoted ((t (:inherit nil))))
  '(diredp-omit-file-name ((t (:inherit diredp-ignored-file-name))))
+ '(hl-line ((t (:inherit highlight :background "#030"))))
+ '(racket-xp-unused-face ((t nil)))
  '(sunrise-active-path-face ((t (:background "#04aa04" :foreground "yellow")))))

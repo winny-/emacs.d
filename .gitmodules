@@ -1,3 +1,6 @@
 [submodule "sunrise-commander"]
 	path = sunrise-commander
 	url = git@github.com:sunrise-commander/sunrise-commander.git
+[submodule "abl-mode"]
+	path = abl-mode
+	url = git@github.com:winny-/abl-mode.git
