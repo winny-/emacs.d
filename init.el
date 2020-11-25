@@ -1167,17 +1167,25 @@ Use a Negative ARG to navigate forwards."
     (unload-feature feature force)
     (load f)))
 
+(require 'loadhist)                     ; For `file-provides'
 (defun winny/reload-major-mode ()
   "Reload the current major mode.
 
-TODO: This should reload the other buffers with the given major mode."
+TODO: This should be generalized to any feature, and will
+re-enable any minor or major modes present in the feature's
+file."
   (interactive)
   (letrec ((mode major-mode)
-           (f (cdr (find-function-library mode))))
+           (f (cdr (find-function-library mode)))
+           (buffers (loop for b in (buffer-list)
+                          when (eq (buffer-local-value 'major-mode b) mode)
+                          collect b)))
     (loop for feature in (file-provides f)
           do (unload-feature feature t))
     (load f)
-    (funcall mode)))
+    (loop for b in buffers
+          do (with-current-buffer b
+               (funcall mode)))))
 
 ;; Dired ^ in customize (u is provided, but I always forget about it).
 (define-key custom-mode-map "^" 'Custom-goto-parent)
