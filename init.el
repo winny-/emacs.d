@@ -43,10 +43,19 @@
 
 ;; Stuff not packaged elsewhere
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
-(load "scribble.el" nil t t)
-(load "irfc.el" nil t t)
-(load "dired+.el" nil t t)
-(load "aps-mode.el" nil t t)
+(use-package scribble)
+(use-package irfc)
+(use-package dired+)
+(use-package aps-mode)
+(use-package unison)
+(use-package sunrise
+  :load-path "~/.emacs.d/sunrise-commander")
+(use-package abl-mode
+  :load-path "~/.emacs.d/abl-mode"
+  ;; :hook (abl-mode-hook . (defun winny/abl-mode-hook ()
+  ;;                          "Hook for `abl-mode'"
+  ;;                          (font-lock-add-keywords 'abl-mode '(("/\\*+ [a-zA-Z]+ *:[^*]*\\*+\\(?:[^/*][^*]*\\*+\\)*/" . font-lock-doc-face)))))
+  )
 
 ;;; Built-in configuration
 
@@ -394,9 +403,6 @@ EXTENSION may also be a list."
 (use-package csharp-mode
   :ensure t)
 
-(use-package csproj-mode
-  :ensure t)
-
 (use-package powershell
   :ensure t
   :hook (powershell-mode
@@ -404,7 +410,7 @@ EXTENSION may also be a list."
          (lambda ()
            ;; No don't override a standard emacs key, really what were they thinking?
            (local-unset-key (kbd "M-`"))
-           ;; Todo: bind powershell-escape-selection to something else...
+           ;; TODO: bind `powershell-escape-selection' to something else...
            )))
 
 (use-package coffee-mode
@@ -622,18 +628,7 @@ EXTENSION may also be a list."
               ("v" . neotree-select-down-node))
   :config (setq neo-filepath-sort-function 'string</extension))
 
-(use-package sunrise
-  :load-path "~/.emacs.d/sunrise-commander")
 
-(use-package abl-mode
-  :load-path "~/.emacs.d/abl-mode"
-  ;; :hook (abl-mode-hook . (defun winny/abl-mode-hook ()
-  ;;                          "Hook for `abl-mode'"
-  ;;                          (font-lock-add-keywords 'abl-mode '(("/\\*+ [a-zA-Z]+ *:[^*]*\\*+\\(?:[^/*][^*]*\\*+\\)*/" . font-lock-doc-face)))))
-  )
-
-(use-package unison
-  :load-path "~/.emacs.d/site-lisp")
 
 (use-package fast-scroll
   :ensure t
@@ -1004,16 +999,13 @@ DISPLAY is the X11 DISPLAY variable contents."
 
 (global-set-key (kbd "C-x M-w") 'show-trailing-whitespace)
 
-(defun winny/ensure-XDG_RUNTIME_DIR ()
-  "Ensure XDG_RUNTIME_DIR is set.
+(add-hook 'after-init-hook
+          (defun winny/ensure-XDG_RUNTIME_DIR ()
+            "Ensure XDG_RUNTIME_DIR is set.
 Used by qutebrowser and other utilities."
-  (let ((rd (getenv "XDG_RUNTIME_DIR")))
-    (when (or (not rd) (string-empty-p rd))
-      (setenv "XDG_RUNTIME_DIR" (format "/run/user/%d" (user-uid))))))
-
-(add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
-
-(load "portage.el" nil t t)
+            (let ((rd (getenv "XDG_RUNTIME_DIR")))
+              (when (or (not rd) (string-empty-p rd))
+                (setenv "XDG_RUNTIME_DIR" (format "/run/user/%d" (user-uid)))))))
 
 (defun remove-from-list (list-var element)
   "Remove ELEMENT from LIST-VAR."
@@ -1022,7 +1014,7 @@ Used by qutebrowser and other utilities."
 ;; Make `if' a bit less stupid looking in elisp
 (put 'if 'lisp-indent-function 'defun)
 
-(display-battery-mode (if battery-status-function 1 -1))
+(display-battery-mode (if (boundp 'battery-status-function) 1 -1))
 
 (add-to-list 'Info-directory-list "~/docs/info" t)
 (bind-key "y" #'Info-copy-current-node-name Info-mode-map)
@@ -1039,8 +1031,11 @@ Used by qutebrowser and other utilities."
         (apply 'delete-region remove)
         (insert description)))))
 
-(load "shebang-change.el" nil t t)
-;;(winny/add-shebang-change-hooks)
+(use-package shebang-change
+  :load-path "~/.emacs.d/site-lisp"
+  :init
+  ;;(winny/add-shebang-change-hooks)
+  )
 
 (defun winny/change-prop-line-mode (mode &optional dont-change-mode)
   "Change the prop line's major MODE.
@@ -1052,17 +1047,16 @@ If DONT-CHANGE-MODE is not nil, dont change to that MODE first."
   (let ((sans-mode (intern (replace-regexp-in-string "-mode$" "" (symbol-name mode)))))
     (add-file-local-variable-prop-line 'mode sans-mode nil)))
 
-(defun winny/make-shebanged-file-executable ()
-  "Make sure scripts with shebang are saved with expected permissions."
-  (interactive)
-  (when (and (save-excursion (goto-char (point-min)) (looking-at "#!"))
-             (not (file-executable-p buffer-file-name)))
-    (message "Making `%s' executable..." buffer-file-name)
-    (executable-chmod)))
+(add-hook 'after-save-hook
+          (defun winny/make-shebanged-file-executable ()
+            "Make sure scripts with shebang are saved with expected permissions."
+            (interactive)
+            (when (and (save-excursion (goto-char (point-min)) (looking-at "#!"))
+                       (not (file-executable-p buffer-file-name)))
+              (message "Making `%s' executable..." buffer-file-name)
+              (executable-chmod))))
 
-(add-hook 'after-save-hook 'winny/make-shebanged-file-executable)
 (put 'narrow-to-region 'disabled nil)
-
 
 (defun copy-buffer-file-name-as-kill (choice)
   "Copy the the buffer path to the `kill-ring'.
