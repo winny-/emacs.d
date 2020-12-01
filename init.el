@@ -428,6 +428,9 @@ EXTENSION may also be a list."
 (use-package yaml-mode
   :ensure t)
 
+(use-package ssh-config-mode
+  :ensure t)
+
 (use-package go-mode
   :ensure t
   :hook (go-mode-hook
