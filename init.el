@@ -428,6 +428,9 @@ EXTENSION may also be a list."
 (use-package yaml-mode
   :ensure t)
 
+(use-package sed-mode
+  :ensure t)
+
 (use-package ssh-config-mode
   :ensure t)
 
@@ -733,6 +736,8 @@ EXTENSION may also be a list."
       (let ((web-mode-enable-part-face nil))
         ad-do-it)
       ad-do-it))
+  (setq web-mode-auto-close-style 2
+        web-mode-enable-auto-closing t)
 ;; (add-hook 'web-mode-hook (lambda ()
 ;;                            (setq web-mode-markup-indent-offset 2)
 ;;                            (setq web-mode-css-indent-offset 2)
