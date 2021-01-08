@@ -749,7 +749,7 @@ EXTENSION may also be a list."
 ;; (load "org-static-blog.el" nil t t)
 (use-package org-static-blog
   :ensure t
-  :load-path "~/projects/org-static-blog/")
+  :load-path "~/.emacs.d/org-static-blog/")
 
 (use-package dashboard
   :ensure t

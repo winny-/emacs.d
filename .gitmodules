@@ -4,3 +4,6 @@
 [submodule "abl-mode"]
 	path = abl-mode
 	url = git@github.com:winny-/abl-mode.git
+[submodule "org-static-blog"]
+	path = org-static-blog
+	url = git@github.com:winny-/org-static-blog
