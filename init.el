@@ -152,6 +152,11 @@ When ARG is positive or not a number, enable function
 ;; move macro keys to f9-f10
 (global-set-key (kbd "<f9>") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "<f10>") 'kmacro-end-or-call-macro)
+;; ergonomic search key
+(define-key global-map (kbd "<f3>") 'isearch-forward)
+(define-key global-map (kbd "<S-f3>") 'isearch-backward)
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<S-f3>") 'isearch-repeat-backward)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; This is valuable because it ensures toggle-debug-on-error will
