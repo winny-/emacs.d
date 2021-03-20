@@ -152,6 +152,11 @@ When ARG is positive or not a number, enable function
 ;; move macro keys to f9-f10
 (global-set-key (kbd "<f9>") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "<f10>") 'kmacro-end-or-call-macro)
+;; ergonomic search key
+(define-key global-map (kbd "<f3>") 'isearch-forward)
+(define-key global-map (kbd "<S-f3>") 'isearch-backward)
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<S-f3>") 'isearch-repeat-backward)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; This is valuable because it ensures toggle-debug-on-error will
@@ -316,7 +321,12 @@ EXTENSION may also be a list."
   :ensure t)
 
 (use-package rg
-  :ensure t)
+  :ensure t
+  :init
+  ;; Move over the default rg search to `rg/files'.
+  (rg-define-search rg/files :confirm prefix)
+  ;; I don't care about rg files prompt, so fix that.
+  (rg-define-search rg :confirm prefix :files "all"))
 
 ;;; File format support
 
@@ -750,7 +760,7 @@ EXTENSION may also be a list."
 ;; (load "org-static-blog.el" nil t t)
 (use-package org-static-blog
   :ensure t
-  :load-path "~/projects/org-static-blog/")
+  :load-path "~/.emacs.d/org-static-blog/")
 
 (use-package dashboard
   :ensure t
@@ -1199,6 +1209,18 @@ file."
 (define-key custom-mode-map (kbd "M-p") 'winny/backward-child-widget)
 ;; Make it extra easy to expand child widgets without dancing around META.
 (define-key custom-mode-map (kbd "M-RET") 'Custom-newline)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun winny/maybe-query-replace-bad-comma (no-prompt)
+  "Replace occurrences of , followed by a non-space.  if `NO-PROMPT' then do don't do a query replace."
+  (interactive "P")
+  (funcall
+   (if no-prompt
+     'replace-regexp
+     'query-replace-regexp)
+   ",\\(\\S \\)"
+   ", \\1"))
 
 (provide 'init)
 ;;; init.el ends here
