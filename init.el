@@ -403,6 +403,9 @@ EXTENSION may also be a list."
 (use-package csharp-mode
   :ensure t)
 
+(use-package csproj-mode
+  :ensure t)
+
 (use-package powershell
   :ensure t
   :hook (powershell-mode
@@ -633,8 +636,6 @@ EXTENSION may also be a list."
               ("^" . neotree-select-up-node)
               ("v" . neotree-select-down-node))
   :config (setq neo-filepath-sort-function 'string</extension))
-
-
 
 (use-package fast-scroll
   :ensure t
