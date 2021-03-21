@@ -756,11 +756,13 @@ EXTENSION may also be a list."
   )
 
 ;; I have a fork
-;; (add-to-list 'load-path "~/projects/org-static-blog")
-;; (load "org-static-blog.el" nil t t)
 (use-package org-static-blog
   :ensure t
   :load-path "~/.emacs.d/org-static-blog/")
+
+(use-package ox-hugo
+  :ensure t
+  :after ox)
 
 (use-package dashboard
   :ensure t
@@ -1221,6 +1223,18 @@ file."
      'query-replace-regexp)
    ",\\(\\S \\)"
    ", \\1"))
+
+(defun winny/increment-footnotes (count)
+  "Increment all footnote numbers in buffer by `COUNT'."
+  (interactive "p")
+  (unless count
+    (setq count 1))
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "\\[fn:\\([0-9]+\\)\\]" nil t)
+      (message "m")
+      (replace-match (number-to-string (+ count (string-to-number (match-string 1))))
+                     nil nil nil 1))))
 
 (provide 'init)
 ;;; init.el ends here
