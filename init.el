@@ -1236,5 +1236,13 @@ file."
       (replace-match (number-to-string (+ count (string-to-number (match-string 1))))
                      nil nil nil 1))))
 
+(defun winny/org-goto-content ()
+  "Go to content for heading or create a newline for content.  TODO Handle visible/invisible."
+  (interactive)
+  (org-end-of-meta-data)
+  (when (org-at-heading-p)
+    (open-line 1)))
+(define-key org-mode-map (kbd "<C-M-return>") 'winny/org-goto-content)
+
 (provide 'init)
 ;;; init.el ends here
