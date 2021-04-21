@@ -339,6 +339,15 @@ EXTENSION may also be a list."
       (put 'bit-string-case 'racket-indent-function 'defun)))
    (racket-mode-hook . 'racket-xp-mode)))
 
+(use-package ledger-mode
+  :ensure t
+  :after company-mode
+  :hook
+  ((ledger-mode-hook
+    .
+    (lambda ()
+      (company-mode 1)))))
+
 (use-package lua-mode
   :ensure t
   :custom
