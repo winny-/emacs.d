@@ -1,0 +1,1887 @@
+#+title: Literate Programming =init.el=
+#+startup: indent
+#+property: header-args :results silent
+
+* Introduction
+This is an literate programming =init.el=.  Read Harry's [[https://harryrschwartz.com/2016/02/15/switching-to-a-literate-emacs-configuration][brief tutorial]] on how
+this works and how to do it yourself.
+
+Just some notes for stuff I forget to do:
+
+- Add =:eval no= to the end of a =BEGIN_SRC= line to disable evaluation.
+
+* Customize
+Load customize settings from a different file than =init.el=.
+
+#+BEGIN_SRC emacs-lisp
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+#+END_SRC
+
+* Set up load path
+This way packages can be installed from submodules or tracked directly in my
+git repository.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+#+END_SRC
+
+* Package Setup
+Set up packaging sources.
+
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize)
+#+END_SRC
+
+And load up use-package logic.
+#+BEGIN_SRC emacs-lisp
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (package-install 'use-package)
+  (require 'use-package))
+#+END_SRC
+
+* Load =host.el=
+#+BEGIN_SRC emacs-lisp
+(message "Loading host.el...")
+(condition-case err
+    (load "~/.emacs.d/host.el" nil t t)
+  (error (message "Failed to load host.el: %s" (error-message-string err))))
+#+END_SRC
+
+* Better frame title
+Give the desktop window title a nicer look.
+
+#+BEGIN_SRC emacs-lisp
+(setq-default frame-title-format '("Emacs "
+                                   (:eval (if buffer-file-name
+                                            (replace-regexp-in-string (regexp-quote (or (getenv "HOME") "")) "~" buffer-file-name)
+                                            (buffer-name)))
+                                   " [%m] { "
+                                   (:eval (string-join (mapcar #'(lambda (w) (buffer-name (window-buffer w))) (window-list)) ", "))
+                                   " }"))
+#+END_SRC
+
+* TODO Backup files
+This is marked as a todo because it appears to not work very well.
+
+#+BEGIN_SRC emacs-lisp
+(defvar my-backup-directory "~/.emacs.d/backup")
+;; Sane backup file settings
+(setq backup-directory-alist
+      `((".*" . ,my-backup-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,my-backup-directory t)))
+#+END_SRC
+* Initialization helpers
+** Toggle showing matching parenthesis for the current buffer only
+
+#+BEGIN_SRC emacs-lisp
+(defun show-paren-local-mode (&optional arg)
+  "Toggle visibility of matching parenthesis for the current buffer.
+When ARG is positive or not a number, enable function
+`show-paren-mode', else disable it."
+  (interactive)
+  (setq-local show-paren-mode
+              (cond
+               ((numberp arg) (> arg 0))
+               ((not arg) (not show-paren-mode))
+               (t t)))
+  (when (called-interactively-p 'interactive)
+    (message "show-paren-mode %s in current buffer." (if show-paren-mode "enabled" "disabled"))))
+#+END_SRC
+** Easy way to add file extensions to a major mode
+#+BEGIN_SRC emacs-lisp
+(defun add-to-auto-mode-alist (mm extension &rest extensions)
+  "Add major mode MM for EXTENSION and EXTENSIONS to the `auto-mode-alist'.
+EXTENSION may also be a list."
+  (let ((ls (if (listp extension)
+              (append extension extensions)
+              (cons extension extensions))))
+    (dolist (ext ls)
+      (add-to-list 'auto-mode-alist (cons (concat "\\." ext "\\'") mm)))
+    auto-mode-alist))
+#+END_SRC
+* Language support
+This section also includes file-format support, as file-formats can be thought
+of as languages :)
+
+** Racket
+The core racket-mode.
+
+#+BEGIN_SRC emacs-lisp
+(use-package racket-mode
+  :ensure t
+  :hook
+  ((racket-mode-hook
+    .
+    (lambda ()
+      (put 'bit-string-case 'racket-indent-function 'defun)))
+   (racket-mode-hook . 'racket-xp-mode)))
+#+END_SRC
+
+And a locally installed =scribble.el= for scribble markup.
+
+#+BEGIN_SRC emacs-lisp
+(use-package scribble)
+#+END_SRC
+
+** LaTeX/auctex
+I install this via my distro's package manager, so no =use-package= here.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'TeX-mode-hook (lambda ()
+                           (setq word-wrap t)))
+#+END_SRC
+** Lua
+#+BEGIN_SRC emacs-lisp
+(use-package lua-mode
+  :ensure t
+  :custom
+  ((lua-indent-level 2)))
+#+END_SRC
+
+** Python
+The python support is a bit complicated.  I use =python-mode= from MELPA for
+the major mode.  Then I use =auto-virtualenvwrapper= to automatically set up
+virtual environments whenever a =venv/= directory exists in the project
+directory.  For some added batteries I use jedi which adds code completion,
+visiting definitions, and so on.  I also use =jedi-direx= which makes it easier
+to navigate python sources.
+
+#+BEGIN_SRC emacs-lisp
+(use-package python-mode
+  :ensure t)
+
+(use-package auto-virtualenvwrapper
+  :ensure t
+  :after python-mode
+  :init
+  (setq auto-virtualenvwrapper-verbose nil)
+  ;; Activate on focus in
+  (add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
+  ;; Activate on changing buffers
+  (add-hook 'window-configuration-change-hook #'auto-virtualenvwrapper-activate)
+  (add-hook 'python-mode-hook 'auto-virtualenvwrapper-activate))
+
+(use-package jedi
+  :ensure t
+  :after python-mode
+  :init
+  (add-hook 'python-mode-hook 'jedi:setup t)
+  :bind (:map jedi-mode-map
+              ("M-." . jedi:goto-definition)
+              ("M-," . jedi:goto-definition-pop-marker)
+              ("C-c d" . jedi:show-doc)
+              ("C-c r" . helm-jedi-related-names)))
+
+(use-package jedi-direx
+  :ensure t
+  :after python-mode
+  :after jedi
+  :init
+  (define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer)
+  (add-hook 'jedi-mode-hook 'jedi-direx:setup))
+#+END_SRC
+
+** Ruby
+The default ruby mode is not very nice.  So use =enh-ruby-mode=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package enh-ruby-mode
+    :ensure t
+    :init
+    ;; Not sure if any if this is needed.  So commenting it out.
+    ;; (autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
+    ;; (add-to-auto-mode-alist 'enh-ruby-mode "rb")
+    ;; (add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
+    )
+#+END_SRC
+
+** C# (.Net support)
+
+*** C# support
+Syntax highlighting major mode.
+
+#+BEGIN_SRC emacs-lisp
+(use-package csharp-mode
+  :ensure t)
+#+END_SRC
+
+*** csproj support
+Major mode for csproj and other msbuild project files.
+
+#+BEGIN_SRC emacs-lisp
+(use-package csproj-mode
+  :ensure t)
+#+END_SRC
+
+*** dotnet cli helper
+This makes it possible to run some dotnet commands via emacs.
+
+#+BEGIN_SRC emacs-lisp
+(use-package dotnet
+  :ensure t
+  :after csharp-mode
+  :init
+  (add-hook 'csharp-mode-hook 'dotnet-mode))
+#+END_SRC
+
+*** omnisharp (code completion, linting, intellisense)
+This is the secret sauce for dotnet core support in emacs.  It gives code
+completion, suggestions, errors, and so on.  It is the same stuff that VSCode
+uses internally.
+
+#+BEGIN_SRC emacs-lisp
+(use-package omnisharp
+  :ensure t
+  :after csharp-mode
+  :after company
+  :init
+  (add-hook 'csharp-mode-hook 'omnisharp-mode)
+  (add-to-list 'company-backends 'company-omnisharp))
+#+END_SRC
+
+*** dotnet core
+Mark the dotnet core =.DotSettings= files as xml.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.DotSettings\\'" . xml-mode))
+#+END_SRC
+** Powershell
+#+BEGIN_SRC emacs-lisp
+(use-package powershell
+  :ensure t
+  :hook (powershell-mode
+         .
+         (lambda ()
+           ;; No don't override a standard emacs key, really what were they thinking?
+           (local-unset-key (kbd "M-`"))
+           ;; TODO: bind `powershell-escape-selection' to something else...
+           )))
+#+END_SRC
+** Web stuff
+
+*** Coffee script
+#+BEGIN_SRC emacs-lisp
+(use-package coffee-mode
+  :ensure t)
+#+END_SRC
+
+*** HTML/template support
+web-mode is pretty great.  It supports all the cool template types.
+
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+  :ensure t
+  :config
+  ;; web-mode
+  (add-to-auto-mode-alist 'web-mode "php" "phtml" "tpl" "[agj]sp" "as[cp]x"
+                          "erb" "mustache" "d?html" "jsx")
+  (defadvice web-mode-highlight-part (around tweak-jsx activate)
+    (if (equal web-mode-content-type "jsx")
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
+      ad-do-it))
+  (setq web-mode-auto-close-style 2
+        web-mode-enable-auto-closing t)
+;; (add-hook 'web-mode-hook (lambda ()
+;;                            (setq web-mode-markup-indent-offset 2)
+;;                            (setq web-mode-css-indent-offset 2)
+;;                            (setq web-mode-code-indent-offset 2)))
+  )
+#+END_SRC
+
+*** Svelte
+A pretty cool framework for modern component web applications.
+
+#+BEGIN_SRC emacs-lisp
+(use-package svelte-mode
+  :ensure t)
+#+END_SRC
+
+*** Jade HTML templates
+Maybe I should remove this.  Haven't used a Jade template for a long time.
+
+#+BEGIN_SRC emacs-lisp
+(use-package jade-mode
+  :ensure t)
+#+END_SRC
+*** Javascript
+#+BEGIN_SRC emacs-lisp
+(setq js-indent-level 2)
+#+END_SRC
+
+** Scala
+
+=scalpp= was a file extension I used for cpp prerocessed code.  =cool= was a
+file extension for a compilers course I took.  It was a subset of Scala, so I
+used this major mode.  =coop= is cpp preprocessed code.
+
+#+BEGIN_SRC emacs-lisp
+(use-package scala-mode
+  :ensure t
+  :mode "\\.coo[lp]\\'"
+  :mode "\\.scalpp\\'")
+#+END_SRC
+
+** Golang
+
+It turns out golang mode is not strict about indentation despite the toolchain
+being pretty strict about that sort of thing.  So that's what the hook does.
+
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode
+  :ensure t
+  :hook (go-mode-hook
+         .
+         (lambda ()
+           (setq tab-width 4)
+           (setq indent-tabs-mode 1))))
+#+END_SRC
+** Packaging language modes
+
+*** nix
+The nix package language and configuration language.
+
+#+BEGIN_SRC emacs-lisp
+(use-package nix-mode
+  :ensure t)
+#+END_SRC
+
+*** PKGBUILD
+The bash-based packaging format used for archlinux.
+
+#+BEGIN_SRC emacs-lisp
+(use-package pkgbuild-mode
+  :ensure t)
+#+END_SRC
+
+*** ebuild
+(This is installed via the package manager.)
+
+#+BEGIN_SRC sh
+eix app-emacs/ebuild-mode
+#+END_SRC
+** APS
+Maybe I should remove this?  I wrote this for my compilers class.
+
+#+BEGIN_SRC emacs-lisp
+(use-package aps-mode)
+#+END_SRC
+** OpenEdge ABL
+A syntax highlighting mode for OpenEdge ABL, a very organic database language.
+#+BEGIN_SRC emacs-lisp
+(use-package abl-mode
+  :load-path "~/.emacs.d/abl-mode")
+#+END_SRC
+** Graphviz .dot files
+See https://www.graphviz.org/doc/info/lang.html
+
+#+BEGIN_SRC emacs-lisp
+(use-package graphviz-dot-mode
+  :ensure t)
+#+END_SRC
+
+** Kotlin
+A Java replacement by Google.
+
+#+BEGIN_SRC emacs-lisp
+(use-package kotlin-mode
+  :ensure t)
+#+END_SRC
+** Ledger
+For [[https://plaintextaccounting.org/][plain text accounting]].
+
+#+BEGIN_SRC emacs-lisp
+(use-package ledger-mode
+  :ensure t
+  :after company-mode
+  :hook
+  ((ledger-mode-hook
+    .
+    (lambda ()
+      (company-mode 1)))))
+#+END_SRC
+** CSV
+Always useful to have better CSV tooling.
+
+#+BEGIN_SRC emacs-lisp
+(use-package csv-mode
+  :ensure t
+  :mode "\\.[Cc][Ss][Vv]\\'")
+#+END_SRC
+** Rust
+Nice and simple.  Just install rust-mode.
+
+#+BEGIN_SRC emacs-lisp
+(use-package rust-mode
+  :ensure t)
+#+END_SRC
+** JSON
+While one could use =javascript-mode=, =json-mode= restricts the syntax to just the
+JSON stuff.
+
+#+BEGIN_SRC emacs-lisp
+(use-package json-mode
+  :ensure t)
+#+END_SRC
+** YAML
+Yet another silly markup language.
+
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :ensure t)
+#+END_SRC
+** TOML
+Tom's obvious minimal language.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package toml-mode
+    :ensure t)
+#+END_SRC
+** Sed
+For =sed(1)= scripts.
+
+#+BEGIN_SRC emacs-lisp
+(use-package sed-mode
+  :ensure t)
+#+END_SRC
+** ssh configuration files
+This adds syntax highlighting for =ssh_config=, =sshd_config=, =known_hosts=,
+and =authorized_keys=.
+
+#+BEGIN_SRC emacs-lisp
+(use-package ssh-config-mode
+  :ensure t)
+#+END_SRC
+** .gitignore
+Helps with making sure globs make sense.
+
+#+BEGIN_SRC emacs-lisp
+(use-package gitignore-mode
+  :ensure t)
+#+END_SRC
+** Markdown
+The markdown markup language.
+
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :ensure t
+  :config
+  (setq markdown-asymmetric-header t))
+#+END_SRC
+** Unison profiles
+The unison synchronization tool has a somewhat weird syntax, so I wrote a major
+mode to highlight it more accurately.
+
+#+BEGIN_SRC emacs-lisp
+(use-package unison)
+#+END_SRC
+** C mode
+*** All C-like
+I can't remember what this does.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (c-set-offset 'substatement-open 0)
+            (if (assoc 'inexpr-class c-offsets-alist)
+              (c-set-offset 'inexpr-class 0))))
+#+END_SRC
+*** C language specifically
+Set default style and use tabs in C files by default.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'c-mode-hook (lambda ()
+                         (setq indent-tabs-mode t)
+                         (c-set-style "bsd")))
+#+END_SRC
+* Whitespace
+** Show trailing whitespace on some major modes by default.
+
+#+BEGIN_SRC emacs-lisp
+  (mapc (lambda (m) (add-hook (intern (concat (symbol-name m) "-mode-hook"))
+                              (defun whitespace-hook ()
+                                "Hook to make trailing whitespace visible."
+                                (setq-local show-trailing-whitespace t))))
+        '(c csv c++ python ruby enh-ruby js lisp web racket org TeX haskell makefile))
+#+END_SRC
+** Add command and bind key to toggle trailing whitespace
+#+BEGIN_SRC emacs-lisp
+(defun show-trailing-whitespace (n)
+  "Toggle the highlight of trailing whitespace for the current buffer.
+
+  When N is nil, toggle the highlight setting.
+  When N is non-negative, enable the highlight setting.
+  When N is negative, disable the highlight setting."
+  (interactive "P")
+  (setq-local show-trailing-whitespace
+              (cond
+               ((eq n nil) (not show-trailing-whitespace))
+               ((< n 0) nil)
+               (t t)))
+  (force-window-update)
+  (message (if show-trailing-whitespace
+             "Showing trailing whitespace."
+             "Hiding trailing whitespace.")))
+
+(global-set-key (kbd "C-x M-w") 'show-trailing-whitespace)
+#+END_SRC
+* File manager stuff
+** dired
+*** Automatically update directory listings
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+#+END_SRC
+
+*** Add =C-c n= to create an empty file
+#+BEGIN_SRC emacs-lisp
+(eval-after-load 'dired
+  '(progn
+     (define-key dired-mode-map (kbd "C-c n") 'dired-create-file)
+     (defun dired-create-file (file)
+       "Create a file called FILE.
+If FILE already exists, signal an error."
+       (interactive
+        (list (read-file-name "Create file: " (dired-current-directory))))
+       (let* ((expanded (expand-file-name file))
+              (try expanded)
+              (dir (directory-file-name (file-name-directory expanded)))
+              new)
+         (if (file-exists-p expanded)
+           (error "Cannot create file %s: file exists" expanded))
+         ;; Find the topmost nonexistent parent dir (variable `new')
+         (while (and try (not (file-exists-p try)) (not (equal new try)))
+           (setq new try
+                 try (directory-file-name (file-name-directory try))))
+         (when (not (file-exists-p dir))
+           (make-directory dir t))
+         (write-region "" nil expanded t)
+         (when new
+           (dired-add-file new)
+           (dired-move-to-filename))))))
+#+END_SRC
+** dired+
+A better dired.
+
+#+BEGIN_SRC emacs-lisp
+(use-package dired+)
+#+END_SRC
+** sunrise commander
+A OFM (like midnight commander) for emacs.
+
+#+BEGIN_SRC emacs-lisp
+(use-package sunrise
+  :load-path "~/.emacs.d/sunrise-commander")
+#+END_SRC
+** neotree side pane
+This is a handy side pane with a navigable tree of folders and files.  This
+also configures neotree to sort by file extension.
+
+#+BEGIN_SRC emacs-lisp
+(defun string</extension (x y)
+  "Using the file extension, indicate if X is less than Y."
+  (let ((x-ext (f-ext x))
+        (y-ext (f-ext y)))
+    (cond
+     ((string= x-ext y-ext) (string< x y))
+     ((not x-ext) t)
+     ((not y-ext) nil)
+     (t (string< x-ext y-ext)))))
+(use-package neotree
+  :ensure t
+  :bind (([f8] . neotree-toggle))
+  :bind (:map neotree-mode-map
+              ("^" . neotree-select-up-node)
+              ("v" . neotree-select-down-node))
+  :config (setq neo-filepath-sort-function 'string</extension))
+#+END_SRC
+* Feature reloading
+This should be moved to its own emacs lisp file.  =winny/reload-major-mode=
+attempts to reload a major mode.  This helps when making certain kinds
+of changes to el files.  No need to restart emacs.  Or partially re-evaluate,
+only to realize it didn't work as you expected.
+
+#+BEGIN_SRC emacs-lisp
+(defun winny/reload-feature (feature &optional force) ; Why the HECK is this
+                                                      ; not standard?
+  "Reload FEATURE optionally FORCE the `unload-feature' call."
+  (interactive
+   (list
+    (read-feature "Unload feature: " t)
+    current-prefix-arg))
+  (let ((f (feature-file feature)))
+    (unload-feature feature force)
+    (load f)))
+
+(require 'loadhist)                     ; For `file-provides'
+(defun winny/reload-major-mode ()
+  "Reload the current major mode.
+
+TODO: This should be generalized to any feature, and will
+re-enable any minor or major modes present in the feature's
+file."
+  (interactive)
+  (letrec ((mode major-mode)
+           (f (cdr (find-function-library mode)))
+           (buffers (loop for b in (buffer-list)
+                          when (eq (buffer-local-value 'major-mode b) mode)
+                          collect b)))
+    (loop for feature in (file-provides f)
+          do (unload-feature feature t))
+    (load f)
+    (loop for b in buffers
+          do (with-current-buffer b
+               (funcall mode)))))
+#+END_SRC
+* =custom-mode= helpers
+Add the following keys to help with navigating =custom-mode=:
+
+| Key     | Command                       | Description                                                                                 |
+|---------+-------------------------------+---------------------------------------------------------------------------------------------|
+| =^=     | =Custom-goto-parent=          | Go to parent node.                                                                          |
+| =M-n=   | =winny/forward-child-widget=  | Go to next configurable option.                                                             |
+| =M-p=   | =winny/backward-child-widget= | Go to previous configurable option.                                                         |
+| =M-RET= | =Custom-newline=              | Lazy bind so one doesn't have to release meta key when wishing to expand/contract a widget. |
+
+The =^= aligns with dired's usage of =^= to go up one directory.
+
+#+BEGIN_SRC emacs-lisp
+(require 'cus-edit)
+(defconst winny/child-widget-regex "^\\(Hide\\|Show Value\\|Show\\)")
+(defun winny/forward-child-widget (&optional arg)
+  "Navigate to next child widget by ARG.
+Use a Negative ARG to navigate backwards."
+  (interactive "p")
+  (when (and (looking-at winny/child-widget-regex) (> arg 0))
+    (setq arg (+ 1 arg)))
+  (condition-case nil
+      (progn
+        (re-search-forward winny/child-widget-regex nil nil arg)
+        ;; Ensure point is at the beginning of the line.
+        (move-beginning-of-line nil))
+    (error (ding))))
+(defun winny/backward-child-widget (&optional arg)
+  "Navigate to previous child widget by ARG.
+Use a Negative ARG to navigate forwards."
+  (interactive "p")
+  (winny/forward-child-widget (- arg)))
+
+(define-key custom-mode-map "^" 'Custom-goto-parent)
+(define-key custom-mode-map (kbd "M-n") 'winny/forward-child-widget)
+(define-key custom-mode-map (kbd "M-p") 'winny/backward-child-widget)
+(define-key custom-mode-map (kbd "M-RET") 'Custom-newline)
+#+END_SRC
+* Theme-ing
+** The themes
+*** cyberpunk
+My goto theme.
+
+#+BEGIN_SRC emacs-lisp
+(use-package cyberpunk-theme
+  :ensure t)
+#+END_SRC
+
+#+RESULTS:
+
+** A facility to streamline theme selection
+#+BEGIN_SRC emacs-lisp
+(load "switch-theme.el" t t)
+(setq winny/default-theme 'cyberpunk)
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (add-hook 'winny/after-theme-switch-hook 'sml/setup t t))
+#+END_SRC
+** Helper to describe theme
+#+BEGIN_SRC emacs-lisp
+(defun describe-current-theme ()
+  "Describe the current theme, ignoring smart-mode-line themes."
+  (interactive)
+  (describe-theme
+   (car
+    (cl-remove-if (lambda (x)
+                    (string-prefix-p "smart-mode-line" (symbol-name x)))
+                  custom-enabled-themes))))
+#+END_SRC
+* Emacs Performance and debugging
+
+** Profiler
+Bind the emacs profiler to some keys under the =C-x M-p= map.
+
+#+BEGIN_SRC emacs-lisp
+(require 'profiler)
+(global-set-key (kbd "C-x M-p s") 'profiler-start)
+(global-set-key (kbd "C-x M-p q") 'profiler-stop)
+(global-set-key (kbd "C-x M-p r") 'profiler-report)
+#+END_SRC
+
+** ESUP - Emacs Start Up Profiler
+
+#+BEGIN_SRC emacs-lisp
+(use-package esup
+  :ensure t
+  ;; To use MELPA Stable use ":pin mepla-stable",
+  :pin melpa
+  :commands (esup))
+#+END_SRC
+
+** Debug on error or quit
+Function =toggle-debug-on-error= is always available, but if there is an error
+that prevents =M-x toggle-debug-on-error RET= from completing, you won't be
+able to enable this functionality, thereby be unable to get an error trace
+(sad).  The work around is to make a helper function, then bind it to a key on
+the global keymap.  In this case =C-x \= will toggle debug on error.  =C-u C-x
+\= will toggle debug on quit.
+
+#+BEGIN_SRC emacs-lisp
+(defun winny/toggle-debug-on-error-or-quit (&optional on-quit)
+  "Toggle debug on error, or quit with non-nil prefix argument.
+When ON-QUIT is non-nil toggle debug on quit instead."
+  (interactive "P")
+  (if on-quit
+    (toggle-debug-on-quit)
+    (toggle-debug-on-error)))
+
+(global-set-key (kbd "C-x \\") 'winny/toggle-debug-on-error-or-quit)
+#+END_SRC
+* org-mode
+Ye ole fabulous productivity tool.
+
+** Main hook
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-mode-hook (lambda ()
+                           (setq word-wrap t)
+                           (turn-on-auto-fill)))
+#+END_SRC
+
+** Global org-mode keys
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-switchb)
+#+END_SRC
+
+** Org-mode specific keys
+#+BEGIN_SRC emacs-lisp
+(define-key org-mode-map (kbd "M-n") 'org-next-visible-heading)
+(define-key org-mode-map (kbd "M-p") 'org-previous-visible-heading)
+(define-key org-mode-map (kbd "<C-M-return>")
+  (defun winny/org-goto-content ()
+    "Go to content for heading or create a newline for content."
+    (interactive)
+    (org-end-of-meta-data)
+    (org-show-hidden-entry)
+    (when (org-at-heading-p)
+      (open-line 1))))
+#+END_SRC
+** Some helper functions/macros for org stuff
+*** convert a table to a definition list
+#+BEGIN_SRC emacs-lisp
+(defun winny/org-table-line-to-definition-list (&optional arg)
+  "Keyboard macro."
+  (interactive "p")
+  (kmacro-exec-ring-item (quote ([4 45 19 124 return 2 2 134217760 4 58 58 5 2 134217760 4 backspace return 11] 0 "%d")) arg))
+#+END_SRC
+*** Silly helper to increment footnotes
+#+BEGIN_SRC emacs-lisp
+(defun winny/increment-footnotes (count)
+  "Increment all footnote numbers in buffer by `COUNT'."
+  (interactive "p")
+  (unless count
+    (setq count 1))
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "\\[fn:\\([0-9]+\\)\\]" nil t)
+      (message "m")
+      (replace-match (number-to-string (+ count (string-to-number (match-string 1))))
+                     nil nil nil 1))))
+#+END_SRC
+*** idk what this does but it was in my init.el
+#+BEGIN_SRC emacs-lisp
+(defun afs/org-replace-link-by-link-description ()
+  "Replace an org link by its description or if empty its address."
+  (interactive)
+  (if (org-in-regexp org-bracket-link-regexp 1)
+    (save-excursion
+      (let ((remove (list (match-beginning 0) (match-end 0)))
+            (description (if (match-end 3)
+                           (org-match-string-no-properties 3)
+                           (org-match-string-no-properties 1))))
+        (apply 'delete-region remove)
+        (insert description)))))
+#+END_SRC
+** Export stuff
+*** ox-latex
+#+BEGIN_SRC emacs-lisp
+(require 'ox-latex)
+(add-to-list 'org-latex-classes
+             '("beamer"
+               "\\documentclass\[presentation\]\{beamer\}"
+               ("\\section\{%s\}" . "\\section*\{%s\}")
+               ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+               ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+#+END_SRC
+*** ox-twbs
+Pretty bootstrap based HTML export.
+
+#+BEGIN_SRC emacs-lisp
+(use-package ox-twbs
+  :ensure t)
+#+END_SRC
+*** ox-hugo
+Export to hugo markdown.  Great for blogging.
+
+#+BEGIN_SRC emacs-lisp
+(use-package ox-hugo
+  :ensure t
+  :after ox)
+#+END_SRC
+*** org-static-blog
+The blogging system that I previously used.  Note the load-path -- I have a
+fork.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-static-blog
+  :ensure t
+  :load-path "~/.emacs.d/org-static-blog/")
+#+END_SRC
+* Code folding
+Use =M-g f= to fold the region.  Use =M-g d= to delete the fold under point.
+Use =M-g t= to toggle the fold at point.
+
+#+BEGIN_SRC emacs-lisp
+(use-package vimish-fold
+  :ensure t
+  :after expand-region
+  :init
+  (defun winny/vimish-fold-defun ()
+    "Fold the defun around point."
+    (interactive)
+    (lexical-let ((r (save-excursion (er/mark-defun) (list (region-beginning) (region-end)))))
+      (vimish-fold (car r) (cadr r))))
+  (defun winny/vimish-fold-delete (entire-buffer)
+    "Fold region or entire buffer when ENTIRE-BUFFER is not nil."
+    (interactive "P")
+    (if entire-buffer
+      (vimish-fold-delete-all)
+      (vimish-fold-delete)))
+  (global-set-key (kbd "M-g f") #'vimish-fold)
+  (global-set-key (kbd "M-g M-f") #'vimish-fold)
+  (global-set-key (kbd "M-g u") #'vimish-fold-unfold)
+  (global-set-key (kbd "M-g M-u") #'vimish-fold-unfold)
+  (global-set-key (kbd "M-g t") #'vimish-fold-toggle)
+  (global-set-key (kbd "M-g M-t") #'vimish-fold-toggle)
+  (global-set-key (kbd "M-g d") #'vimish-fold-delete)
+  (global-set-key (kbd "M-g M-d") #'vimish-fold-delete))
+#+END_SRC
+
+* VCS/Git support
+** Magit
+The best way to use git.  As long as you know =C-x g= to open the magit menu,
+you are good to go.
+
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)
+         ("C-x M-g" . magit-dispatch)
+         ("C-x M-c" . magit-clone)))
+#+END_SRC
+
+** Forge
+Work with github and gitlab efficiently.
+
+#+BEGIN_SRC emacs-lisp
+(use-package forge
+  :ensure t)
+#+END_SRC
+
+* Documentation/help browsers
+
+** info
+Sometimes I put texinfo files into =~/docs/info=.  Most distros do not package
+mysql's texinfo, for example.  It sure beats firing up a web browser!
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'Info-directory-list "~/docs/info" t)
+#+END_SRC
+
+Add a key to easily copy the current info node name.  This can be used to share
+with others how to find docuemantion.
+
+#+BEGIN_SRC emacs-lisp
+(bind-key "y" #'Info-copy-current-node-name Info-mode-map)
+#+END_SRC
+
+** RFC reader (irfc)
+In this repository.
+
+#+BEGIN_SRC emacs-lisp
+(use-package irfc)
+#+END_SRC
+
+Do not show matching parenthesis in this mode.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'irfc-mode-hook (lambda () (show-paren-local-mode -1)))
+#+END_SRC
+
+** Dash docs
+This uses the same documentation sources that https://devdocs.io/ uses.
+
+#+BEGIN_SRC emacs-lisp
+(use-package dash-docs
+  :ensure t
+  :init
+  (require 'dash-docs)                  ; Gives error when line not present.
+  (defun winny/dash-docs-activate-all-docsets ()
+    (interactive)
+    (loop for docset in (directory-files dash-docs-docsets-path nil "^.+\\.docset$")
+          do (dash-docs-activate-docset (string-remove-suffix ".docset" docset))))
+  (winny/dash-docs-activate-all-docsets))
+#+END_SRC
+
+Also pull in a counsel helper to make it easier to search.
+
+#+BEGIN_SRC emacs-lisp
+(use-package counsel-dash
+  :ensure t
+  :after dash-docs)
+#+END_SRC
+
+** Better =describe-*=
+The =helpful= package takes over =C-h v=, =C-h k=, =C-h f= providing more
+descriptive output and nicer formatting.
+
+#+BEGIN_SRC emacs-lisp
+(use-package helpful
+  :ensure t
+  :bind (("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-h f" . helpful-callable)))
+#+END_SRC
+
+** Show keys in the current mode-map
+Say you start typing =C-x=.  After a brief delay this mode will show all
+available keys at the bottom of the screen.  This can help with forgetting
+keyboard shortcuts, as one tends to do with octopus-hand tools like Emacs.
+
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :init
+  (which-key-mode 1))
+#+END_SRC
+
+** Show unbound keyboard shortcuts
+No more guessing if a key is available.  This will show a list of all keys
+available in a given mode map.  Use =C-h Y=.
+
+#+BEGIN_SRC emacs-lisp
+(use-package free-keys
+  :ensure t
+  :bind (("C-h Y" . free-keys)))
+#+END_SRC
+** Describe a face
+#+BEGIN_SRC emacs-lisp
+(defun what-face (pos)
+  "Describe the face under point.
+
+Prefix argument POS should be a location it the buffer."
+  (interactive "d")
+  (let ((face (or (get-char-property (pos) 'read-face-name)
+                  (get-char-property (pos) 'face))))
+    (if face (message "Face: %s" face) (message "No face at %d" pos))))
+#+END_SRC
+
+** Describe a theme
+See [[Helper to describe theme][here]].
+* Pull in ssh-agent via keychain
+See https://www.funtoo.org/Keychain
+
+#+BEGIN_SRC emacs-lisp
+(use-package keychain-environment
+  :ensure t
+  :init
+  (keychain-refresh-environment))
+#+END_SRC
+
+* Counsel/Ivy
+** Ivy
+#+BEGIN_SRC emacs-lisp
+(use-package ivy
+  :ensure t
+  :config
+  (defun winny/ivy-force-done ()
+    "Complete ivy with entered text ignoring completions."
+    (interactive)
+    (ivy-alt-done t))
+  (defun winny/ivy-ding (&rest ignored)
+    "Ring the bell doing nothing with IGNORED."
+    (ding t))
+  (bind-keys :map ivy-minibuffer-map
+             ("<C-return>" . winny/ivy-force-done))
+  (setq ivy-height 10
+        ivy-count-format "(%d/%d) "
+        ivy-on-del-error-function 'winny/ivy-ding
+        ivy-read-action-format-function 'ivy-read-action-format-default
+        ivy-use-virtual-buffers t)
+  :init
+  (ivy-mode 1))
+#+END_SRC
+*** ivy-prescient (ivy history)
+Keep track of ivy completions over sessions.
+
+#+BEGIN_SRC emacs-lisp
+(use-package ivy-prescient
+  :ensure t
+  :init
+  (ivy-prescient-mode 1))
+#+END_SRC
+** Counsel
+#+BEGIN_SRC emacs-lisp
+(use-package counsel
+  :ensure t
+  :init
+  (counsel-mode 1))
+#+END_SRC
+*** Tramp
+#+BEGIN_SRC emacs-lisp
+(use-package counsel-tramp
+  :ensure t)
+#+END_SRC
+
+*** etags
+#+BEGIN_SRC emacs-lisp
+(use-package counsel-etags
+  :ensure t)
+#+END_SRC
+
+*** Projectile
+#+BEGIN_SRC emacs-lisp
+(use-package counsel-projectile
+  :ensure t
+  :init
+  (counsel-projectile-mode 1))
+#+END_SRC
+
+* Ensure XDG_RUNTIME_DIR is set
+#+BEGIN_SRC emacs-lisp
+(add-hook 'after-init-hook
+          (defun winny/ensure-XDG_RUNTIME_DIR ()
+            "Ensure XDG_RUNTIME_DIR is set.
+Used by qutebrowser and other utilities."
+            (let ((rd (getenv "XDG_RUNTIME_DIR")))
+              (when (or (not rd) (string-empty-p rd))
+                (setenv "XDG_RUNTIME_DIR" (format "/run/user/%d" (user-uid)))))))
+#+END_SRC
+
+* eww
+
+** Create multiple eww buffers
+This allows for =C-u M-x eww RET= to create a new buffer.  This is from
+https://emacs.stackexchange.com/a/24477/9163 .
+
+#+BEGIN_SRC emacs-lisp
+(defun modi/force-new-eww-buffer (orig-fun &rest args)
+  "When prefix argument is used, a new eww buffer will be created,
+regardless of whether the current buffer is in `eww-mode'."
+  (if current-prefix-arg
+    (with-temp-buffer
+      (apply orig-fun args))
+    (apply orig-fun args)))
+(advice-add 'eww :around #'modi/force-new-eww-buffer)
+#+END_SRC
+
+It appears the above does not work :(.  This is a convenient work around.  Just
+use =M-x eww-new RET=
+
+#+BEGIN_SRC emacs-lisp
+(defun eww-new ()
+  (interactive)
+  (let ((url (read-from-minibuffer "Enter URL or keywords: ")))
+    (switch-to-buffer (generate-new-buffer "*eww*"))
+    (eww-mode)
+    (eww url)))
+#+END_SRC
+
+** Better eww appearance
+Using writeroom-mode, one can center the text in eww-mode, reduce the paragraph
+width, and increase line height.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'eww-mode-hook 'writeroom-mode)
+#+END_SRC
+
+* Code searching
+
+** ripgrep
+
+#+BEGIN_SRC emacs-lisp
+(use-package rg
+  :ensure t
+  :init
+  ;; Move over the default rg search to `rg/files'.
+  (rg-define-search rg/files :confirm prefix)
+  ;; I don't care about rg files prompt, so fix that.
+  (rg-define-search rg :confirm prefix :files "all"))
+#+END_SRC
+
+** the silver searcher
+
+#+BEGIN_SRC emacs-lisp
+(use-package ag
+  :ensure t)
+#+END_SRC
+
+** Ergonomic search key
+Use =f3= as an ergonomic search key.
+
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "<f3>") 'isearch-forward)
+(define-key global-map (kbd "<S-f3>") 'isearch-backward)
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "<S-f3>") 'isearch-repeat-backward)
+#+END_SRC
+
+** Occur
+Occcur is pretty cool, but not sure why =n= and =p= do not move the cursor down
+and up?
+
+#+BEGIN_SRC emacs-lisp
+(define-key occur-mode-map (kbd "p") 'previous-line)
+(define-key occur-mode-map (kbd "n") 'next-line)
+#+END_SRC
+
+** Swiper
+A rather nice incremental search.
+
+#+BEGIN_SRC emacs-lisp
+(use-package swiper
+  :ensure t
+  :bind (("C-x M-s" . swiper)))
+#+END_SRC
+* Flyspell/flycheck/etc
+
+** Flyspell
+Check spelling of strings and comments in source code.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+#+END_SRC
+
+Check spelling of prose in writing modes.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'text-mode-hook 'flyspell-mode)
+#+END_SRC
+
+** flycheck
+Enable it globally.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :init
+    (global-flycheck-mode 1))
+#+END_SRC
+
+* Code completion
+
+** company
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :init
+  (global-set-key (kbd "<C-tab>") 'company-complete)
+  ;; Temporarily disable this hook until implications are understood.  Add the
+  ;; line to host.el instead.
+  ;; (add-hook 'after-init-hook 'global-company-mode)
+  )
+#+END_SRC
+
+* Navigation
+
+** Reverse cycle windows
+=C-x o= goes to the next window.  But what about going to the previous window?
+One can do =C-u -1 C-x o= but we can do better than that.
+
+This adds =C-x O= to cycle backwards.
+
+#+BEGIN_SRC emacs-lisp
+(defun other-window-reverse (offset &optional all-frames)
+  "`other-window' but in reverse."
+  (interactive "p")
+  (other-window (- (if (numberp offset) offset 1)) all-frames))
+
+(global-set-key (kbd "C-x O") 'other-window-reverse)
+#+END_SRC
+
+** Slightly adjusting the viewport
+This scrolls the viewport up and down.  It keeps the cursor at the same line
+except if the line the cursor is presently on scrolls off the screen.  Then the
+cursor moves to the line closest to the previous line that is still on the
+screen.  It is bound to =M-N= and =M-P=.
+
+#+BEGIN_SRC emacs-lisp
+(defun scroll-up-1 ()
+  "Scroll up by 1 line."
+  (interactive)
+  (scroll-up 1))
+(defun scroll-down-1 ()
+  "Scroll down by 1 line."
+  (interactive)
+  (scroll-down 1))
+
+(global-set-key (kbd "M-N") 'scroll-up-1)
+(global-set-key (kbd "M-P") 'scroll-down-1)
+#+END_SRC
+
+** Move buffers between windows
+#+BEGIN_SRC emacs-lisp
+(use-package buffer-move
+  :ensure t
+  :bind (("C-x w p" . buf-move-up)
+         ("C-x w n" . buf-move-down)
+         ("C-x w b" . buf-move-left)
+         ("C-x w f" . buf-move-right)))
+#+END_SRC
+
+** Recenter on page navigation
+#+BEGIN_SRC emacs-lisp
+(defun traverse-page--recenter-top (&optional count)
+  "Recenter top, ignoring COUNT."
+  (when (get-buffer-window)
+    (recenter-top-bottom 0)))
+
+(advice-add 'forward-page :after #'traverse-page--recenter-top)
+(advice-add 'backward-page :after #'traverse-page--recenter-top)
+#+END_SRC
+
+** Easier to type keys for page navigation
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "<C-M-next>") 'forward-page)
+(global-set-key (kbd "<C-M-prior>") 'backward-page)
+
+#+END_SRC
+
+** Winner
+Navigate history of window/buffer/frame layout.  Use =C-c <left>= to go to
+previous layout, and =C-c <right>= to go to next layout.
+
+#+BEGIN_SRC emacs-lisp
+(winner-mode 1)
+#+END_SRC
+
+** Speed up scrolling
+This works by disabling font locking (syntax highlighting) when rendering is
+taking too long, then restores font locking when scrolling stops.
+
+#+BEGIN_SRC emacs-lisp
+(use-package fast-scroll
+  :ensure t
+  :config
+  ;; Keep `mode-line-format' the same. This addresses a problem with
+  ;; disappearing winum mode-line indicies.
+  (defun fast-scroll-default-mode-line ()
+    mode-line-format)
+  :init
+  (fast-scroll-mode 1))
+#+END_SRC
+
+** Alternate keys to traverse between delimited phrases
+One can use =C-M-B= and =C-M-f= to go backward and forward between
+s-expressions, but sometimes that is a bit awkward.  So add keys =C-x ,= and
+=C-x .= to do the same thing.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-x," 'backward-sexp)
+(global-set-key "\C-x." 'forward-sexp)
+#+END_SRC
+* Editing
+** Lisp editing
+
+*** Edit s-expressions efficiently
+Paredit is the best.
+#+BEGIN_SRC emacs-lisp
+(use-package paredit
+  :ensure t
+  :init
+  (dolist (m '(emacs-lisp-mode-hook
+     	       racket-mode-hook
+     	       racket-repl-mode-hook
+               lisp-mode-hook))
+    (add-hook m #'paredit-mode))
+  (defun winny/add-paredit-keystrokes ()
+    "Ensure custom keys are enabled in paredit."
+    (bind-keys :map paredit-mode-map
+               ("{"   . paredit-open-curly)
+               ("}"   . paredit-close-curly))
+    (unless terminal-frame
+      (bind-keys :map paredit-mode-map
+                 ("M-[" . paredit-wrap-square)
+                 ("M-{" . paredit-wrap-curly))))
+  (add-hook 'paredit-mode-hook 'winny/add-paredit-keystrokes))
+#+END_SRC
+
+*** Make parenthesis stand out less in lisp modes
+
+#+BEGIN_SRC emacs-lisp
+(use-package paren-face
+  :ensure t
+  :config
+  (setq paren-face-regexp (rx (any "()[]{}")))
+  (add-to-list 'paren-face-modes 'racket-mode)
+  (add-to-list 'paren-face-modes 'racket-reply-mode)
+  (add-to-list 'paren-face-modes 'emacs-lisp-mode)
+  (add-to-list 'paren-face-modes 'lisp-mode))
+#+END_SRC
+
+*** Tweak =if= to not indent weird in elisp
+#+BEGIN_SRC emacs-lisp
+(put 'if 'lisp-indent-function 'defun)
+#+END_SRC
+** Expand region
+Use =C-== to select things around the point such as words, balanced delimiters,
+paragraphs, functions, incrementally.
+
+#+BEGIN_SRC emacs-lisp
+(use-package expand-region
+  :ensure t
+  :bind (("C-=" . er/expand-region)))
+#+END_SRC
+** editorconfig support
+Configure the editor via =.editorconfig= files.
+
+#+BEGIN_SRC emacs-lisp
+(use-package editorconfig
+  :ensure t
+  :config
+  (setq editorconfig-mode-lighter " EdC")
+  :init
+  (editorconfig-mode 1))
+#+END_SRC
+** Electric parens
+Insert matching parenthesis.
+
+#+BEGIN_SRC emacs-lisp
+(electric-pair-mode 1)
+#+END_SRC
+** Wider fill column
+Use 79 chars in each line for filling.
+
+#+BEGIN_SRC emacs-lisp
+(setq-default fill-column 79)
+#+END_SRC
+** No tabs by default
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil)
+#+END_SRC
+** Zap
+One can use =M-z= to character.  This will delete all text including the first
+occurrence of the prompted character.  Sometimes this is not ideal, so one can
+use =C-M-z= to zap up to (but keep) the prompted character.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-M-z") 'zap-up-to-char)
+#+END_SRC
+** Some helper macros/commands
+#+BEGIN_SRC emacs-lisp
+(defun winny/maybe-query-replace-bad-comma (no-prompt)
+  "Replace occurrences of , followed by a non-space.  if `NO-PROMPT' then do don't do a query replace."
+  (interactive "P")
+  (funcall
+   (if no-prompt
+     'replace-regexp
+     'query-replace-regexp)
+   ",\\(\\S \\)"
+   ", \\1"))
+#+END_SRC
+
+*** Collapse a wrapped paragraph to a single line.
+
+#+BEGIN_SRC emacs-lisp
+(defun unfill-region (beg end)
+  "Unfill the region, joining text paragraphs into a single
+    logical line.  This is useful, e.g., for use with
+    `visual-line-mode'."
+  (interactive "*r")
+  (let ((fill-column (point-max)))
+    (fill-region beg end)))
+#+END_SRC
+
+*** Delete whitespace right of point
+#+BEGIN_SRC emacs-lisp
+(defun winny/kill-whitespace-right ()
+  "Kill whitespace to right of point."
+  (interactive)
+  (delete-region (point) (save-excursion (skip-chars-forward " \t") (point))))
+#+END_SRC
+
+*** Alternate function to mark functions
+#+BEGIN_SRC emacs-lisp
+(defun winny/mark-defun ()
+  (interactive)
+  (mark-defun)
+  (when (or (comment-only-p (region-beginning) (region-end))
+            (looking-at-p "[[:space:]]*$"))
+    (forward-line 1)))
+#+END_SRC
+* RSS Feed Reader
+
+#+BEGIN_SRC emacs-lisp
+(use-package elfeed
+  :ensure t
+  ;; :after writeroom-mode
+  ;; :hook (elfeed-show-mode . (lambda ()
+  ;;               (writeroom-mode 1)
+  ;;               (setq-local shr-width (writeroom--calculate-width))))
+  )
+#+END_SRC
+
+Manage RSS feeds in [[file:elfeed.org][elfeed.org]].
+
+#+BEGIN_SRC emacs-lisp
+(use-package elfeed-org
+  :ensure t
+  :init
+  (elfeed-org))
+#+END_SRC
+* Transmission
+I don't currently use this, so it is disabled.
+
+#+BEGIN_SRC emacs-lisp :eval no
+  (use-package transmission
+    :init
+    (defun winny/transmission-add-magnet-uri ()
+      "Add a magnet URI"
+      (interactive)
+      (transmission-add (read-string "Magnet URI: ")))
+    :bind (:map transmission-mode-map
+                ("A" . winny/transmission-add-magnet-uri)))
+#+END_SRC
+* Password manager
+#+BEGIN_SRC emacs-lisp
+(use-package pass
+  :ensure t)
+#+END_SRC
+* Shebang improvements
+** Make shebanged files executable on save
+#+BEGIN_SRC emacs-lisp
+(add-hook 'after-save-hook
+          (defun winny/make-shebanged-file-executable ()
+            "Make sure scripts with shebang are saved with expected permissions."
+            (interactive)
+            (when (and (save-excursion (goto-char (point-min)) (looking-at "#!"))
+                       (not (file-executable-p buffer-file-name)))
+              (message "Making `%s' executable..." buffer-file-name)
+              (executable-chmod))))
+#+END_SRC
+** Detect shebang change and change major mode
+#+BEGIN_SRC emacs-lisp
+(use-package shebang-change
+  :init
+  ;;(winny/add-shebang-change-hooks)
+  )
+#+END_SRC
+
+* Mode line tweaks
+(Besides smart-mode-line)
+** Show battery when a battery is present
+#+BEGIN_SRC emacs-lisp
+(display-battery-mode (if (boundp 'battery-status-function) 1 -1))
+#+END_SRC
+** Flash mode-line when a bell occurs
+#+BEGIN_SRC emacs-lisp
+(use-package mode-line-bell
+  :ensure t
+  :init
+  (mode-line-bell-mode 1))
+#+END_SRC
+* Buffer management
+
+** Revert all buffers
+
+#+BEGIN_SRC emacs-lisp
+(defun revert-all-buffers ()
+  "Refreshes all open buffers from their respective files."
+  (interactive)
+  (dolist (buffer (buffer-list) (message "Refreshed open files"))
+    (let ((fn (buffer-file-name buffer)))
+      (when (and fn (not (buffer-modified-p buffer)))
+        (if (file-exists-p fn)
+          (progn
+            (set-buffer buffer)
+            (revert-buffer t t t))
+          (message "Backing file `%s' no longer exists! Skipping." fn))))))
+#+END_SRC
+
+** Kill buffers missing their files
+
+#+BEGIN_SRC emacs-lisp
+(defun kill-all-missing-buffers (no-ask)
+  "Kill all buffers with missing files.
+
+When prefix argument NO-ASK is non-nil, do not ask before killing
+each buffer"
+  (interactive "P")
+  (dolist (buffer (buffer-list))
+    (let ((fn (buffer-file-name buffer)))
+      (when (and fn (not (file-exists-p fn)))
+        (if no-ask
+          (kill-buffer buffer)
+          (kill-buffer-ask buffer))))))
+#+END_SRC
+
+** Copy the buffer filename
+#+BEGIN_SRC emacs-lisp
+(defun copy-buffer-file-name-as-kill (choice)
+  "Copy the the buffer path to the `kill-ring'.
+CHOICE can be `?f', `?d', or `?n' for full path, directory path,
+or filename respectively.  Via
+https://stackoverflow.com/a/18814469/2720026"
+  (interactive "cCopy Buffer Name (F) Full, (D) Directory, (N) Name")
+  (let ((new-kill-string)
+        (name (if (eq major-mode 'dired-mode)
+                  (dired-get-filename)
+                (or (buffer-file-name) ""))))
+    (cond ((eq choice ?f)
+           (setq new-kill-string name))
+          ((eq choice ?d)
+           (setq new-kill-string (file-name-directory name)))
+          ((eq choice ?n)
+           (setq new-kill-string (file-name-nondirectory name)))
+          (t (message "Quit")))
+    (when new-kill-string
+      (message "%s copied" new-kill-string)
+      (kill-new new-kill-string))))
+#+END_SRC
+
+** Show buffer filename is minibuffer
+
+#+BEGIN_SRC emacs-lisp
+(defun show-file-name ()
+  "Show the full path file name in the minibuffer."
+  (interactive)
+  (message (buffer-file-name)))
+#+END_SRC
+
+** Use ibuffer
+#+BEGIN_SRC emacs-lisp
+(defalias 'list-buffers 'ibuffer)
+#+END_SRC
+
+* Highlight text
+Better highlight.  Don't believe I use this?
+#+BEGIN_SRC emacs-lisp
+(use-package highlight
+  :ensure t)
+#+END_SRC
+
+Highlight Todo's and XXX.
+#+BEGIN_SRC emacs-lisp
+(use-package hl-todo
+  :ensure t
+  :init
+  (global-hl-todo-mode 1))
+#+END_SRC
+
+Highlight color codes.
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-mode
+  :ensure t)
+#+END_SRC
+
+Highlight the current line.  This can cause issues with font-lock, so YMMV.
+#+BEGIN_SRC emacs-lisp
+(global-hl-line-mode 1)
+#+END_SRC
+
+* Dashboard
+Show a nice screen when emacs starts up or creates a new fram.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :load-path "~/projects/emacs-dashboard/"
+    :bind (:map dashboard-mode-map
+                ("p" . dashboard-previous-line)
+                ("n" . dashboard-next-line))
+    :init
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
+          dashboard-items '((projects . 5)
+                            (recents . 5)
+                            (bookmarks . 5))
+          dashboard-item-shortcuts '((projects . "j")
+                                     (recents . "r")
+                                     (bookmarks . "m")
+                                     (agenda . "a")
+                                     (registers . "e"))
+          dashboard-image-banner-max-height 50
+          dashboard-image-banner-max-width 50)
+    (dashboard-setup-startup-hook)
+    (defun dashboard ()
+      (interactive)
+      (let ((buffer "*dashboard*"))
+        (when (not (get-buffer buffer))
+          (dashboard-insert-startupify-lists))
+        (switch-to-buffer buffer))))
+#+END_SRC
+
+* General keybinds
+
+** Browse kill ring
+#+BEGIN_SRC emacs-lisp
+(use-package browse-kill-ring
+  :ensure t
+  :bind (("C-x y" . browse-kill-ring)))
+#+END_SRC
+
+** Compile shortcut
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x c") 'compile)
+#+END_SRC
+
+** Disable =C-z= when in windowed mode
+I prefer the window manager to handle this, and it only feels familiar in
+console, where C-z does exactly what it should.  It shouldn't minimize windows,
+it's not the same thing.
+
+#+BEGIN_SRC emacs-lisp
+(when window-system
+  (global-unset-key (kbd "C-z")))
+#+END_SRC
+
+** View register
+Pretty nice to see what's in the registers.  Bind it to =C-x r v=.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x r v") 'view-register)
+#+END_SRC
+
+** Backup key for =M-x= (=C-x M-x=)
+Just in case the =M-x= replacement de-jure messes up, keep it bound elsewhere.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x M-x") 'execute-extended-command)
+#+END_SRC
+
+** Find thing at point
+=C-c P f= to find file at point.  And =C-c P u= to find url at point.
+
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "C-c P f") 'find-file-at-point)
+(define-key global-map (kbd "C-c P u") 'browse-url-at-point)
+#+END_SRC
+
+** bury buffer
+Like =kill-buffer= but just moves the buffer to the end of the buffer list.
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x K") 'bury-buffer)
+#+END_SRC
+
+** Move macro keys
+Default macro keys are in a weird place so let's move them over.  I had a
+reason to do this, but I've since forgotten.
+
+(Note, f3 is already rebound in a different section.  See [[Ergonomic search key][here]].  Menu-bar-open
+(F10) default is not very useful -- just use =M-`=.)
+
+#+BEGIN_SRC emacs-lisp
+(global-unset-key (kbd "<f4>"))
+(global-set-key (kbd "<f9>") 'kmacro-start-macro-or-insert-counter)
+(global-set-key (kbd "<f10>") 'kmacro-end-or-call-macro)
+#+END_SRC
+
+** Lazy repeat
+Having to type the default repeat key is torture.  =C-x z= requires *four*
+actions.  Hold down =C=, then type =x=.  Release =C=.  Type =z=.  So instead,
+just Bind =C-x C-z= which means one can rapid-fire repeat with only two
+keystrokes per repeat.
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-z") 'repeat)
+#+END_SRC
+* Other packages / support stuff
+
+** god-mode
+#+BEGIN_SRC emacs-lisp
+
+(use-package god-mode
+  :ensure t
+  :bind (("<escape>" . god-local-mode))
+  :init
+  (defun my-update-cursor ()
+    (setq cursor-type (if god-local-mode
+                        'hbar
+                        t)))
+  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
+  (add-hook 'god-mode-disabled-hook 'my-update-cursor))
+#+END_SRC
+
+** default-text-scale
+With default-text-scale resizing the buffer text is done with =C-M--= and
+=C-M-==.  The text size changes applies to *all* buffers not just the current
+one.  It does not replace using =C-x C--= and =C-x C-+= as those adjust the
+text size *only* in the *current* buffer.  Sometimes it's nice to resize text
+in all buffers.
+
+#+BEGIN_SRC emacs-lisp
+(use-package default-text-scale
+  :ensure t
+  :init
+  (default-text-scale-mode 1))
+#+END_SRC
+
+** writeroom-mode
+This improves the presentation of emacs so it's less distracting when writing
+prose.  It centers the text, reduces paragraph width, and increases line
+height.  It has application in other modes where reading content can be
+improved by applying the aforementioned visual tweaks.
+
+#+BEGIN_SRC emacs-lisp
+(use-package writeroom-mode
+  :ensure t)
+#+END_SRC
+
+** prescient
+Same frequency of command history.  I don't believe this does anything on its
+own, but works with ivy or counsel.
+
+#+BEGIN_SRC emacs-lisp
+(use-package prescient
+  :ensure t
+  :init
+  (prescient-persist-mode 1))
+#+END_SRC
+
+** projectile
+Manage groups of buffers by project.  Also do actions with respect to a
+project.  A project root can be defined as a git repository, a folder with a
+=.projectfile= file in it, and so on.
+
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :ensure t
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  (setq projectile-mode-line-prefix " Pro")
+  :init
+  ;;(setq projectile-project-search-path '("~/projects" "~/code" "~/docs"))
+  (setq projectile-project-search-path '("~/"))
+  (projectile-mode 1))
+#+END_SRC
+
+** ansible
+Helper stuff for ansible.
+
+#+BEGIN_SRC emacs-lisp
+(use-package ansible
+  :ensure t)
+#+END_SRC
+
+* Some other functions
+
+** Helper function for creating new emacs frames
+#+BEGIN_SRC emacs-lisp
+(defun winny/raise-or-create-window-system-frame (display)
+  "Raise an existing frame in the window system or create a new one.
+
+DISPLAY is the X11 DISPLAY variable contents."
+  (let ((frames (seq-filter #'(lambda (f) (frame-parameter f 'display)) (frame-list))))
+    (if (null frames)
+      (make-frame `((window-system . x)
+                    (display . ,display)))
+      (select-frame-set-input-focus (car frames)))))
+#+END_SRC
+
+** Helper to remove item from an alist
+#+BEGIN_SRC emacs-lisp
+(defun remove-from-list (list-var element)
+  "Remove ELEMENT from LIST-VAR."
+  (setq list-var (delete element list-var)))
+#+END_SRC
+
+** toggle word wrap
+=M-x toggle-word-wrap RET=
+
+#+BEGIN_SRC emacs-lisp
+(defun toggle-word-wrap ()
+  "Toggle word wrap."
+  (interactive)
+  (message (format
+            "Word wrap %s."
+            (if (setq word-wrap (not word-wrap))
+              "enabled"
+              "disabled"))))
+#+END_SRC
+
+** Change the mode line and reload the major mode
+#+BEGIN_SRC emacs-lisp
+(defun winny/change-prop-line-mode (mode &optional dont-change-mode)
+  "Change the prop line's major MODE.
+If DONT-CHANGE-MODE is not nil, dont change to that MODE first."
+  (interactive "aMajor mode: \nP")
+  (unless dont-change-mode
+    (funcall-interactively mode))
+  (delete-file-local-variable-prop-line 'mode)
+  (let ((sans-mode (intern (replace-regexp-in-string "-mode$" "" (symbol-name mode)))))
+    (add-file-local-variable-prop-line 'mode sans-mode nil)))
+#+END_SRC
+
+** Bind a key in the current buffer only
+Great for experimenting with keyboard shortcuts.
+
+#+BEGIN_SRC emacs-lisp
+(defun buffer-local-set-key (key func)
+  (interactive "KSet key on this buffer: \naCommand: ")
+  (let ((name (format "%s-magic" (buffer-name))))
+    (eval
+     `(define-minor-mode ,(intern name)
+        "Automagically built minor mode to define buffer-local keys."))
+    (let* ((mapname (format "%s-map" name))
+           (map (intern mapname)))
+      (unless (boundp (intern mapname))
+        (set map (make-sparse-keymap)))
+      (eval
+       `(define-key ,map ,key func)))
+    (funcall (intern name) t)))
+#+END_SRC
+
+** Find the current buffer as root
+#+BEGIN_SRC emacs-lisp
+(defun winny/find-current-buffer-as-root ()
+  "Find the current buffer as root using TRAMP sudo."
+  (interactive)
+  (when (file-remote-p default-directory)
+    (error "Already a TRAMP buffer.  Giving up"))
+  (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))
+#+END_SRC
+
+** Hide fringes
+#+BEGIN_SRC emacs-lisp
+  (defun hide-fringes ()
+    "Hide fringes"
+    (interactive)
+    (set-window-fringes (selected-window) 0 0))
+#+END_SRC
+
+* Narrow
+Enable =narrow-to-region=
+#+BEGIN_SRC emacs-lisp
+(put 'narrow-to-region 'disabled nil)
+#+END_SRC
+
+* Indication of completion
+#+BEGIN_SRC emacs-lisp
+(message "configuration.org evaluation complete.")
+#+END_SRC
