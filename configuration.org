@@ -1,0 +1,401 @@
+#+title: Literate Programming =init.el=
+#+startup: indent
+* Customize
+Load customize settings from a different file than =init.el=.
+
+#+BEGIN_SRC emacs-lisp
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+#+END_SRC
+
+* Set up load path
+This way packages can be installed from submodules or tracked directly in my
+git repository.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+#+END_SRC
+
+* Package Setup
+Set up packaging sources.
+
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize)
+#+END_SRC
+
+And load up use-package logic.
+#+BEGIN_SRC emacs-lisp
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (package-install 'use-package)
+  (require 'use-package))
+#+END_SRC
+
+* Load =host.el=
+#+BEGIN_SRC emacs-lisp
+(message "Loading host.el...")
+(condition-case err
+    (load "~/.emacs.d/host.el" nil t t)
+  (error (message "Failed to load host.el: %s" (error-message-string err))))
+#+END_SRC
+
+* Initialization helpers
+#+BEGIN_SRC emacs-lisp
+(defun add-to-auto-mode-alist (mm extension &rest extensions)
+  "Add major mode MM for EXTENSION and EXTENSIONS to the `auto-mode-alist'.
+EXTENSION may also be a list."
+  (let ((ls (if (listp extension)
+              (append extension extensions)
+              (cons extension extensions))))
+    (dolist (ext ls)
+      (add-to-list 'auto-mode-alist (cons (concat "\\." ext "\\'") mm)))
+    auto-mode-alist))
+#+END_SRC
+* Language support
+This section also includes file-format support, as file-formats can be thought
+of as languages :)
+
+** Racket
+The core racket-mode.
+
+#+BEGIN_SRC emacs-lisp
+(use-package racket-mode
+  :ensure t
+  :hook
+  ((racket-mode-hook
+    .
+    (lambda ()
+      (put 'bit-string-case 'racket-indent-function 'defun)))
+   (racket-mode-hook . 'racket-xp-mode)))
+#+END_SRC
+
+And a locally installed =scribble.el= for scribble markup.
+
+#+BEGIN_SRC emacs-lisp
+(use-package scribble)
+#+END_SRC
+
+** Lua
+#+BEGIN_SRC emacs-lisp
+(use-package lua-mode
+  :ensure t
+  :custom
+  ((lua-indent-level 2)))
+#+END_SRC
+
+** Python
+The python support is a bit complicated.  I use =python-mode= from MELPA for
+the major mode.  Then I use =auto-virtualenvwrapper= to automatically set up
+virtual environments whenever a =venv/= directory exists in the project
+directory.  For some added batteries I use jedi which adds code completion,
+visiting definitions, and so on.  I also use =jedi-direx= which makes it easier
+to navigate python sources.
+
+#+BEGIN_SRC emacs-lisp
+(use-package python-mode
+  :ensure t)
+
+(use-package auto-virtualenvwrapper
+  :ensure t
+  :after python-mode
+  :init
+  (setq auto-virtualenvwrapper-verbose nil)
+  ;; Activate on focus in
+  (add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
+  ;; Activate on changing buffers
+  (add-hook 'window-configuration-change-hook #'auto-virtualenvwrapper-activate)
+  (add-hook 'python-mode-hook 'auto-virtualenvwrapper-activate))
+
+(use-package jedi
+  :ensure t
+  :after python-mode
+  :init
+  (add-hook 'python-mode-hook 'jedi:setup t)
+  :bind (:map jedi-mode-map
+              ("M-." . jedi:goto-definition)
+              ("M-," . jedi:goto-definition-pop-marker)
+              ("C-c d" . jedi:show-doc)
+              ("C-c r" . helm-jedi-related-names)))
+
+(use-package jedi-direx
+  :ensure t
+  :after python-mode
+  :after jedi
+  :init
+  (define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer)
+  (add-hook 'jedi-mode-hook 'jedi-direx:setup))
+#+END_SRC
+
+** C# (.Net support)
+
+*** C# support
+Syntax highlighting major mode.
+
+#+BEGIN_SRC emacs-lisp
+(use-package csharp-mode
+  :ensure t)
+#+END_SRC
+
+*** csproj support
+Major mode for csproj and other msbuild project files.
+
+#+BEGIN_SRC emacs-lisp
+(use-package csproj-mode
+  :ensure t)
+#+END_SRC
+
+*** dotnet cli helper
+This makes it possible to run some dotnet commands via emacs.
+
+#+BEGIN_SRC emacs-lisp
+(use-package dotnet
+  :ensure t
+  :after csharp-mode
+  :init
+  (add-hook 'csharp-mode-hook 'dotnet-mode))
+#+END_SRC
+
+*** omnisharp (code completion, linting, intellisense)
+This is the secret sauce for dotnet core support in emacs.  It gives code
+completion, suggestions, errors, and so on.  It is the same stuff that VSCode
+uses internally.
+
+#+BEGIN_SRC emacs-lisp
+(use-package omnisharp
+  :ensure t
+  :after csharp-mode
+  :after company
+  :init
+  (add-hook 'csharp-mode-hook 'omnisharp-mode)
+  (add-to-list 'company-backends 'company-omnisharp))
+#+END_SRC
+** Powershell
+#+BEGIN_SRC emacs-lisp
+(use-package powershell
+  :ensure t
+  :hook (powershell-mode
+         .
+         (lambda ()
+           ;; No don't override a standard emacs key, really what were they thinking?
+           (local-unset-key (kbd "M-`"))
+           ;; TODO: bind `powershell-escape-selection' to something else...
+           )))
+#+END_SRC
+** Web stuff
+
+*** Coffee script
+#+BEGIN_SRC emacs-lisp
+(use-package coffee-mode
+  :ensure t)
+#+END_SRC
+
+*** HTML/template support
+web-mode is pretty great.  It supports all the cool template types.
+
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+  :ensure t
+  :config
+  ;; web-mode
+  (add-to-auto-mode-alist 'web-mode "php" "phtml" "tpl" "[agj]sp" "as[cp]x"
+                          "erb" "mustache" "d?html" "jsx")
+  (defadvice web-mode-highlight-part (around tweak-jsx activate)
+    (if (equal web-mode-content-type "jsx")
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
+      ad-do-it))
+  (setq web-mode-auto-close-style 2
+        web-mode-enable-auto-closing t)
+;; (add-hook 'web-mode-hook (lambda ()
+;;                            (setq web-mode-markup-indent-offset 2)
+;;                            (setq web-mode-css-indent-offset 2)
+;;                            (setq web-mode-code-indent-offset 2)))
+  )
+#+END_SRC
+
+*** Svelte
+A pretty cool framework for modern component web applications.
+
+#+BEGIN_SRC emacs-lisp
+(use-package svelte-mode
+  :ensure t)
+#+END_SRC
+
+*** Jade HTML templates
+Maybe I should remove this.  Haven't used a Jade template for a long time.
+
+#+BEGIN_SRC emacs-lisp
+(use-package jade-mode
+  :ensure t)
+#+END_SRC
+** Scala
+
+=scalpp= was a file extension I used for cpp prerocessed code.  =cool= was a
+file extension for a compilers course I took.  It was a subset of Scala, so I
+used this major mode.  =coop= is cpp preprocessed code.
+
+#+BEGIN_SRC emacs-lisp
+(use-package scala-mode
+  :ensure t
+  :mode "\\.coo[lp]\\'"
+  :mode "\\.scalpp\\'")
+#+END_SRC
+
+** Golang
+
+It turns out golang mode is not strict about indentation despite the toolchain
+being pretty strict about that sort of thing.  So that's what the hook does.
+
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode
+  :ensure t
+  :hook (go-mode-hook
+         .
+         (lambda ()
+           (setq tab-width 4)
+           (setq indent-tabs-mode 1))))
+#+END_SRC
+** Packaging language modes
+
+*** nix
+The nix package language and configuration language.
+
+#+BEGIN_SRC emacs-lisp
+(use-package nix-mode
+  :ensure t)
+#+END_SRC
+
+*** PKGBUILD
+The bash-based packaging format used for archlinux.
+
+#+BEGIN_SRC emacs-lisp
+(use-package pkgbuild-mode
+  :ensure t)
+#+END_SRC
+
+*** ebuild
+(This is installed via the package manager.)
+
+#+BEGIN_SRC sh
+eix app-emacs/ebuild-mode
+#+END_SRC
+** APS
+Maybe I should remove this?  I wrote this for my compilers class.
+
+#+BEGIN_SRC emacs-lisp
+(use-package aps-mode)
+#+END_SRC
+** OpenEdge ABL
+A syntax highlighting mode for OpenEdge ABL, a very organic database language.
+#+BEGIN_SRC emacs-lisp
+(use-package abl-mode
+  :load-path "~/.emacs.d/abl-mode")
+#+END_SRC
+** Graphviz .dot files
+See https://www.graphviz.org/doc/info/lang.html
+
+#+BEGIN_SRC emacs-lisp
+(use-package graphviz-dot-mode
+  :ensure t)
+#+END_SRC
+
+** Kotlin
+A Java replacement by Google.
+
+#+BEGIN_SRC emacs-lisp
+(use-package kotlin-mode
+  :ensure t)
+#+END_SRC
+** Ledger
+For [[https://plaintextaccounting.org/][plain text accounting]].
+
+#+BEGIN_SRC emacs-lisp
+(use-package ledger-mode
+  :ensure t
+  :after company-mode
+  :hook
+  ((ledger-mode-hook
+    .
+    (lambda ()
+      (company-mode 1)))))
+#+END_SRC
+** CSV
+Always useful to have better CSV tooling.
+
+#+BEGIN_SRC emacs-lisp
+(use-package csv-mode
+  :ensure t
+  :mode "\\.[Cc][Ss][Vv]\\'")
+#+END_SRC
+** Rust
+Nice and simple.  Just install rust-mode.
+
+#+BEGIN_SRC emacs-lisp
+(use-package rust-mode
+  :ensure t)
+#+END_SRC
+** JSON
+While one could use =javascript-mode=, =json-mode= restricts the syntax to just the
+JSON stuff.
+
+#+BEGIN_SRC emacs-lisp
+(use-package json-mode
+  :ensure t)
+#+END_SRC
+** YAML
+Yet another silly markup language.
+
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :ensure t)
+#+END_SRC
+** TOML
+Tom's obvious minimal language.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package toml-mode
+    :ensure t)
+#+END_SRC
+** Sed
+For =sed(1)= scripts.
+
+#+BEGIN_SRC emacs-lisp
+(use-package sed-mode
+  :ensure t)
+#+END_SRC
+** ssh configuration files
+This adds syntax highlighting for =ssh_config=, =sshd_config=, =known_hosts=,
+and =authorized_keys=.
+
+#+BEGIN_SRC emacs-lisp
+(use-package ssh-config-mode
+  :ensure t)
+#+END_SRC
+** .gitignore
+Helps with making sure globs make sense.
+
+#+BEGIN_SRC emacs-lisp
+(use-package gitignore-mode
+  :ensure t)
+#+END_SRC
+** Markdown
+The markdown markup language.
+
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :ensure t
+  :config
+  (setq markdown-asymmetric-header t))
+#+END_SRC
+** Unison profiles
+The unison synchronization tool has a somewhat weird syntax, so I wrote a major
+mode to highlight it more accurately.
+
+#+BEGIN_SRC emacs-lisp
+(use-package unison)
+#+END_SRC

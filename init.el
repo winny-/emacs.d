@@ -4,58 +4,14 @@
 ;; use-package.
 ;;; Code:
 
-;;; Customize
-
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+(org-babel-load-file "~/.emacs.d/configuration.org")
 
 
-;; (setq debug-on-message "Eager macro-expansion failure:")
-
-
-;;; MELPA+ELPA package setup
-
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize)
-
-(message "Loading host.el...")
-(condition-case err
-    (load "~/.emacs.d/host.el" nil t t)
-  (error (message "Failed to load host.el: %s" (error-message-string err))))
-
-
-;;; Package requires / system loads
-
-;; Uncomment for benchmarking emacs initialization.
-;(require 'benchmark-init)
-;(benchmark-init/activate)
-
-;(add-to-list 'load-path "~/.emacs.d/custom/emacs-eclim")
-
-;; Packaged by Gentoo
-;; (load "auctex.el" nil t t)
-;; (load "preview-latex.el" nil t t)
-
-;; Stuff not packaged elsewhere
-(add-to-list 'load-path "~/.emacs.d/site-lisp/")
-(use-package scribble)
 (use-package irfc)
 (use-package dired+)
-(use-package aps-mode)
-(use-package unison)
 (use-package sunrise
   :load-path "~/.emacs.d/sunrise-commander")
-(use-package abl-mode
-  :load-path "~/.emacs.d/abl-mode"
-  ;; :hook (abl-mode-hook . (defun winny/abl-mode-hook ()
-  ;;                          "Hook for `abl-mode'"
-  ;;                          (font-lock-add-keywords 'abl-mode '(("/\\*+ [a-zA-Z]+ *:[^*]*\\*+\\(?:[^/*][^*]*\\*+\\)*/" . font-lock-doc-face)))))
-  )
+
 
 ;;; Built-in configuration
 
@@ -277,15 +233,7 @@ regardless of whether the current buffer is in `eww-mode'."
 
 ;;(eval-after-load 'image+ '(imagex-global-sticky-mode 1))
 
-(defun add-to-auto-mode-alist (mm extension &rest extensions)
-  "Add major mode MM for EXTENSION and EXTENSIONS to the `auto-mode-alist'.
-EXTENSION may also be a list."
-  (let ((ls (if (listp extension)
-              (append extension extensions)
-              (cons extension extensions))))
-    (dolist (ext ls)
-      (add-to-list 'auto-mode-alist (cons (concat "\\." ext "\\'") mm)))
-    auto-mode-alist))
+
 
 ;; enh-ruby-mode
 (autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
@@ -309,10 +257,6 @@ EXTENSION may also be a list."
 ;;    (interactive)
 ;;    (transmission-add (read-string "Magnet URI: "))))
 
-(eval-when-compile
-  ;; Following line is not needed if use-package.el is in ~/.emacs.d
-  (package-install 'use-package)
-  (require 'use-package))
 
 (use-package highlight
   :ensure t)
@@ -330,147 +274,24 @@ EXTENSION may also be a list."
 
 ;;; File format support
 
-(use-package racket-mode
-  :ensure t
-  :hook
-  ((racket-mode-hook
-    .
-    (lambda ()
-      (put 'bit-string-case 'racket-indent-function 'defun)))
-   (racket-mode-hook . 'racket-xp-mode)))
 
-(use-package ledger-mode
-  :ensure t
-  :after company-mode
-  :hook
-  ((ledger-mode-hook
-    .
-    (lambda ()
-      (company-mode 1)))))
 
-(use-package lua-mode
-  :ensure t
-  :custom
-  ((lua-indent-level 2)))
 
-(use-package python-mode
-  :ensure t)
 
-(use-package auto-virtualenvwrapper
-  :ensure t
-  :after python-mode
-  :init
-  (setq auto-virtualenvwrapper-verbose nil)
-  ;; Activate on focus in
-  (add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
-  ;; Activate on changing buffers
-  (add-hook 'window-configuration-change-hook #'auto-virtualenvwrapper-activate)
-  (add-hook 'python-mode-hook 'auto-virtualenvwrapper-activate))
 
-(use-package jedi
-  :ensure t
-  :after python-mode
-  :init
-  (add-hook 'python-mode-hook 'jedi:setup t)
-  :bind (:map jedi-mode-map
-              ("M-." . jedi:goto-definition)
-              ("M-," . jedi:goto-definition-pop-marker)
-              ("C-c d" . jedi:show-doc)
-              ("C-c r" . helm-jedi-related-names)))
 
-(use-package jedi-direx
-  :ensure t
-  :after python-mode
-  :after jedi
-  :init
-  (define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer)
-  (add-hook 'jedi-mode-hook 'jedi-direx:setup))
 
-(use-package jade-mode
-  :ensure t)
 
-(use-package csv-mode
-  :ensure t
-  :mode "\\.[Cc][Ss][Vv]\\'")
 
-(use-package nix-mode
-  :ensure t)
 
-(use-package pkgbuild-mode
-  :ensure t)
 
-(use-package rust-mode
-  :ensure t)
 
-(use-package dotnet
-  :ensure t
-  :after csharp-mode
-  :init
-  (add-hook 'csharp-mode-hook 'dotnet-mode))
 
-(use-package omnisharp
-  :ensure t
-  :after csharp-mode
-  :after company
-  :init
-  (add-hook 'csharp-mode-hook 'omnisharp-mode)
-  (add-to-list 'company-backends 'company-omnisharp))
 
-(use-package csproj-mode
-  :ensure t)
 
-(use-package csharp-mode
-  :ensure t)
 
-(use-package csproj-mode
-  :ensure t)
 
-(use-package powershell
-  :ensure t
-  :hook (powershell-mode
-         .
-         (lambda ()
-           ;; No don't override a standard emacs key, really what were they thinking?
-           (local-unset-key (kbd "M-`"))
-           ;; TODO: bind `powershell-escape-selection' to something else...
-           )))
 
-(use-package coffee-mode
-  :ensure t)
-
-(use-package svelte-mode
-  :ensure t)
-
-(use-package kotlin-mode
-  :ensure t)
-
-(use-package json-mode
-  :ensure t)
-
-(use-package yaml-mode
-  :ensure t)
-
-(use-package sed-mode
-  :ensure t)
-
-(use-package ssh-config-mode
-  :ensure t)
-
-(use-package go-mode
-  :ensure t
-  :hook (go-mode-hook
-         .
-         (lambda ()
-           (setq tab-width 4)
-           (setq indent-tabs-mode 1))))
-
-(use-package scala-mode
-  :ensure t
-  :mode "\\.coo[lp]\\'"
-  :mode "\\.scalpp\\'")
-
-(use-package graphviz-dot-mode
-  :ensure t)
 
 
 (use-package keychain-environment
@@ -590,8 +411,6 @@ EXTENSION may also be a list."
          ("C-x M-g" . magit-dispatch)
          ("C-x M-c" . magit-clone)))
 
-(use-package gitignore-mode
-  :ensure t)
 
 (use-package which-key
   :ensure t
@@ -745,24 +564,7 @@ EXTENSION may also be a list."
 (use-package rainbow-mode
   :ensure t)
 
-(use-package web-mode
-  :ensure t
-  :config
-  ;; web-mode
-  (add-to-auto-mode-alist 'web-mode "php" "phtml" "tpl" "[agj]sp" "as[cp]x"
-                          "erb" "mustache" "d?html" "jsx")
-  (defadvice web-mode-highlight-part (around tweak-jsx activate)
-    (if (equal web-mode-content-type "jsx")
-      (let ((web-mode-enable-part-face nil))
-        ad-do-it)
-      ad-do-it))
-  (setq web-mode-auto-close-style 2
-        web-mode-enable-auto-closing t)
-;; (add-hook 'web-mode-hook (lambda ()
-;;                            (setq web-mode-markup-indent-offset 2)
-;;                            (setq web-mode-css-indent-offset 2)
-;;                            (setq web-mode-code-indent-offset 2)))
-  )
+
 
 ;; I have a fork
 (use-package org-static-blog
@@ -851,10 +653,6 @@ EXTENSION may also be a list."
          ("C-h k" . helpful-key)
          ("C-h f" . helpful-callable)))
 
-(use-package markdown-mode
-  :ensure t
-  :config
-  (setq markdown-asymmetric-header t))
 
 (use-package ansible
   :ensure t)
@@ -1222,6 +1020,13 @@ file."
 (define-key custom-mode-map (kbd "M-RET") 'Custom-newline)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun winny/find-current-buffer-as-root ()
+  "Find the current buffer as root using TRAMP sudo."
+  (interactive)
+  (when (file-remote-p default-directory)
+    (error "Already a TRAMP buffer.  Giving up"))
+  (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))
 
 (defun winny/maybe-query-replace-bad-comma (no-prompt)
   "Replace occurrences of , followed by a non-space.  if `NO-PROMPT' then do don't do a query replace."

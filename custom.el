@@ -245,7 +245,8 @@ static char *gnus-pointer[] = {
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
    (quote
-    ((eval web-mode-set-engine "go")
+    ((eval web-mode-set-engine "django")
+     (eval web-mode-set-engine "go")
      (eval add-to-list
            (quote auto-mode-alist)
            (\`

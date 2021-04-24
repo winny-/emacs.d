@@ -28,3 +28,4 @@
 /host.el
 /\#*\#
 /.emacs.desktop
+/configuration.el
