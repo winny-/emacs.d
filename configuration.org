@@ -854,6 +854,14 @@ fork.
   :ensure t
   :load-path "~/.emacs.d/org-static-blog/")
 #+END_SRC
+** Prettier bullets
+#+BEGIN_SRC emacs-lisp
+    (use-package org-bullets
+      :ensure t
+      :hook ((org-mode
+              .
+              org-bullets-mode)))
+#+END_SRC
 * Code folding
 Use =M-g f= to fold the region.  Use =M-g d= to delete the fold under point.
 Use =M-g t= to toggle the fold at point.
