@@ -783,6 +783,17 @@ Ye ole fabulous productivity tool.
     (when (org-at-heading-p)
       (open-line 1))))
 #+END_SRC
+
+** Insert created timestamp
+#+BEGIN_SRC emacs-lisp
+  (defun winny/org-insert-created ()
+    "Insert created expiry information."
+    (save-excursion
+      (org-back-to-heading)
+      (org-expiry-insert-created)))
+  (add-hook 'org-capture-before-finalize-hook 'winny/org-insert-created)
+  (add-hook 'org-insert-heading-hook 'winny/org-insert-created)
+#+END_SRC
 ** Some helper functions/macros for org stuff
 *** convert a table to a definition list
 #+BEGIN_SRC emacs-lisp
