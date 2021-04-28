@@ -1443,6 +1443,18 @@ use =C-M-z= to zap up to (but keep) the prompted character.
             (looking-at-p "[[:space:]]*$"))
     (forward-line 1)))
 #+END_SRC
+** Snippets
+*** Yasnippets (core)
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    (yas-global-mode 1))
+#+END_SRC
+*** Upstream Snippets
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet-snippets
+    :ensure t)
+#+END_SRC
 * RSS Feed Reader
 
 #+BEGIN_SRC emacs-lisp
