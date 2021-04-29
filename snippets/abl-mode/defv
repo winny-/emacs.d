@@ -3,4 +3,4 @@
 # key: defv
 # --
 define variable $1 as $2 no-undo.
-$0
+$>$0

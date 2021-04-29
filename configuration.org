@@ -1481,10 +1481,16 @@ This unwraps a paragraph into one line.
     (forward-line 1)))
 #+END_SRC
 ** Snippets
+Using [[https://github.com/joaotavora/yasnippet][Yasnippets]].  See the [[http://joaotavora.github.io/yasnippet/][documentation]].
+
 *** Yasnippets (core)
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
+    :hook
+    (snippet-mode . (lambda ()
+                      ;; Do not force a newline in snippets.
+                      (setq-local require-final-newline nil)))
     :init
     (yas-global-mode 1))
 #+END_SRC
