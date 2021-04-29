@@ -74,16 +74,28 @@ Give the desktop window title a nicer look.
                                    " }"))
 #+END_SRC
 
-* TODO Backup files
-This is marked as a todo because it appears to not work very well.
+* Backup files
+This section is inspired by
+https://github.com/yanghaoxie/emacs.d#setting-related-in-build-in-features
+
+Store backup files in =~/.emacs.d/var/backup/=.
 
 #+BEGIN_SRC emacs-lisp
-(defvar my-backup-directory "~/.emacs.d/backup")
-;; Sane backup file settings
-(setq backup-directory-alist
-      `((".*" . ,my-backup-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,my-backup-directory t)))
+  (defvar winny/backup-directory
+    (concat (file-name-as-directory user-emacs-directory) "var/backup"))
+  (unless (file-exists-p winny/backup-directory)
+    (make-directory winny/backup-directory t))
+  (setq backup-directory-alist
+        `(("." . ,winny/backup-directory)))
+#+END_SRC
+
+Store auto-save files in =~/.emacs.d/var/auto-save/=
+#+BEGIN_SRC emacs-lisp
+  (defvar winny/emacs-autosave-directory (concat (file-name-as-directory user-emacs-directory) "var/auto-save/"))
+  (unless (file-exists-p winny/emacs-autosave-directory)
+    (make-directory winny/emacs-autosave-directory t))
+  (setq auto-save-file-name-transforms
+        `((".*" ,winny/emacs-autosave-directory t)))
 #+END_SRC
 * Initialization helpers
 ** Toggle showing matching parenthesis for the current buffer only
@@ -1439,6 +1451,8 @@ use =C-M-z= to zap up to (but keep) the prompted character.
 
 *** Collapse a wrapped paragraph to a single line.
 
+This unwraps a paragraph into one line.
+
 #+BEGIN_SRC emacs-lisp
 (defun unfill-region (beg end)
   "Unfill the region, joining text paragraphs into a single
@@ -1471,6 +1485,7 @@ use =C-M-z= to zap up to (but keep) the prompted character.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
+    :init
     (yas-global-mode 1))
 #+END_SRC
 *** Upstream Snippets

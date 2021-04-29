@@ -29,3 +29,5 @@
 /\#*\#
 /.emacs.desktop
 /configuration.el
+/.cache/
+.keep
