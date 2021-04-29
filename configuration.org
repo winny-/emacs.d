@@ -46,6 +46,13 @@ And load up use-package logic.
   (require 'use-package))
 #+END_SRC
 
+* Detect WSL
+
+Load the locally maintained is-wsl package which is used later in this file.
+
+#+BEGIN_SRC emacs-lisp
+(use-package is-wsl)
+#+END_SRC
 * Load =host.el=
 #+BEGIN_SRC emacs-lisp
 (message "Loading host.el...")
@@ -537,8 +544,13 @@ Set default style and use tabs in C files by default.
 ** dired
 *** Automatically update directory listings
 
+Except on Windows where Disk IO seems to be prohibitively slow.  Could just be
+work Anti Virus ¯\_(ツ)_/¯.  On Windows, typing =g= in a dired buffer causes an
+excessively long delay (tens of seconds) in a directory with 4000 entries.
+
 #+BEGIN_SRC emacs-lisp
-(add-hook 'dired-mode-hook 'auto-revert-mode)
+  (unless (or (member system-type '(ms-dos windows-nt cygwin)) is-wsl)
+    (add-hook 'dired-mode-hook 'auto-revert-mode))
 #+END_SRC
 
 *** Add =C-c n= to create an empty file
