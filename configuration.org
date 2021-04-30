@@ -779,6 +779,18 @@ When ON-QUIT is non-nil toggle debug on quit instead."
 * org-mode
 Ye ole fabulous productivity tool.
 
+** Package setup
+This config uses the Emacs-bundled org-mode, but loads some Org [[https://orgmode.org/worg/org-contrib/][contrib]] files
+from this git repository.  There does not appear to be an easier way to install
+contrib files at this time.  See the Org Mode [[https://orgmode.org/install.html][installation guide]].
+
+*** org-expiry
+For easy commands to insert expiry from lisp.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-expiry)
+#+END_SRC
+
 ** Main hook
 #+BEGIN_SRC emacs-lisp
 (add-hook 'org-mode-hook (lambda ()
@@ -810,11 +822,21 @@ Ye ole fabulous productivity tool.
 
 ** Insert created timestamp
 #+BEGIN_SRC emacs-lisp
+  (defvar winny/org-auto-insert-expiry-pattern-list '()
+    "A list of regexes like the first element in `auto-mode-alist'
+  cons cells.")
   (defun winny/org-insert-created ()
-    "Insert created expiry information."
-    (save-excursion
-      (org-back-to-heading)
-      (org-expiry-insert-created)))
+    "Insert created expiry information.
+  Only insert when the variable `buffer-file-name' matches a regex
+  in `winny/org-auto-insert-expiry-pattern-list'."
+    (when (let ((case-fold-search (file-name-case-insensitive-p buffer-file-name)))
+            (assoc-default buffer-file-name
+                           (mapcar '(lambda (el) (cons el t))
+                                   winny/org-auto-insert-expiry-pattern-list)
+                           'string-match))
+      (save-excursion
+        (org-back-to-heading)
+        (org-expiry-insert-created))))
   (add-hook 'org-capture-before-finalize-hook 'winny/org-insert-created)
   (add-hook 'org-insert-heading-hook 'winny/org-insert-created)
 #+END_SRC
