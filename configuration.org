@@ -1797,6 +1797,15 @@ keystrokes per repeat.
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-x C-z") 'repeat)
 #+END_SRC
+
+** Save =(yank)= to register
+#+BEGIN_SRC emacs-lisp
+  (defun winny/save-last-kill-to-register (register)
+    "Save the last kill to register."
+    (interactive (list (register-read-with-preview "Copy last kill to register: ")))
+    (set-register register (current-kill 0)))
+  (define-key global-map "\C-xr\C-y" 'winny/save-last-kill-to-register)
+#+END_SRC
 * Other packages / support stuff
 
 ** god-mode
