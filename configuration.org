@@ -1521,6 +1521,16 @@ Using [[https://github.com/joaotavora/yasnippet][Yasnippets]].  See the [[http:/
   (use-package yasnippet-snippets
     :ensure t)
 #+END_SRC
+** Kill line or region
+Type =C-w= without a region (selection) to kill the current line.  Found this
+in [[https://www.masteringemacs.org/][Mastering Emacs]], a fantastic book that you should also read :).
+
+#+BEGIN_SRC emacs-lisp
+  (use-package whole-line-or-region
+    :ensure t
+    :init
+    (whole-line-or-region-global-mode))
+#+END_SRC
 * RSS Feed Reader
 
 #+BEGIN_SRC emacs-lisp
