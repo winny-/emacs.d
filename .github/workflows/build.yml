@@ -1,0 +1,15 @@
+name: 'Build'
+on: push
+jobs:
+  test_core:
+    name: 'Check that everything compiles'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout action
+        uses: actions/checkout@v2
+      - name: Check that init.el loads
+        uses: leotaku/elisp-check@master
+        with:
+          check: load-file
+          file: init.el
+
