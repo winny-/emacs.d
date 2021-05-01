@@ -1964,12 +1964,16 @@ Great for experimenting with keyboard shortcuts.
 
 ** Find the current buffer as root
 #+BEGIN_SRC emacs-lisp
-(defun winny/find-current-buffer-as-root ()
-  "Find the current buffer as root using TRAMP sudo."
-  (interactive)
-  (when (file-remote-p default-directory)
-    (error "Already a TRAMP buffer.  Giving up"))
-  (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))
+  (defun winny/find-current-buffer-as-root ()
+    "Find the current buffer as root using TRAMP sudo."
+    (interactive)
+    (when (file-remote-p default-directory)
+      (error "Already a TRAMP buffer.  Giving up"))
+    (let ((path (expand-file-name
+                 (if (eq major-mode 'dired-mode)
+                   default-directory       ; Dired does not use buffer-file-name to represent a path
+                   buffer-file-name))))
+      (find-alternate-file (concat "/sudo:root@localhost:" path))))
 #+END_SRC
 
 ** Hide fringes
