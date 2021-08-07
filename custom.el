@@ -230,13 +230,9 @@ static char *gnus-pointer[] = {
 ")
  '(org-latex-image-default-width ".8\\linewidth")
  '(org-latex-inputenc-alist (quote (("\"utf8\"" . "\"utf8x\""))))
- '(org-static-blog-drafts-directory "~/projects/blog/drafts/")
- '(org-static-blog-posts-directory "~/projects/blog/posts/")
- '(org-static-blog-publish-directory "~/projects/blog/")
- '(org-trello-current-prefix-keybinding "C-c o")
  '(package-selected-packages
    (quote
-    (whole-line-or-region yasnippet-snippets org-bullets borland-blue-theme ledger-mode ox-hugo sed-mode ssh-config-mode csproj-mode rg password-store which-key hl-todo counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible org-static-blog prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line steam swiper tuareg use-package winum yaml-mode bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii)))
+    (whole-line-or-region yasnippet-snippets org-bullets borland-blue-theme ledger-mode ox-hugo sed-mode ssh-config-mode csproj-mode rg password-store which-key hl-todo counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line steam swiper tuareg use-package winum yaml-mode bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii)))
  '(pdf-view-midnight-colors (quote ("#655370" . "#fbf8ef")))
  '(plantuml-default-exec-mode (quote executable))
  '(pos-tip-background-color "#eee8d5")
@@ -244,7 +240,13 @@ static char *gnus-pointer[] = {
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
    (quote
-    ((eval web-mode-set-engine "django")
+    ((eval progn
+           (org-indent-mode 1)
+           (add-to-list
+            (quote winny/org-auto-insert-expiry-pattern-list)
+            (expand-file-name default-directory)))
+     (org-log-done . time)
+     (eval web-mode-set-engine "django")
      (eval web-mode-set-engine "go")
      (eval add-to-list
            (quote auto-mode-alist)
@@ -281,10 +283,6 @@ static char *gnus-pointer[] = {
            (auto-revert-mode 1)
            (org-indent-mode))
      (org-hide-emphasis-markers . t)
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.13\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
      (eval progn
            (use-local-map
             (copy-keymap text-mode-map))
@@ -309,10 +307,6 @@ static char *gnus-pointer[] = {
            (concat
             (projectile-project-root)
             "private/setup"))
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.12\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
      (eval ansible)
      (eval c-set-offset
            (quote arglist-cont-nonempty)
@@ -333,208 +327,20 @@ static char *gnus-pointer[] = {
      (eval c-set-offset
            (quote substatement-open)
            0)
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.11\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
-     (org-static-blog-page-preamble . "
-<nav>
-<div class=\"flexcontainer\">
-<div class=\"smallitem\">
-<ul class=\"inline-list\">
-<li><a href=\".\">blog.winny.tech</a></li>
-<li><a href=\"https://winny.tech/\">About</a></li>
-</ul>
-</div>
-<div class=\"bigitem\">
-<ul class=\"inline-list\">
-<li><a href=\"archive.html\">Archive</a></li>
-<li><a href=\"tags.html\">Tags</a></li>
-<li><a href=\"rss.xml\">RSS Feed</a></li>
-</ul>
-</div>
-</div>
-</nav>
-<hr/>
-")
-     (org-static-blog-page-preamble . "
-<nav>
-<div class=\"flexcontainer\">
-<div class=\"smallitem\">
-<ul class=\"inline-list\">
-<li><a href=\".\">blog.winny.tech</a></li>
-<li><a href=\"https://winny.tech/\">About Me</a></li>
-</ul>
-</div>
-<div class=\"bigitem\">
-<ul class=\"inline-list\">
-<li><a href=\"archive.html\">Archive</a></li>
-<li><a href=\"tags.html\">Tags</a></li>
-<li><a href=\"rss.xml\">RSS Feed</a></li>
-</ul>
-</div>
-</div>
-</nav>
-<hr/>
-")
-     (org-static-blog-page-preamble . "
-<nav>
-<div class=\"flexcontainer\">
-<div class=\"smallitem\">
-<ul class=\"inline-list\">
-<li><a href=\".\">blog.winny.tech</a></li>
-<li><a href=\"https://winny.tech/\">About Me</a></li>
-</ul>
-blog.winny.tech
-</div>
-<div class=\"bigitem\">
-<ul class=\"inline-list\">
-<li><a href=\"archive.html\">Archive</a></li>
-<li><a href=\"tags.html\">Tags</a></li>
-<li><a href=\"rss.xml\">RSS Feed</a></li>
-</ul>
-</div>
-</div>
-</nav>
-<hr/>
-")
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.10\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.9\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
-     (org-startup-indented . t)
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.8\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
      (org-export-html-style . "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/stylesheet.css\" />")
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.7\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.6\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
      (eval when
            (fboundp
             (quote rainbow-mode))
            (rainbow-mode 1))
      (elisp-lint-indent-specs
       (when-let . 1))
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.5\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
-     (org-static-blog-page-postamble . "
-<hr/>
-<ul class=\"inline-list interpunct\">
-<li>Powered by <a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a></li>
-<li>Like what I do? <a href=\"https://www.buymeacoffee.com/winny\">Buy me a Coffee</a></li>
-</ul>
-<p>© Winston Weinert (winny) — <a href=\"https://creativecommons.org/licenses/by-sa/4.0/legalcode\">CC-BY-SA-4.0</a></p>
-")
-     (org-static-blog-page-postamble . "
-<hr/>
-<ul class=\"inline-list interpunct\">
-<li>Powered&nbsp;by&nbsp;<a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a></li>
-<li>Like&nbsp;what&nbsp;I&nbsp;do?&nbsp;<a href=\"https://www.buymeacoffee.com/winny\">Buy&nbsp;me&nbsp;a&nbsp;Coffee</a></li>
-<li>©&nbsp;Winston&nbsp;Weinert&nbsp;(winny)&nbsp;—&nbsp;<a href=\"https://creativecommons.org/licenses/by-sa/4.0/legalcode\">CC-BY-SA-4.0</a></li>
-</ul>
-")
-     (org-static-blog-page-postamble . "
-<hr/>
-<ul class=\"inline-list interpunct\">
-<li>Powered&nbsp;by&nbsp;<a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a></li>
-<li>Like&nbsp;what&nbsp;I&nbsp;do?&nbsp;<a href=\"https://www.buymeacoffee.com/winny\">Buy&nbsp;me&nbsp;a&nbsp;Coffee</a></li>
-<li>© Winston&nbsp;Weinert&nbsp;(winny)&nbsp;—&nbsp;<a href=\"https://creativecommons.org/licenses/by-sa/4.0/legalcode\">CC-BY-SA-4.0</a></li>
-</ul>
-")
-     (org-static-blog-page-postamble . "
-<hr/>
-<ul class=\"inline-list interpunct\">
-<li>Powered by <a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a></li>
-<li>Like what I do? <a href=\"https://www.buymeacoffee.com/winny\">Buy me a Coffee</a></li>
-<li>© Winston Weinert (winny) — <a href=\"https://creativecommons.org/licenses/by-sa/4.0/legalcode\">CC-BY-SA-4.0</a></li>
-</ul>
-")
-     (org-static-blog-publish-url . "/")
      (eval c-set-offset
            (quote innamespace)
            0)
      (eval when
            (fboundp
             (quote c-toggle-comment-style))
-           (c-toggle-comment-style 1))
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.4\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=1\">
-")
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.4\" rel=\"stylesheet\" type=\"text/css\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-")
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.4\" rel=\"stylesheet\" type=\"text/css\" />
-")
-     (org-static-blog-page-preamble . "
-<nav>
-<div class=\"flexcontainer\">
-<div class=\"smallitem\">
-blog.winny.tech
-</div>
-<div class=\"bigitem\">
-<ul class=\"inline-list\">
-<li><a href=\".\">Home</a></li>
-<li><a href=\"archive.html\">Archive</a></li>
-<li><a href=\"tags.html\">Tags</a></li>
-<li><a href=\"rss.xml\">RSS Feed</a></li>
-</ul>
-</div>
-</div>
-</nav>
-<hr/>
-")
-     (eval setq org-static-blog-publish-directory
-           (projectile-project-root))
-     (eval add-to-list
-           (quote auto-mode-alist)
-           (cons
-            (concat org-static-blog-posts-directory ".*\\.org\\'")
-            (quote org-static-blog-mode)))
-     (eval setq org-static-blog-drafts-directory
-           (concat org-static-blog-publish-directory "/drafts/"))
-     (eval setq org-static-blog-posts-directory
-           (concat org-static-blog-publish-directory "/posts/"))
-     (eval setq org-static-blog-publish-directory default-directory)
-     (org-static-blog-page-postamble . "
-<hr/>
-<ul class=\"inline-list interpunct\">
-<li>Powered by <a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a></li>
-<li>Like what I do? <a href=\"https://www.buymeacoffee.com/winny\">Buy me a Coffee</a></li>
-</ul>
-")
-     (org-static-blog-page-preamble . "
-<nav>
-blog.winny.tech :: <ul class=\"inline-list\">
-<li><a href=\".\">Home</a></li>
-<li><a href=\"archive.html\">Archive</a></li>
-<li><a href=\"tags.html\">Tags</a></li>
-<li><a href=\"rss.xml\">RSS Feed</a></li>
-</ul>
-</nav>
-<hr/>
-")
-     (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.3\" rel=\"stylesheet\" type=\"text/css\" />
-")
-     (org-static-blog-enable-tags . t)
-     (org-static-blog-publish-url . "https://blog.winny.tech/")
-     (org-static-blog-publish-title . "blog.winny.tech"))))
+           (c-toggle-comment-style 1)))))
  '(same-window-regexps (quote ("\\*Man .*\\*")))
  '(scroll-bar-mode nil)
  '(sgml-basic-offset 2)

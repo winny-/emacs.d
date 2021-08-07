@@ -942,15 +942,6 @@ Export to hugo markdown.  Great for blogging.
   :ensure t
   :after ox)
 #+END_SRC
-*** org-static-blog
-The blogging system that I previously used.  Note the load-path -- I have a
-fork.
-
-#+BEGIN_SRC emacs-lisp
-(use-package org-static-blog
-  :ensure t
-  :load-path "~/.emacs.d/org-static-blog/")
-#+END_SRC
 ** Prettier bullets
 #+BEGIN_SRC emacs-lisp
     (use-package org-bullets
