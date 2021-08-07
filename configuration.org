@@ -429,14 +429,31 @@ See https://www.graphviz.org/doc/info/lang.html
 (use-package graphviz-dot-mode
   :ensure t)
 #+END_SRC
+** Java ecosystem
 
-** Kotlin
+*** Kotlin
 A Java replacement by Google.
 
 #+BEGIN_SRC emacs-lisp
 (use-package kotlin-mode
   :ensure t)
 #+END_SRC
+
+*** Gradle (build tool)
+See also [[Groovy][groovy-mode]] for syntax highlighting.
+
+#+begin_src emacs-lisp
+  (use-package gradle-mode
+    :ensure t)
+#+end_src
+
+*** Groovy
+(And Gradle syntax highlighting)
+
+#+begin_src emacs-lisp
+  (use-package groovy-mode
+    :ensure t)
+#+end_src
 ** Ledger
 For [[https://plaintextaccounting.org/][plain text accounting]].
 
