@@ -2,7 +2,14 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("(elisp) Faces for Font Lock"
+(("(guile) Threads"
+ (front-context-string . "‘provided?’: Fea")
+ (rear-context-string . "provided (*note\n")
+ (position . 280613)
+ (filename . "/usr/share/info/guile")
+ (info-node . "Threads")
+ (handler . Info-bookmark-jump))
+("(elisp) Faces for Font Lock"
  (front-context-string . "’\n     for the n")
  (rear-context-string . "riable-name-face")
  (position . 1477576)

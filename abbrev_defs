@@ -256,8 +256,6 @@
   '(
    ))
 
-(define-abbrev-table 'bibtex-mode-abbrev-table '())
-
 (define-abbrev-table 'c++-mode-abbrev-table
   '(
    ))
@@ -290,6 +288,10 @@
 
 (define-abbrev-table 'emacs-lisp-mode-abbrev-table '())
 
+(define-abbrev-table 'enh-ruby-mode-abbrev-table
+  '(
+   ))
+
 (define-abbrev-table 'epa-info-mode-abbrev-table '())
 
 (define-abbrev-table 'epa-key-list-mode-abbrev-table '())
@@ -307,8 +309,6 @@
 (define-abbrev-table 'gdb-script-mode-abbrev-table '())
 
 (define-abbrev-table 'global-abbrev-table '())
-
-(define-abbrev-table 'gnus-group-mode-abbrev-table '())
 
 (define-abbrev-table 'go-dot-mod-mode-abbrev-table '())
 
@@ -341,8 +341,6 @@
 (define-abbrev-table 'js-jsx-mode-abbrev-table '())
 
 (define-abbrev-table 'js-mode-abbrev-table '())
-
-(define-abbrev-table 'json-mode-abbrev-table '())
 
 (define-abbrev-table 'kotlin-mode-abbrev-table '())
 
@@ -394,8 +392,6 @@
   '(
    ))
 
-(define-abbrev-table 'rust-mode-abbrev-table '())
-
 (define-abbrev-table 'scss-mode-abbrev-table '())
 
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
@@ -412,6 +408,8 @@
 
 (define-abbrev-table 'tabulated-list-mode-abbrev-table '())
 
+(define-abbrev-table 'tar-mode-abbrev-table '())
+
 (define-abbrev-table 'text-mode-abbrev-table '())
 
 (define-abbrev-table 'url-cookie-mode-abbrev-table '())
@@ -427,6 +425,4 @@
 (define-abbrev-table 'web-mode-abbrev-table '())
 
 (define-abbrev-table 'xref--xref-buffer-mode-abbrev-table '())
-
-(define-abbrev-table 'yaml-mode-abbrev-table '())
 

@@ -1912,7 +1912,7 @@ project.  A project root can be defined as a git repository, a folder with a
   :config
   (setq projectile-mode-line-prefix " Pro")
   :init
-  ;;(setq projectile-project-search-path '("~/projects" "~/code" "~/docs"))
+  ;;(setq projectile-project-search-path '("~/pro" "~/code" "~/docs"))
   (setq projectile-project-search-path '("~/"))
   (projectile-mode 1))
 #+END_SRC
