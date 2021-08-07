@@ -7,3 +7,6 @@
 [submodule "org-static-blog"]
 	path = org-static-blog
 	url = git@github.com:winny-/org-static-blog
+[submodule "emacs-dashboard"]
+	path = emacs-dashboard
+	url = git@github.com:emacs-dashboard/emacs-dashboard.git
