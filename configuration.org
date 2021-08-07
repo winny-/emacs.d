@@ -10,6 +10,25 @@ Just some notes for stuff I forget to do:
 
 - Add =:eval no= to the end of a =BEGIN_SRC= line to disable evaluation.
 
+* Helper for loading optional elisp files
+#+BEGIN_SRC emacs-lisp
+    (defun winny/load-file-when-present (file)
+      "Load FILE when it's present.
+
+  This suppresses an error caused by missing file.  It only prints
+  out an error when the file throws an error."
+      (condition-case err
+          (load file nil t t)
+        (file-missing nil)                  ; Ignore missing optional file
+        (error (message "Failed to load %s: %s" file (error-message-string err))
+               nil)))
+#+END_SRC
+
+* Load =host-pre-init.el=
+#+BEGIN_SRC emacs-lisp
+  (winny/load-file-when-present "~/.emacs.d/host-pre-init.el")
+#+END_SRC
+
 * Customize
 Load customize settings from a different file than =init.el=.
 
@@ -53,13 +72,17 @@ Load the locally maintained is-wsl package which is used later in this file.
 #+BEGIN_SRC emacs-lisp
 (use-package is-wsl)
 #+END_SRC
-* Load =host.el=
+* Load =host-post-init.el=
 #+BEGIN_SRC emacs-lisp
-(message "Loading host.el...")
-(condition-case err
-    (load "~/.emacs.d/host.el" nil t t)
-  (error (message "Failed to load host.el: %s" (error-message-string err))))
+  (winny/load-file-when-present "~/.emacs.d/host-post-init.el")
 #+END_SRC
+
+(And load the legacy =host.el= for now...)
+
+#+BEGIN_SRC emacs-lisp
+  (winny/load-file-when-present "~/.emacs.d/host.el")
+#+END_SRC
+
 
 * Better frame title
 Give the desktop window title a nicer look.

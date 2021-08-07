@@ -31,3 +31,5 @@
 /configuration.el
 /.cache/
 .keep
+/host-post-init.el
+/host-pre-init.el
