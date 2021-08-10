@@ -416,12 +416,6 @@ Maybe I should remove this?  I wrote this for my compilers class.
 #+BEGIN_SRC emacs-lisp
 (use-package aps-mode)
 #+END_SRC
-** OpenEdge ABL
-A syntax highlighting mode for OpenEdge ABL, a very organic database language.
-#+BEGIN_SRC emacs-lisp
-(use-package abl-mode
-  :load-path "~/.emacs.d/abl-mode")
-#+END_SRC
 ** Graphviz .dot files
 See https://www.graphviz.org/doc/info/lang.html
 
@@ -1366,7 +1360,6 @@ screen.  It is bound to =M-N= and =M-P=.
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "<C-M-next>") 'forward-page)
 (global-set-key (kbd "<C-M-prior>") 'backward-page)
-
 #+END_SRC
 
 ** Winner
