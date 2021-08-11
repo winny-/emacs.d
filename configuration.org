@@ -410,12 +410,6 @@ The bash-based packaging format used for archlinux.
 #+BEGIN_SRC sh
 eix app-emacs/ebuild-mode
 #+END_SRC
-** APS
-Maybe I should remove this?  I wrote this for my compilers class.
-
-#+BEGIN_SRC emacs-lisp
-(use-package aps-mode)
-#+END_SRC
 ** Graphviz .dot files
 See https://www.graphviz.org/doc/info/lang.html
 
