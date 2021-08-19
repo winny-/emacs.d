@@ -173,6 +173,14 @@ And a locally installed =scribble.el= for scribble markup.
 (use-package scribble)
 #+END_SRC
 
+** Common Lisp
+#+BEGIN_SRC emacs-lisp
+  (use-package slime
+    :ensure t
+    :configuration
+    (setq inferior-lisp-program "sbcl"))
+#+END_SRC
+
 ** LaTeX/auctex
 I install this via my distro's package manager, so no =use-package= here.
 
