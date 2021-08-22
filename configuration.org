@@ -177,7 +177,7 @@ And a locally installed =scribble.el= for scribble markup.
 #+BEGIN_SRC emacs-lisp
   (use-package slime
     :ensure t
-    :configuration
+    :init
     (setq inferior-lisp-program "sbcl"))
 #+END_SRC
 
