@@ -493,6 +493,20 @@ Yet another silly markup language.
 (use-package yaml-mode
   :ensure t)
 #+END_SRC
+** XML extensions
+Format XML documents.  Not perfect as it depends an =xmllint= and that tends to
+clean up dirty XML documents (e.g. add DTDs).
+#+begin_src emacs-lisp
+  (fset 'winny/xml-format
+       (kmacro-lambda-form [?\C-x ?h ?\C-u ?\M-| ?x ?m ?l ?l ?i ?n ?t ?  ?- ?- ?f ?o ?r ?m ?a ?t ?  ?- return] 0 "%d"))
+#+end_src
+
+Add some other known extensions to ~xml-mode~.
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode)) ; XML Schema Definition
+  (add-to-list 'auto-mode-alist '("\\.wsdl\\'" . xml-mode)) ; Web Services Description Language
+  (add-to-list 'auto-mode-alist '("\\.jca\\'" . xml-mode)) ; Java Connector Architecture Adapter files
+#+end_src
 ** TOML
 Tom's obvious minimal language.
 
@@ -557,6 +571,10 @@ Set default style and use tabs in C files by default.
                          (setq indent-tabs-mode t)
                          (c-set-style "bsd")))
 #+END_SRC
+** Qlik
+#+begin_src emacs-lisp
+  (add-to-auto-mode-alist 'sql-mode "qvs")
+#+end_src
 * Whitespace
 ** Show trailing whitespace on some major modes by default.
 
