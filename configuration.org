@@ -1938,6 +1938,12 @@ Helper stuff for ansible.
   :ensure t)
 #+END_SRC
 
+Syntax highlight inventory files
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist '("/inventory[^/]*\\'" . conf-unix-mode))
+#+END_SRC
+
 ** vterm
 #+BEGIN_SRC emacs-lisp
   (use-package vterm
