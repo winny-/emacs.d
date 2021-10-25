@@ -575,6 +575,14 @@ Set default style and use tabs in C files by default.
 #+begin_src emacs-lisp
   (add-to-auto-mode-alist 'sql-mode "qvs")
 #+end_src
+** Perl
+*** perldoc support
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-perldoc
+    :ensure t
+    :init
+    (helm-perldoc:setup))
+#+END_SRC
 * Whitespace
 ** Show trailing whitespace on some major modes by default.
 
