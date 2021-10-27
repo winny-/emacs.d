@@ -583,6 +583,13 @@ Set default style and use tabs in C files by default.
     :init
     (helm-perldoc:setup))
 #+END_SRC
+** Erlang
+#+BEGIN_SRC emacs-lisp
+  (use-package erlang
+    :ensure t
+    :init
+    (require 'erlang-start))
+#+END_SRC
 * Whitespace
 ** Show trailing whitespace on some major modes by default.
 
