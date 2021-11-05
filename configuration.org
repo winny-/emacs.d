@@ -1316,6 +1316,10 @@ Enable it globally.
   (use-package flycheck
     :ensure t
     :init
+    ;; Disable the Elisp checkdoc checker.  I'm not sure why this is enabled by
+    ;; default as most elisp users write is ad-hoc and
+    ;; undocumented... https://emacs.stackexchange.com/a/10854/9163
+    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
     (global-flycheck-mode 1))
 #+END_SRC
 
