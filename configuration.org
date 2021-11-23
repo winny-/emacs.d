@@ -366,6 +366,11 @@ Maybe I should remove this.  Haven't used a Jade template for a long time.
 #+BEGIN_SRC emacs-lisp
 (setq js-indent-level 2)
 #+END_SRC
+*** Typescrypt
+#+begin_src emacs-lisp
+  (use-package typescript
+    :ensure t)
+#+end_src
 
 ** Scala
 
