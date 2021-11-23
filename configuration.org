@@ -595,6 +595,11 @@ Set default style and use tabs in C files by default.
     :init
     (require 'erlang-start))
 #+END_SRC
+** Dockerfile
+#+begin_src emacs-lisp
+  (use-package dockerfile-mode
+    :ensure t)
+#+end_src
 * Whitespace
 ** Show trailing whitespace on some major modes by default.
 
