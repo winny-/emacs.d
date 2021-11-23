@@ -853,6 +853,12 @@ When ON-QUIT is non-nil toggle debug on quit instead."
 * org-mode
 Ye ole fabulous productivity tool.
 
+** Note to self about blocks
+In recent org-mode =<sTAB= no longer works.  One can restore this functionality
+using =(require 'org-tempo)= --- this reimplements the old behavior.  On the
+other hand the new behavior using =C-c C-, s= is much cleaner, allowing the
+user to dispatch to any known block type from a menu.  It is one extra
+keystroke, but I think I'll live.
 ** Package setup
 This config uses the Emacs-bundled org-mode, but loads some Org [[https://orgmode.org/worg/org-contrib/][contrib]] files
 from this git repository.  There does not appear to be an easier way to install
