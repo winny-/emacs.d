@@ -368,7 +368,7 @@ Maybe I should remove this.  Haven't used a Jade template for a long time.
 #+END_SRC
 *** Typescrypt
 #+begin_src emacs-lisp
-  (use-package typescript
+  (use-package typescript-mode
     :ensure t)
 #+end_src
 
