@@ -543,10 +543,11 @@ and =authorized_keys=.
   :ensure t)
 #+END_SRC
 ** .gitignore
-Helps with making sure globs make sense.
+Also adds major modes for git attributes and git config files.
+=gitignore-mode= Helps with making sure globs make sense.
 
 #+BEGIN_SRC emacs-lisp
-(use-package gitignore-mode
+(use-package git-modes
   :ensure t)
 #+END_SRC
 ** Markdown
