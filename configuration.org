@@ -1601,6 +1601,7 @@ Using [[https://github.com/joaotavora/yasnippet][Yasnippets]].  See the [[http:/
                       ;; Do not force a newline in snippets.
                       (setq-local require-final-newline nil)))
     :init
+    (make-directory (concat user-emacs-directory "/snippets") :parents)
     (yas-global-mode 1))
 #+END_SRC
 *** Upstream Snippets
