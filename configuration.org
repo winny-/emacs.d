@@ -1806,8 +1806,14 @@ Show a nice screen when emacs starts up or creates a new fram.
                                      (registers . "e"))
           dashboard-image-banner-max-height 50
           dashboard-image-banner-max-width 50)
+
+    ;; Add the hook to startup, but... See second line.
     (dashboard-setup-startup-hook)
+    ;; Ensure scratch is hidden
+    (add-hook 'emacs-startup-hook 'delete-other-windows)
+
     (defun dashboard ()
+      "Switch to or create the dashboard. "
       (interactive)
       (let ((buffer "*dashboard*"))
         (when (not (get-buffer buffer))
