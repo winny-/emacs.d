@@ -1985,6 +1985,11 @@ Syntax highlight inventory files
 
 ** vterm
 #+BEGIN_SRC emacs-lisp
+  ;; Tell vterm to automatically try to compile the module when it's not present.
+  ;; This prevents vterm from prompting the user if they wish to compile and
+  ;; delaying productivity.
+  (setq vterm-always-compile-module t)
+
   (use-package vterm
     :ensure t)
 #+END_SRC
