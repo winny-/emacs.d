@@ -80,18 +80,6 @@ Load the locally maintained is-wsl package which is used later in this file.
 #+BEGIN_SRC emacs-lisp
 (use-package is-wsl)
 #+END_SRC
-* Load =host-post-init.el=
-#+BEGIN_SRC emacs-lisp
-  (winny/load-file-when-present "~/.emacs.d/host-post-init.el")
-#+END_SRC
-
-(And load the legacy =host.el= for now...)
-
-#+BEGIN_SRC emacs-lisp
-  (winny/load-file-when-present "~/.emacs.d/host.el")
-#+END_SRC
-
-
 * Better frame title
 Give the desktop window title a nicer look.
 
@@ -2093,6 +2081,17 @@ Great for experimenting with keyboard shortcuts.
 Enable =narrow-to-region=
 #+BEGIN_SRC emacs-lisp
 (put 'narrow-to-region 'disabled nil)
+#+END_SRC
+
+* Load =host-post-init.el=
+#+BEGIN_SRC emacs-lisp
+  (winny/load-file-when-present "~/.emacs.d/host-post-init.el")
+#+END_SRC
+
+(And load the legacy =host.el= for now...)
+
+#+BEGIN_SRC emacs-lisp
+  (winny/load-file-when-present "~/.emacs.d/host.el")
 #+END_SRC
 
 * Indication of completion
