@@ -153,14 +153,14 @@ of as languages :)
 The core racket-mode.
 
 #+BEGIN_SRC emacs-lisp
-(use-package racket-mode
-  :ensure t
-  :hook
-  ((racket-mode-hook
-    .
-    (lambda ()
-      (put 'bit-string-case 'racket-indent-function 'defun)))
-   (racket-mode-hook . 'racket-xp-mode)))
+  (use-package racket-mode
+    :ensure t
+    :init
+    (add-hook 'racket-mode-hook
+              #'(lambda ()
+                  (put 'bit-string-case 'racket-indent-function 'defun)))
+    (add-hook 'racket-mode-hook
+              'racket-xp-mode))
 #+END_SRC
 
 And a locally installed =scribble.el= for scribble markup.
