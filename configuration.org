@@ -48,13 +48,21 @@ git repository.
 Set up packaging sources.
 
 #+BEGIN_SRC emacs-lisp
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(package-initialize)
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t)
+  (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+  (package-initialize)
+  (defconst winny/initialized-cookie-path
+    (concat user-emacs-directory "/.w-firstboot-initialized"))
+  (unless (file-exists-p winny/initialized-cookie-path)
+    (message "Detected first boot.  Doing initialization steps...")
+    (package-refresh-contents)
+    (with-temp-buffer
+      (write-file winny/initialized-cookie-path))
+    (message "First boot-only initialization complete."))
 #+END_SRC
 
 And load up use-package logic.
