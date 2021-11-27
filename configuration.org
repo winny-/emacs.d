@@ -925,7 +925,7 @@ For easy commands to insert expiry from lisp.
   in `winny/org-auto-insert-expiry-pattern-list'."
     (when (let ((case-fold-search (file-name-case-insensitive-p buffer-file-name)))
             (assoc-default buffer-file-name
-                           (mapcar '(lambda (el) (cons el t))
+                           (mapcar #'(lambda (el) (cons el t))
                                    winny/org-auto-insert-expiry-pattern-list)
                            'string-match))
       (save-excursion
