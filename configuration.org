@@ -1786,7 +1786,6 @@ Show a nice screen when emacs starts up or creates a new fram.
 #+BEGIN_SRC emacs-lisp
   (use-package dashboard
     :ensure t
-    :load-path "~/.emacs.d/emacs-dashboard/"
     :bind (:map dashboard-mode-map
                 ("p" . dashboard-previous-line)
                 ("n" . dashboard-next-line))
