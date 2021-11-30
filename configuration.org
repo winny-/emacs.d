@@ -1367,6 +1367,12 @@ This adds =C-x O= to cycle backwards.
 (global-set-key (kbd "C-x O") 'other-window-reverse)
 #+END_SRC
 
+** Ergonomic cycle key
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<f4>") 'other-window)
+  (global-set-key (kbd "S-<f4>") 'other-window)
+#+end_src
+
 ** Slightly adjusting the viewport
 This scrolls the viewport up and down.  It keeps the cursor at the same line
 except if the line the cursor is presently on scrolls off the screen.  Then the
