@@ -2077,6 +2077,19 @@ Great for experimenting with keyboard shortcuts.
     (set-window-fringes (selected-window) 0 0))
 #+END_SRC
 
+** Change default directory
+
+#+begin_src emacs-lisp
+  (defun change-default-directory (target)
+    "Change DEFAULT-DIRECTORY to TARGET.
+
+  Useful for things like vterm, ansi-term, or term.  One can change
+  directory in the child shell but it won't reflect in Emacs.  This
+  allows the user to manually update this."
+    (interactive "D")
+    (setq default-directory target))
+#+end_src
+
 * Narrow
 Enable =narrow-to-region=
 #+BEGIN_SRC emacs-lisp
