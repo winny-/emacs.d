@@ -542,10 +542,13 @@ Also adds major modes for git attributes and git config files.
 The markdown markup language.
 
 #+BEGIN_SRC emacs-lisp
-(use-package markdown-mode
-  :ensure t
-  :config
-  (setq markdown-asymmetric-header t))
+  (use-package markdown-mode
+    :ensure t
+    :config
+    (setq markdown-asymmetric-header t)
+    :init
+    (define-key markdown-mode-map (kbd "C-c C-'") 'markdown-edit-code-block)
+    (define-key edit-indirect-mode-map (kbd "C-c C-'") 'edit-indirect-commit))
 #+END_SRC
 ** Unison profiles
 The unison synchronization tool has a somewhat weird syntax, so I wrote a major
@@ -890,16 +893,22 @@ For easy commands to insert expiry from lisp.
 
 ** Org-mode specific keys
 #+BEGIN_SRC emacs-lisp
-(define-key org-mode-map (kbd "M-n") 'org-next-visible-heading)
-(define-key org-mode-map (kbd "M-p") 'org-previous-visible-heading)
-(define-key org-mode-map (kbd "<C-M-return>")
-  (defun winny/org-goto-content ()
-    "Go to content for heading or create a newline for content."
-    (interactive)
-    (org-end-of-meta-data)
-    (org-show-hidden-entry)
-    (when (org-at-heading-p)
-      (open-line 1))))
+  (define-key org-mode-map (kbd "M-n") 'org-next-visible-heading)
+  (define-key org-mode-map (kbd "M-p") 'org-previous-visible-heading)
+
+  (define-key org-mode-map (kbd "<C-M-return>")
+    (defun winny/org-goto-content ()
+      "Go to content for heading or create a newline for content."
+      (interactive)
+      (org-end-of-meta-data)
+      (org-show-hidden-entry)
+      (when (org-at-heading-p)
+        (open-line 1))))
+
+  ;; Make it easier to enter/leave org block editing without lifting the Control
+  ;; key.
+  (define-key org-mode-map (kbd "C-c C-'") 'org-edit-special)
+  (define-key org-src-mode-map (kbd "C-c C-'") 'org-edit-src-exit)
 #+END_SRC
 
 ** Insert created timestamp
