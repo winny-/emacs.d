@@ -155,6 +155,8 @@ The core racket-mode.
 #+BEGIN_SRC emacs-lisp
   (use-package racket-mode
     :ensure t
+    :config
+    (setq racket-show-functions 'racket-show-echo-area)
     :init
     (add-hook 'racket-mode-hook
               #'(lambda ()
