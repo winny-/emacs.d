@@ -34,3 +34,4 @@
 /host-post-init.el
 /host-pre-init.el
 .w-firstboot-initialized
+/.org-id-locations
