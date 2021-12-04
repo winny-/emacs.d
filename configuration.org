@@ -1910,6 +1910,18 @@ keystrokes per repeat.
     (set-register register (current-kill 0)))
   (define-key global-map "\C-xr\C-y" 'winny/save-last-kill-to-register)
 #+END_SRC
+
+** Advent of Code quickstart
+
+This creates a new directory for the advent of code day, then creates a
+sample.txt buffer.  Finally it creates a =.rkt= source file for the day with a
+template.
+
+#+begin_src emacs-lisp
+  (fset 'new-aoc-day
+        (kmacro-lambda-form [?\C-x ?d ?~ ?p ?r ?o ?/ ?a ?o ?c ?/ ?2 ?0 ?2 ?1 ?/ return ?+ ?d ?a ?y ?\C-u ?\C-x ?q return return ?\C-x ?\C-f ?s ?a ?m ?p ?l ?e ?. ?t ?x ?t return ?\C-x ?3 ?\C-x ?\C-f return ?^ ?\C-  ?\C-e ?\M-w return ?\C-x ?\C-f ?d ?a ?y backspace backspace backspace ?\C-y ?. ?r ?k ?t return ?\M-x ?y ?a return return] 0 "%d"))
+#+end_src
+
 * Other packages / support stuff
 
 ** god-mode

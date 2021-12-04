@@ -1,0 +1,24 @@
+# key: aoc
+# name: aoc
+# --
+#lang racket
+
+(define (read2 ip)
+  (match (read-line ip)
+    [(? eof-object? e) e]
+    [s ${0:(read (open-input-string s))}]))
+
+(define (part1 ls)
+  (void))
+
+(define (part2 ls)
+  (void))
+
+(module+ main
+  (define ls (port->list read2))
+  (part1 ls)
+  (part2 ls))
+
+;; Local Variables:
+;; compile-command: "racket `(file-name-nondirectory (buffer-file-name))` < sample.txt"
+;; End:
