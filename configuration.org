@@ -795,11 +795,17 @@ My goto theme.
 #+END_SRC
 
 #+RESULTS:
+*** tao
+
+#+begin_src emacs-lisp
+  (use-package tao-theme
+    :ensure t)
+#+end_src
 
 ** A facility to streamline theme selection
 #+BEGIN_SRC emacs-lisp
 (load "switch-theme.el" t t)
-(setq winny/default-theme 'cyberpunk)
+(setq winny/default-theme 'tao-yin)
 (use-package smart-mode-line
   :ensure t
   :init
