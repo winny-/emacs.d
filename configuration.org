@@ -602,6 +602,12 @@ Set default style and use tabs in C files by default.
   (use-package dockerfile-mode
     :ensure t)
 #+end_src
+** SQL
+#+begin_src emacs-lisp
+  (use-package sql-indent
+    :ensure t
+    :hook ((sql-mode . sqlind-minor-mode)))
+#+end_src
 * Whitespace
 ** Show trailing whitespace on some major modes by default.
 
@@ -1131,10 +1137,13 @@ available keys at the bottom of the screen.  This can help with forgetting
 keyboard shortcuts, as one tends to do with octopus-hand tools like Emacs.
 
 #+BEGIN_SRC emacs-lisp
-(use-package which-key
-  :ensure t
-  :init
-  (which-key-mode 1))
+  (use-package which-key
+    :ensure t
+    :init
+    (which-key-mode 1)
+    :config
+    ;; Address issue with tao-yin.  This is a hack.
+    (set-face-attribute 'which-key-command-description-face nil :inherit nil))
 #+END_SRC
 
 ** Show unbound keyboard shortcuts
@@ -1470,6 +1479,24 @@ s-expressions, but sometimes that is a bit awkward.  So add keys =C-x ,= and
 (global-set-key "\C-x," 'backward-sexp)
 (global-set-key "\C-x." 'forward-sexp)
 #+END_SRC
+
+** Line numbers
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+#+end_src
+
+** Ace Jump
+Type =C-c C-SPC= or =C-c SPC= then type the character you wish to navigate to.
+Type the subsequent highlighted character when prompted.  Viola!
+
+#+begin_src emacs-lisp
+  (use-package ace-jump-mode
+    :ensure t
+    :config
+    (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+    (define-key global-map (kbd "C-c C-SPC") 'ace-jump-mode))
+#+end_src
+
 * Editing
 ** Lisp editing
 

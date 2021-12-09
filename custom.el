@@ -94,6 +94,7 @@ static char *note[] = {
  '(fci-rule-color "#383838")
  '(global-hl-line-mode t)
  '(gnus-logo-colors (quote ("#4c8383" "#bababa")) t)
+ '(global-hl-line-mode nil)
  '(gnus-mode-line-image-cache
    (quote
     (image :type xpm :ascent center :data "/* XPM */
