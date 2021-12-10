@@ -1480,9 +1480,51 @@ s-expressions, but sometimes that is a bit awkward.  So add keys =C-x ,= and
 (global-set-key "\C-x." 'forward-sexp)
 #+END_SRC
 
-** Line numbers
+** Globally enable/disable line numbers in =prog-mode=
+
+This feature allows for the quick toggle of line numbers.  I personally don't
+find line numbers very handy, but they help pair programmers communicate which
+particular code fragment they are talking about.
+
+Type =C-x M-l= to toggle line numbers.
+
 #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+  (defun enable-line-numbers ()
+    "Enable line numbers in prog-mode."
+    (interactive)
+    (cl-loop for buf in (buffer-list)
+             collect (with-current-buffer buf
+                       (when (derived-mode-p 'prog-mode)
+                         (display-line-numbers-mode 1))))
+    (add-hook 'prog-mode-hook 'winny--enable-line-numbers)
+    (when (called-interactively-p 'interactive)
+      (message "Line numbers ENABLED in prog-modes."))
+    t)
+
+  (defun disable-line-numbers ()
+    "Disable line numbers in prog-mode."
+    (interactive)
+    (cl-loop for buf in (buffer-list)
+             collect (with-current-buffer buf
+                       (when (derived-mode-p 'prog-mode)
+                         (display-line-numbers-mode -1))))
+    (remove-hook 'prog-mode-hook 'winny--enable-line-numbers)
+    (when (called-interactively-p 'interactive)
+      (message "Line numbers DISABLED in prog-modes."))
+    nil)
+
+  (defun winny--enable-line-numbers ()
+    "Internal hook function."
+      (display-line-numbers-mode 1))
+
+  (defun toggle-line-numbers ()
+    "Toggle visibility of line numbers in prog-mode."
+    (interactive)
+    (if (member 'winny--enable-line-numbers prog-mode-hook)
+      (call-interactively 'disable-line-numbers)
+      (call-interactively 'enable-line-numbers)))
+
+  (global-set-key (kbd "C-x M-l") 'toggle-line-numbers)
 #+end_src
 
 ** Ace Jump
