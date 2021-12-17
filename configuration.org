@@ -608,6 +608,16 @@ Set default style and use tabs in C files by default.
     :ensure t
     :hook ((sql-mode . sqlind-minor-mode)))
 #+end_src
+** CMake
+#+begin_src emacs-lisp
+  (use-package cmake-mode
+    :ensure t)
+#+end_src
+** Bison (Lex/Yacc)
+#+begin_src emacs-lisp
+  (use-package bison-mode
+    :ensure t)
+#+end_src
 * Whitespace
 ** Show trailing whitespace on some major modes by default.
 
