@@ -1480,6 +1480,14 @@ taking too long, then restores font locking when scrolling stops.
   (fast-scroll-mode 1))
 #+END_SRC
 
+** Speed up rendering of very long lines
+
+New with Emacs 27.1.  See =M-x so-long-commentary RET=.
+
+#+begin_src emacs-lisp
+  (global-so-long-mode 1)
+#+end_src
+
 ** Alternate keys to traverse between delimited phrases
 One can use =C-M-B= and =C-M-f= to go backward and forward between
 s-expressions, but sometimes that is a bit awkward.  So add keys =C-x ,= and
