@@ -2218,6 +2218,25 @@ Enable =narrow-to-region=
 (put 'narrow-to-region 'disabled nil)
 #+END_SRC
 
+* Emacs daemon/server quick keys
+Like =with-editor=, set up =server.el= (see =server-visit-files=) with =C-c
+C-c= to "commit" save and close the buffer, and =C-c C-k= to revert and close
+the buffer (thereby discarding the edits).
+
+#+begin_src emacs-lisp
+  (add-hook 'server-visit-hook
+            (defun winny/server-visit-hook ()
+              (when (frame-parameter nil 'winny/opened-from-editor)
+                (buffer-local-set-key (kbd "C-c C-c") (defun winny/server-edit-commit ()
+                                                        (interactive)
+                                                        (save-buffer)
+                                                        (server-edit)))
+                (buffer-local-set-key (kbd "C-c C-k") (defun winny/server-edit-abort ()
+                                                        (interactive)
+                                                        (revert-buffer nil t)
+                                                        (server-edit))))))
+#+end_src
+
 * Load =host-post-init.el=
 #+BEGIN_SRC emacs-lisp
   (winny/load-file-when-present "~/.emacs.d/host-post-init.el")
