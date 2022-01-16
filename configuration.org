@@ -1987,7 +1987,6 @@ reason to do this, but I've since forgotten.
 (F10) default is not very useful -- just use =M-`=.)
 
 #+BEGIN_SRC emacs-lisp
-(global-unset-key (kbd "<f4>"))
 (global-set-key (kbd "<f9>") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "<f10>") 'kmacro-end-or-call-macro)
 #+END_SRC
