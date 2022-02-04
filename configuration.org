@@ -1308,20 +1308,19 @@ width, and increase line height.
 ** ripgrep
 
 #+BEGIN_SRC emacs-lisp
-(use-package rg
-  :ensure t
-  :init
-  ;; Move over the default rg search to `rg/files'.
-  (rg-define-search rg/files :confirm prefix)
-  ;; I don't care about rg files prompt, so fix that.
-  (rg-define-search rg :confirm prefix :files "all"))
-#+END_SRC
-
-** the silver searcher
-
-#+BEGIN_SRC emacs-lisp
-(use-package ag
-  :ensure t)
+  (use-package rg
+    :ensure t
+    :init
+    ;; Move over the default rg search to `rg/files'.
+    (rg-define-search rg/files :confirm prefix)
+    ;; Don't prompt for file types.  Note: "all" will only search the files known
+    ;; to ripgrep to be interesting.  This won't work if working with
+    ;; non-standard file extensions.  Instead use "everything", which appears to
+    ;; be what ripgrep does by default anyways.
+    ;;
+    ;; Created https://github.com/dajva/rg.el/issues/131 to memorialize this
+    ;; surprising behavior.
+    (rg-define-search rg :confirm prefix :files "everything"))
 #+END_SRC
 
 ** Ergonomic search key
