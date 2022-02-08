@@ -1,0 +1,10 @@
+# key: blog
+# name: blog-post
+# --
+* $1
+:PROPERTIES:
+:EXPORT_FILE_NAME: ${1:$(concat " "(replace-regexp-in-string "[^A-Za-z0-9]+" "_" yas-text t t))}
+:EXPORT_DATE: `(winny/iso-8601)`
+:END:
+
+$0

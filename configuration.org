@@ -24,6 +24,23 @@ Just some notes for stuff I forget to do:
                nil)))
 #+END_SRC
 
+* Utility stuff
+
+** Full ISO 8601
+From https://wilkesley.org/~ian/xah/emacs/elisp_datetime.html
+
+#+begin_src emacs-lisp
+  (defun winny/iso-8601 ()
+    (concat
+     (format-time-string "%Y-%m-%dT%T")
+     ((lambda (x) (concat (substring x 0 3) ":" (substring x 3 5)))
+      (format-time-string "%z"))))
+
+  (defun winny/insert-iso-8601 ()
+    (interactive)
+    (insert (winny/iso-8601)))
+#+end_src
+
 * Load =host-pre-init.el=
 #+BEGIN_SRC emacs-lisp
   (winny/load-file-when-present "~/.emacs.d/host-pre-init.el")
@@ -1024,6 +1041,16 @@ Export to hugo markdown.  Great for blogging.
   :ensure t
   :after ox)
 #+END_SRC
+**** Helper commands to get productive
+
+#+begin_src emacs-lisp
+  (defun winny/new-blog-post ()
+    (interactive)
+    (find-file "~/pro/winny.tech/blog.winny.tech/content-org/all-posts.org")
+    (goto-char (point-max))
+    (org-previous-visible-heading 1)
+    (org-meta-return))
+#+end_src
 ** Prettier bullets
 #+BEGIN_SRC emacs-lisp
     (use-package org-bullets
