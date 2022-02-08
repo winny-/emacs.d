@@ -58,7 +58,7 @@ Load customize settings from a different file than =init.el=.
 Hardcode some settings that I wish to never change in any Emacs setup.
 
 #+begin_src emacs-lisp
-  (setq require-final-newline t)
+  (setq mode-require-final-newline t)
 #+end_src
 
 * Set up load path
