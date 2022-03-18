@@ -413,14 +413,22 @@ It turns out golang mode is not strict about indentation despite the toolchain
 being pretty strict about that sort of thing.  So that's what the hook does.
 
 #+BEGIN_SRC emacs-lisp
-(use-package go-mode
-  :ensure t
-  :hook (go-mode-hook
-         .
-         (lambda ()
-           (setq tab-width 4)
-           (setq indent-tabs-mode 1))))
+  (use-package go-mode
+    :ensure t
+    :after (lsp-mode)
+    :init
+    (add-hook 'go-mode-hook #'lsp-deferred)
+    (add-hook 'go-mode-hook
+              (defun lsp-go-install-save-hooks ()
+                (add-hook 'before-save-hook #'lsp-format-buffer t t)
+                (add-hook 'before-save-hook #'lsp-organize-imports t t))))
 #+END_SRC
+
+** LSP
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :ensure t)
+#+end_src
 ** Packaging language modes
 
 *** nix
