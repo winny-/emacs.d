@@ -424,6 +424,13 @@ being pretty strict about that sort of thing.  So that's what the hook does.
                 (add-hook 'before-save-hook #'lsp-organize-imports t t))))
 #+END_SRC
 
+** Haskell
+
+#+begin_src emacs-lisp
+  (use-package haskell-mode
+    :ensure t)
+#+end_src
+
 ** LSP
 #+begin_src emacs-lisp
   (use-package lsp-mode
