@@ -431,6 +431,13 @@ being pretty strict about that sort of thing.  So that's what the hook does.
     :ensure t)
 #+end_src
 
+** Ocaml
+
+#+begin_src emacs-lisp
+  (use-package tuareg
+    :ensure t)
+#+end_src
+
 ** LSP
 #+begin_src emacs-lisp
   (use-package lsp-mode
