@@ -988,10 +988,13 @@ For easy commands to insert expiry from lisp.
   cons cells.")
   (defun winny/org-insert-created ()
     "Insert created expiry information.
-  Only insert when the variable `buffer-file-name' matches a regex
-  in `winny/org-auto-insert-expiry-pattern-list'."
-    (when (let ((case-fold-search (file-name-case-insensitive-p buffer-file-name)))
-            (assoc-default buffer-file-name
+  Only insert when the variable the target filing file name matches
+  a regex in `winny/org-auto-insert-expiry-pattern-list'."
+    (when (let* ((base-buffer-file-name
+                  (buffer-file-name (buffer-base-buffer (current-buffer))))
+                 (case-fold-search
+                  (file-name-case-insensitive-p base-buffer-file-name)))
+            (assoc-default base-buffer-file-name
                            (mapcar #'(lambda (el) (cons el t))
                                    winny/org-auto-insert-expiry-pattern-list)
                            'string-match))
