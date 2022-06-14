@@ -1262,6 +1262,14 @@ Prefix argument POS should be a location it the buffer."
 
 ** Describe a theme
 See [[Helper to describe theme][here]].
+
+* Direnv
+#+begin_src elisp
+  (use-package direnv
+    :ensure t
+    :config
+    (direnv-mode))
+#+end_src
 * Pull in ssh-agent via keychain
 See https://www.funtoo.org/Keychain
 
