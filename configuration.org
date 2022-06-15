@@ -768,7 +768,7 @@ A better dired.
 ** sunrise commander
 A OFM (like midnight commander) for emacs.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp, :eval never
 (use-package sunrise
   :load-path "~/.emacs.d/sunrise-commander")
 #+END_SRC
