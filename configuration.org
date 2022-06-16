@@ -1911,26 +1911,27 @@ each buffer"
 
 ** Copy the buffer filename
 #+BEGIN_SRC emacs-lisp
-(defun copy-buffer-file-name-as-kill (choice)
-  "Copy the the buffer path to the `kill-ring'.
-CHOICE can be `?f', `?d', or `?n' for full path, directory path,
-or filename respectively.  Via
-https://stackoverflow.com/a/18814469/2720026"
-  (interactive "cCopy Buffer Name (F) Full, (D) Directory, (N) Name")
-  (let ((new-kill-string)
-        (name (if (eq major-mode 'dired-mode)
-                  (dired-get-filename)
-                (or (buffer-file-name) ""))))
-    (cond ((eq choice ?f)
-           (setq new-kill-string name))
-          ((eq choice ?d)
-           (setq new-kill-string (file-name-directory name)))
-          ((eq choice ?n)
-           (setq new-kill-string (file-name-nondirectory name)))
-          (t (message "Quit")))
-    (when new-kill-string
-      (message "%s copied" new-kill-string)
-      (kill-new new-kill-string))))
+  (defun yank-file-name (choice)
+    "Copy the the buffer path to the `kill-ring'.
+  CHOICE can be `?f', `?d', or `?n' for full path, directory path,
+  or filename respectively.  Via
+  https://stackoverflow.com/a/18814469/2720026"
+    (interactive "cCopy Buffer Name (F) Full, (D) Directory, (N) Name, (P) Project Path")
+    (let* ((name (if (eq major-mode 'dired-mode)
+                   (dired-get-filename)
+                   (buffer-file-name)))
+           (s
+            (cl-case choice
+              (?f name)
+              (?d (file-name-directory name))
+              (?n (file-name-nondirectory name))
+              (?p (replace-regexp-in-string (regexp-quote (projectile-project-root)) "" name)))))
+      (cond
+       (s
+        (message "%s copied" s)
+        (kill-new s))
+       (t
+        (message "(No name to copy.)")))))
 #+END_SRC
 
 ** Show buffer filename is minibuffer
