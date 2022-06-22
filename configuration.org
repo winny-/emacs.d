@@ -1151,6 +1151,14 @@ you are good to go.
          ("C-x M-c" . magit-clone)))
 #+END_SRC
 
+** Git LFS
+
+#+begin_src emacs-lisp
+  (use-package magit-lfs
+    :ensure t
+    :after magit)
+#+end_src
+
 ** Forge
 Work with github and gitlab efficiently.
 
