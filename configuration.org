@@ -890,12 +890,12 @@ My goto theme.
 
 ** A facility to streamline theme selection
 #+BEGIN_SRC emacs-lisp
-(load "switch-theme.el" t t)
-(setq winny/default-theme 'tao-yin)
-(use-package smart-mode-line
-  :ensure t
-  :init
-  (add-hook 'winny/after-theme-switch-hook 'sml/setup t t))
+  (load "switch-theme.el" t t)
+  (setq winny/default-theme 'cyberpunk)
+  (use-package smart-mode-line
+    :ensure t
+    :init
+    (add-hook 'winny/after-theme-switch-hook 'sml/setup t t))
 #+END_SRC
 ** Helper to describe theme
 #+BEGIN_SRC emacs-lisp
