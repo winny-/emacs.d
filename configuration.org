@@ -416,8 +416,6 @@ Maybe I should remove this.  Haven't used a Jade template for a long time.
     (add-hook 'typescript-mode-hook #'setup-tide-mode))
 #+end_src
 
-
-
 ** Scala
 
 =scalpp= was a file extension I used for cpp prerocessed code.  =cool= was a
@@ -688,6 +686,13 @@ Set default style and use tabs in C files by default.
   (use-package bison-mode
     :ensure t)
 #+end_src
+* Hex editing
+#+begin_src emacs-lisp
+  (use-package nhexl-mode
+    :ensure t)
+
+  (defalias 'hex-edit 'nhexl-mode)        ; defalias needs symbols: it's a function, not a macro.
+#+end_src
 * Whitespace
 ** Show trailing whitespace on some major modes by default.
 
@@ -768,9 +773,9 @@ A better dired.
 ** sunrise commander
 A OFM (like midnight commander) for emacs.
 
-#+BEGIN_SRC emacs-lisp, :eval never
-(use-package sunrise
-  :load-path "~/.emacs.d/sunrise-commander")
+#+BEGIN_SRC emacs-lisp :eval never
+  (use-package sunrise
+    :load-path "~/.emacs.d/site-packages/sunrise-commander")
 #+END_SRC
 ** neotree side pane
 This is a handy side pane with a navigable tree of folders and files.  This
@@ -1100,6 +1105,14 @@ Export to hugo markdown.  Great for blogging.
     (org-previous-visible-heading 1)
     (org-meta-return))
 #+end_src
+*** ox-textile
+For use with Redmine and friends.
+
+#+begin_src emacs-lisp
+  (use-package ox-textile
+    :load-path "~/.emacs.d/site-packages/org-textile")
+#+end_src
+
 ** Prettier bullets
 #+BEGIN_SRC emacs-lisp
     (use-package org-bullets
