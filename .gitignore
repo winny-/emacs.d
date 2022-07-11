@@ -35,3 +35,4 @@
 /host-pre-init.el
 .w-firstboot-initialized
 /.org-id-locations
+/places

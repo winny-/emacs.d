@@ -1826,6 +1826,10 @@ in [[https://www.masteringemacs.org/][Mastering Emacs]], a fantastic book that y
     :init
     (whole-line-or-region-global-mode))
 #+END_SRC
+** Open file to previous position
+#+begin_src emacs-lisp
+  (save-place-mode 1)
+#+end_src
 * RSS Feed Reader
 
 #+BEGIN_SRC emacs-lisp
