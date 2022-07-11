@@ -6,10 +6,6 @@
 This is an literate programming =init.el=.  Read Harry's [[https://harryrschwartz.com/2016/02/15/switching-to-a-literate-emacs-configuration][brief tutorial]] on how
 this works and how to do it yourself.
 
-Just some notes for stuff I forget to do:
-
-- Add =:eval no= to the end of a =BEGIN_SRC= line to disable evaluation.
-
 * Helper for loading optional elisp files
 #+BEGIN_SRC emacs-lisp
     (defun winny/load-file-when-present (file)
@@ -773,8 +769,9 @@ A better dired.
 ** sunrise commander
 A OFM (like midnight commander) for emacs.
 
-#+BEGIN_SRC emacs-lisp :eval never
+#+BEGIN_SRC emacs-lisp
   (use-package sunrise
+    :disabled
     :load-path "~/.emacs.d/site-packages/sunrise-commander")
 #+END_SRC
 ** neotree side pane
@@ -1850,10 +1847,10 @@ Manage RSS feeds in [[file:elfeed.org][elfeed.org]].
   (elfeed-org))
 #+END_SRC
 * Transmission
-I don't currently use this, so it is disabled.
 
-#+BEGIN_SRC emacs-lisp :eval no
+#+BEGIN_SRC emacs-lisp
   (use-package transmission
+    :disabled
     :init
     (defun winny/transmission-add-magnet-uri ()
       "Add a magnet URI"
