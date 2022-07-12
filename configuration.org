@@ -974,9 +974,10 @@ For easy commands to insert expiry from lisp.
 
 ** Main hook
 #+BEGIN_SRC emacs-lisp
-(add-hook 'org-mode-hook (lambda ()
-                           (setq word-wrap t)
-                           (turn-on-auto-fill)))
+  (add-hook 'org-mode-hook (defun winny/org-hook ()
+                             (setq word-wrap t)
+                             (turn-on-auto-fill)
+                             (org-indent-mode 1)))
 #+END_SRC
 
 ** Global org-mode keys
@@ -1154,11 +1155,16 @@ The best way to use git.  As long as you know =C-x g= to open the magit menu,
 you are good to go.
 
 #+BEGIN_SRC emacs-lisp
-(use-package magit
-  :ensure t
-  :bind (("C-x g" . magit-status)
-         ("C-x M-g" . magit-dispatch)
-         ("C-x M-c" . magit-clone)))
+  (use-package magit
+    :ensure t
+    :bind (("C-x g" . magit-status)
+           ("C-x M-g" . magit-dispatch)
+           ("C-x M-c" . magit-clone)
+           :map magit-revision-mode-map
+           ("C-c u" . magit-rev-parent))
+    :init
+    (fset 'magit-rev-parent
+     (kmacro-lambda-form [?\M-< ?\C-s ?p ?a ?r ?e ?n ?t ?: return return] 0 "%d")))
 #+END_SRC
 
 ** Git LFS
