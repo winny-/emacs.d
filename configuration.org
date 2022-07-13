@@ -646,6 +646,11 @@ Set default style and use tabs in C files by default.
                          (setq indent-tabs-mode t)
                          (c-set-style "bsd")))
 #+END_SRC
+** Meson
+#+begin_src emacs-lisp
+  (use-package meson-mode
+    :ensure t)
+#+end_src
 ** Qlik
 #+begin_src emacs-lisp
   (add-to-auto-mode-alist 'sql-mode "qvs")
