@@ -689,9 +689,12 @@ Set default style and use tabs in C files by default.
 * Hex editing
 #+begin_src emacs-lisp
   (use-package nhexl-mode
-    :ensure t)
-
-  (defalias 'hex-edit 'nhexl-mode)        ; defalias needs symbols: it's a function, not a macro.
+    :ensure t
+    :init
+    ;; defalias needs symbols: it's a function, not a macro.
+    (defalias 'hex-edit 'nhexl-mode)
+    (add-hook 'nhexl-mode-hook #'(lambda ()
+                                   (setq-local so-long-action 'longlines-mode))))
 #+end_src
 * Whitespace
 ** Show trailing whitespace on some major modes by default.
