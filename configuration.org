@@ -178,9 +178,13 @@ The core racket-mode.
     :config
     (setq racket-show-functions 'racket-show-echo-area)
     :init
-    (add-hook 'racket-mode-hook
-              #'(lambda ()
-                  (put 'bit-string-case 'racket-indent-function 'defun)))
+    (add-hook
+     'racket-mode-hook
+     (defun winny/racket-mode-hook ()
+       (put 'bit-string-case 'racket-indent-function 'defun)
+       ;; Defer to Emacs default value.  Note to self, if I modify this variable
+       ;; I need to use (set-default-value ...)
+       (setq-local comment-column (default-value 'comment-column))))
     (add-hook 'racket-mode-hook
               'racket-xp-mode))
 #+END_SRC
@@ -1750,6 +1754,10 @@ Use 79 chars in each line for filling.
 #+BEGIN_SRC emacs-lisp
 (setq-default indent-tabs-mode nil)
 #+END_SRC
+** Use closest indent column for margin comments
+#+begin_src emacs-lisp
+  (setq-default comment-column 0)
+#+end_src
 ** Zap
 One can use =M-z= to character.  This will delete all text including the first
 occurrence of the prompted character.  Sometimes this is not ideal, so one can
