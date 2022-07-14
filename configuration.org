@@ -1698,27 +1698,28 @@ Type the subsequent highlighted character when prompted.  Viola!
 * Editing
 ** Lisp editing
 
-*** Edit s-expressions efficiently
+*** Edit s-expressions efficiently with Paredit
 Paredit is the best.
 #+BEGIN_SRC emacs-lisp
-(use-package paredit
-  :ensure t
-  :init
-  (dolist (m '(emacs-lisp-mode-hook
-     	       racket-mode-hook
-     	       racket-repl-mode-hook
-               lisp-mode-hook))
-    (add-hook m #'paredit-mode))
-  (defun winny/add-paredit-keystrokes ()
-    "Ensure custom keys are enabled in paredit."
-    (bind-keys :map paredit-mode-map
-               ("{"   . paredit-open-curly)
-               ("}"   . paredit-close-curly))
-    (unless terminal-frame
-      (bind-keys :map paredit-mode-map
-                 ("M-[" . paredit-wrap-square)
-                 ("M-{" . paredit-wrap-curly))))
-  (add-hook 'paredit-mode-hook 'winny/add-paredit-keystrokes))
+  (use-package paredit
+    :ensure t
+    :init
+    (dolist (m '(emacs-lisp-mode-hook
+                 racket-mode-hook
+                 racket-repl-mode-hook
+                 lisp-mode-hook
+                 scheme-mode-hook))
+      (add-hook m #'paredit-mode))
+    (add-hook 'paredit-mode-hook
+              (defun winny/add-paredit-keystrokes ()
+                "Ensure custom keys are enabled in paredit."
+                (bind-keys :map paredit-mode-map
+                           ("{"   . paredit-open-curly)
+                           ("}"   . paredit-close-curly))
+                (unless terminal-frame
+                  (bind-keys :map paredit-mode-map
+                             ("M-[" . paredit-wrap-square)
+                             ("M-{" . paredit-wrap-curly))))))
 #+END_SRC
 
 *** Make parenthesis stand out less in lisp modes
