@@ -1162,6 +1162,14 @@ Use =M-g t= to toggle the fold at point.
 #+END_SRC
 
 * VCS/Git support
+
+When following a symlink into a git repo, display a warning, but don't prompt
+if it is okay.
+
+#+begin_src emacs-lisp
+  (setq vc-follow-symlinks nil)
+#+end_src
+
 ** Magit
 The best way to use git.  As long as you know =C-x g= to open the magit menu,
 you are good to go.
