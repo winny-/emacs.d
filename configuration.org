@@ -398,6 +398,7 @@ Maybe I should remove this.  Haven't used a Jade template for a long time.
     :after typescript-mode
     :after flycheck
     :after company
+    :after editorconfig
     :init
     (defun setup-tide-mode ()
       (interactive)
@@ -413,7 +414,12 @@ Maybe I should remove this.  Haven't used a Jade template for a long time.
     ;; formats the buffer before saving
     (add-hook 'before-save-hook 'tide-format-before-save)
 
-    (add-hook 'typescript-mode-hook #'setup-tide-mode))
+    (add-hook 'typescript-mode-hook #'setup-tide-mode)
+    (add-hook 'editorconfig-after-apply-functions (defun winny/fix-tide-indentation (props)
+                                                    (when (and (boundp 'tide-mode) tide-mode)
+                                                      (tide-command:configure)))))
+
+
 #+end_src
 
 ** Scala
