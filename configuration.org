@@ -87,10 +87,11 @@ Set up packaging sources.
 
 And load up use-package logic.
 #+BEGIN_SRC emacs-lisp
-(eval-when-compile
-  ;; Following line is not needed if use-package.el is in ~/.emacs.d
-  (package-install 'use-package)
-  (require 'use-package))
+  (eval-when-compile
+    ;; Following line is not needed if use-package.el is in ~/.emacs.d
+    (package-install 'use-package)
+    (require 'use-package)
+    (setq use-package-always-ensure t))
 #+END_SRC
 
 * Detect WSL
@@ -469,7 +470,8 @@ being pretty strict about that sort of thing.  So that's what the hook does.
 ** LSP
 #+begin_src emacs-lisp
   (use-package lsp-mode
-    :ensure t)
+    :ensure t
+    :bind-keymap (("C-'" . lsp-command-map)))
 #+end_src
 ** Packaging language modes
 
@@ -526,6 +528,11 @@ See also [[Groovy][groovy-mode]] for syntax highlighting.
 #+begin_src emacs-lisp
   (use-package groovy-mode
     :ensure t)
+#+end_src
+*** Java LSP
+#+begin_src emacs-lisp
+  (use-package lsp-java
+    :init (add-hook 'java-mode-hook 'lsp))
 #+end_src
 ** Ledger
 For [[https://plaintextaccounting.org/][plain text accounting]].
