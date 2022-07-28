@@ -1943,8 +1943,16 @@ Manage RSS feeds in [[file:elfeed.org][elfeed.org]].
 (Besides smart-mode-line)
 ** Show battery when a battery is present
 #+BEGIN_SRC emacs-lisp
-(display-battery-mode (if (boundp 'battery-status-function) 1 -1))
+  (display-battery-mode
+   ;; Show battery status only if the system can use a battery.
+   (if (and (boundp 'battery-status-function)
+            (lexical-let ((ac-line-status
+                           (alist-get ?L (funcall battery-status-function))))
+              (and ac-line-status (not (equal "N/A" ac-line-status)))))
+     1
+     -1))
 #+END_SRC
+
 ** Flash mode-line when a bell occurs
 #+BEGIN_SRC emacs-lisp
 (use-package mode-line-bell
