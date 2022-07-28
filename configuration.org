@@ -2208,21 +2208,6 @@ template.
 
 * Other packages / support stuff
 
-** god-mode
-#+BEGIN_SRC emacs-lisp
-
-(use-package god-mode
-  :ensure t
-  :bind (("<escape>" . god-local-mode))
-  :init
-  (defun my-update-cursor ()
-    (setq cursor-type (if god-local-mode
-                        'hbar
-                        t)))
-  (add-hook 'god-mode-enabled-hook 'my-update-cursor)
-  (add-hook 'god-mode-disabled-hook 'my-update-cursor))
-#+END_SRC
-
 ** default-text-scale
 With default-text-scale resizing the buffer text is done with =C-M--= and
 =C-M-==.  The text size changes applies to *all* buffers not just the current
