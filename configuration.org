@@ -90,9 +90,12 @@ And load up use-package logic.
   (eval-when-compile
     ;; Following line is not needed if use-package.el is in ~/.emacs.d
     (package-install 'use-package)
-    (require 'use-package)
-    (setq use-package-always-ensure t))
+    (require 'use-package))
 #+END_SRC
+
+** TODO =use-package-always-ensure=
+Set =use-package-always-ensure= to =t=... if one can figure out how to load
+stuff from =site-lisp= and =site-packages= with this setting.
 
 * Detect WSL
 
@@ -532,6 +535,7 @@ See also [[Groovy][groovy-mode]] for syntax highlighting.
 *** Java LSP
 #+begin_src emacs-lisp
   (use-package lsp-java
+    :ensure t
     :init (add-hook 'java-mode-hook 'lsp))
 #+end_src
 ** Ledger
@@ -1152,6 +1156,17 @@ For use with Redmine and friends.
               .
               org-bullets-mode)))
 #+END_SRC
+
+** Babel (code evaluation)
+
+*** BASIC support (tinybasic.rkt)
+
+Quick and dirty org-mode support for my BASIC dialect.
+
+#+begin_src emacs-lisp
+  (use-package ob-basic)
+#+end_src
+
 * Code folding
 Use =M-g f= to fold the region.  Use =M-g d= to delete the fold under point.
 Use =M-g t= to toggle the fold at point.
