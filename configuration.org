@@ -1742,7 +1742,6 @@ Paredit is the best.
     :init
     (dolist (m '(emacs-lisp-mode-hook
                  racket-mode-hook
-                 racket-repl-mode-hook
                  lisp-mode-hook
                  scheme-mode-hook))
       (add-hook m #'paredit-mode))
