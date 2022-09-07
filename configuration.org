@@ -2274,6 +2274,13 @@ Syntax highlight inventory files
 (add-to-list 'auto-mode-alist '("/inventory[^/]*\\'" . conf-unix-mode))
 #+END_SRC
 
+** Terraform
+
+#+begin_src emacs-lisp
+  (use-package terraform-mode
+    :ensure t)
+#+end_src
+
 ** vterm
 #+BEGIN_SRC emacs-lisp
   ;; Tell vterm to automatically try to compile the module when it's not present.
