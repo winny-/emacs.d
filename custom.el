@@ -7,21 +7,20 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(Man-notify-method (quote friendly))
+ '(Man-notify-method 'friendly)
  '(TeX-view-program-selection
-   (quote
-    (((output-dvi has-no-display-manager)
+   '(((output-dvi has-no-display-manager)
       "dvi2tty")
      ((output-dvi style-pstricks)
       "dvips and gv")
      (output-dvi "xdvi")
      (output-pdf "Zathura")
-     (output-html "xdg-open"))))
+     (output-html "xdg-open")))
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#000000" "#8b0000" "#00ff00" "#ffa500" "#7b68ee" "#dc8cc3" "#93e0e3" "#dcdccc"])
- '(async-shell-command-buffer (quote new-buffer))
+ '(async-shell-command-buffer 'new-buffer)
  '(auto-revert-verbose nil)
  '(blink-cursor-mode t)
  '(bookmark-save-flag 1)
@@ -29,40 +28,36 @@
  '(column-number-mode t)
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
- '(compilation-message-face (quote default))
- '(counsel-mode t)
+ '(compilation-message-face 'default)
  '(css-indent-offset 2)
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#657b83")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
  '(current-language-environment "UTF-8")
- '(custom-enabled-themes (quote (wheatgrass)))
+ '(custom-enabled-themes '(wheatgrass))
  '(custom-raised-buttons t)
  '(custom-safe-themes
-   (quote
-    ("947190b4f17f78c39b0ab1ea95b1e6097cc9202d55c73a702395fc817f899393" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "6bc387a588201caf31151205e4e468f382ecc0b888bac98b2b525006f7cb3307" "d1cc05d755d5a21a31bced25bed40f85d8677e69c73ca365628ce8024827c9e3" "9fe1540491fcf692b8c639a3abacd32b29233bc4cb834a12a0fd1e01cbd0a128" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "f0d8af755039aa25cd0792ace9002ba885fd14ac8e8807388ab00ec84c9497d7" "c86f868347919095aa44d2a6129dd714cbcf8feaa88ba954f636295b14ceff8f" default)))
- '(dash-docs-browser-func (quote eww))
+   '("947190b4f17f78c39b0ab1ea95b1e6097cc9202d55c73a702395fc817f899393" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "6bc387a588201caf31151205e4e468f382ecc0b888bac98b2b525006f7cb3307" "d1cc05d755d5a21a31bced25bed40f85d8677e69c73ca365628ce8024827c9e3" "9fe1540491fcf692b8c639a3abacd32b29233bc4cb834a12a0fd1e01cbd0a128" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "f0d8af755039aa25cd0792ace9002ba885fd14ac8e8807388ab00ec84c9497d7" "c86f868347919095aa44d2a6129dd714cbcf8feaa88ba954f636295b14ceff8f" default))
+ '(dash-docs-browser-func 'eww)
  '(debug-on-error nil)
- '(desktop-path (quote ("~/.emacs.d/desktop")))
- '(diary-entry-marker (quote font-lock-variable-name-face))
- '(dired-guess-shell-alist-user (quote (("\\.pdf$" "zathura") ("\\.djvu$" "zathura"))))
+ '(desktop-path '("~/.emacs.d/desktop"))
+ '(diary-entry-marker 'font-lock-variable-name-face)
+ '(dired-guess-shell-alist-user '(("\\.pdf$" "zathura") ("\\.djvu$" "zathura")))
  '(display-battery-mode t)
  '(display-buffer-alist
-   (quote
-    (("\\*Async Shell Command\\*.*"
+   '(("\\*Async Shell Command\\*.*"
       (display-buffer-no-window))
      ("*\\Man .*\\*"
-      (display-buffer-same-window)))))
+      (display-buffer-same-window))))
  '(display-time-world-list
-   (quote
-    (("America/Los_Angeles" "Seattle")
+   '(("America/Los_Angeles" "Seattle")
      ("America/Chicago" "Chicago")
      ("America/New_York" "New York")
      ("Europe/London" "London")
      ("Europe/Paris" "Paris")
      ("Asia/Hong_Kong" "Hong Kong")
-     ("Asia/Tokyo" "Tokyo"))))
+     ("Asia/Tokyo" "Tokyo")))
  '(doc-view-resolution 144)
  '(eclim-executable "/usr/lib/eclipse/eclim")
  '(eclimd-autostart-with-default-workspace nil)
@@ -70,8 +65,7 @@
  '(eclimd-executable nil)
  '(editorconfig-mode t)
  '(emms-mode-line-icon-image-cache
-   (quote
-    (image :type xpm :ascent center :data "/* XPM */
+   '(image :type xpm :ascent center :data "/* XPM */
 static char *note[] = {
 /* width height num_colors chars_per_pixel */
 \"    10   11        2            1\",
@@ -89,15 +83,13 @@ static char *note[] = {
 \"#..######.\",
 \"#######...\",
 \"######....\",
-\"#######..#\" };")))
+\"#######..#\" };"))
  '(epresent-text-scale 200)
  '(fci-rule-color "#383838")
- '(global-hl-line-mode t)
- '(gnus-logo-colors (quote ("#4c8383" "#bababa")) t)
  '(global-hl-line-mode nil)
+ '(gnus-logo-colors '("#4c8383" "#bababa") t)
  '(gnus-mode-line-image-cache
-   (quote
-    (image :type xpm :ascent center :data "/* XPM */
+   '(image :type xpm :ascent center :data "/* XPM */
 static char *gnus-pointer[] = {
 /* width height num_colors chars_per_pixel */
 \"    18    13        2            1\",
@@ -117,38 +109,33 @@ static char *gnus-pointer[] = {
 \"######..###.######\",
 \"###....####.######\",
 \"###..######.######\",
-\"###########.######\" };")) t)
+\"###########.######\" };") t)
  '(gnus-select-method
-   (quote
-    (nntp "news.easynews.com"
+   '(nntp "news.easynews.com"
           (nntp-open-connection-function nntp-open-ssl-stream)
-          (nntp-port-number 563))))
+          (nntp-port-number 563)))
  '(haskell-interactive-popup-errors nil)
- '(helm-dash-browser-func (quote eww))
- '(help-window-select (quote other))
- '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+ '(helm-dash-browser-func 'eww)
+ '(help-window-select 'other)
+ '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-foreground-color "#586e75")
  '(highlight-tail-colors
-   (quote
-    (("#eee8d5" . 0)
+   '(("#eee8d5" . 0)
      ("#B4C342" . 20)
      ("#69CABF" . 30)
      ("#69B7F0" . 50)
      ("#DEB542" . 60)
      ("#F2804F" . 70)
      ("#F771AC" . 85)
-     ("#eee8d5" . 100))))
+     ("#eee8d5" . 100)))
  '(hl-bg-colors
-   (quote
-    ("#DEB542" "#F2804F" "#FF6E64" "#F771AC" "#9EA0E5" "#69B7F0" "#69CABF" "#B4C342")))
+   '("#DEB542" "#F2804F" "#FF6E64" "#F771AC" "#9EA0E5" "#69B7F0" "#69CABF" "#B4C342"))
  '(hl-fg-colors
-   (quote
-    ("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3")))
- '(hl-paren-colors (quote ("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900")))
+   '("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3"))
+ '(hl-paren-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
  '(hl-sexp-background-color "#efebe9")
  '(hl-todo-keyword-faces
-   (quote
-    (("TODO" . "#dc752f")
+   '(("TODO" . "#dc752f")
      ("NEXT" . "#dc752f")
      ("THEM" . "#2d9574")
      ("PROG" . "#3a81c3")
@@ -162,12 +149,11 @@ static char *gnus-pointer[] = {
      ("TEMP" . "#b1951d")
      ("FIXME" . "#dc752f")
      ("XXX+" . "#dc752f")
-     ("\\?\\?\\?+" . "#dc752f"))))
- '(ibuffer-default-sorting-mode (quote alphabetic))
+     ("\\?\\?\\?+" . "#dc752f")))
+ '(ibuffer-default-sorting-mode 'alphabetic)
  '(ibuffer-eliding-string "…")
  '(ibuffer-formats
-   (quote
-    ((mark modified read-only " "
+   '((mark modified read-only " "
            (name 26 26 :left :elide)
            " "
            (size 9 -1 :right)
@@ -176,7 +162,7 @@ static char *gnus-pointer[] = {
            " " filename-and-process)
      (mark " "
            (name 16 -1)
-           " " filename))))
+           " " filename)))
  '(ido-confirm-unique-completion t)
  '(indicate-buffer-boundaries t)
  '(inhibit-startup-screen t)
@@ -184,25 +170,21 @@ static char *gnus-pointer[] = {
  '(irfc-directory "~/docs/RFC")
  '(irfc-download-base-url "https://www.ietf.org/rfc/")
  '(js-indent-level 2)
- '(lua-indent-level 2 nil nil "Customized with use-package lua-mode")
  '(magit-diff-use-overlays nil)
  '(magithub-clone-default-directory "~/code/")
  '(mediawiki-site-alist
-   (quote
-    (("Wikipedia" "https://en.wikipedia.org/w/" "username" "password" nil "Main Page")
-     ("NetHackWiki" "https://nethackwiki.com/w/" "username" "password" nil ""))))
+   '(("Wikipedia" "https://en.wikipedia.org/w/" "username" "password" nil "Main Page")
+     ("NetHackWiki" "https://nethackwiki.com/w/" "username" "password" nil "")))
  '(menu-bar-mode nil)
  '(mingus-mpd-config-file "~/.config/mpd/mpd.conf")
  '(mingus-mpd-root "/mnt/elements/music/")
  '(minions-mode nil)
  '(mode-line-bell-mode t)
  '(nrepl-message-colors
-   (quote
-    ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
- '(org-agenda-files (quote ("~/docs/orgs/todo.org")))
+   '("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4"))
+ '(org-agenda-files '("~/docs/orgs/todo.org"))
  '(org-capture-templates
-   (quote
-    (("s" "Snippet" entry
+   '(("s" "Snippet" entry
       (file+datetree "~/docs/unsorted.org")
       (file "~/.emacs.d/org-capture-templates/unsorted.org"))
      ("j" "Journal Entry" entry
@@ -210,7 +192,7 @@ static char *gnus-pointer[] = {
       (file "~/.emacs.d/org-capture-templates/journal-item.org"))
      ("t" "Todo list item" entry
       (file+headline "~/docs/todo/todo.org" "Incoming")
-      (file "~/.emacs.d/org-capture-templates/todo-item.org")))))
+      (file "~/.emacs.d/org-capture-templates/todo-item.org"))))
  '(org-default-notes-file "~/docs/notes.org")
  '(org-hide-emphasis-markers nil)
  '(org-indent-mode-turns-on-hiding-stars t)
@@ -230,36 +212,47 @@ static char *gnus-pointer[] = {
 }
 ")
  '(org-latex-image-default-width ".8\\linewidth")
- '(org-latex-inputenc-alist (quote (("\"utf8\"" . "\"utf8x\""))))
+ '(org-latex-inputenc-alist '(("\"utf8\"" . "\"utf8x\"")))
  '(package-selected-packages
-   (quote
-    (whole-line-or-region yasnippet-snippets org-bullets borland-blue-theme ledger-mode ox-hugo sed-mode ssh-config-mode csproj-mode rg password-store which-key hl-todo counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line steam swiper tuareg use-package winum yaml-mode bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii)))
- '(pdf-view-midnight-colors (quote ("#655370" . "#fbf8ef")))
- '(plantuml-default-exec-mode (quote executable))
+   '(all-the-icons-completion marginalia vertico terraform-mode whole-line-or-region yasnippet-snippets org-bullets borland-blue-theme ledger-mode ox-hugo sed-mode ssh-config-mode csproj-mode rg password-store which-key hl-todo counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line steam swiper tuareg use-package winum yaml-mode bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii))
+ '(pdf-view-midnight-colors '("#655370" . "#fbf8ef"))
+ '(plantuml-default-exec-mode 'executable)
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(rfc-mode-directory "/home/winston/docs/RFC/")
  '(safe-local-variable-values
-   (quote
-    ((eval progn
+   '((eval
+      (lambda nil
+        (when
+            (and
+             (buffer-file-name)
+             (string=
+              (file-name-extension
+               (buffer-file-name))
+              "rkt")
+             (not
+              (member
+               (file-name-nondirectory
+                (buffer-file-name))
+               '("info.rkt" "main.rkt")))
+             (not
+              (equal major-mode 'basic-mode)))
+          (message "dir-locals.el: Switching to BASIC mode...")
+          (basic-mode))))
+     (eval progn
            (org-indent-mode 1)
-           (add-to-list
-            (quote winny/org-auto-insert-expiry-pattern-list)
-            (expand-file-name default-directory)))
+           (add-to-list 'winny/org-auto-insert-expiry-pattern-list
+                        (expand-file-name default-directory)))
      (org-log-done . time)
      (eval web-mode-set-engine "django")
      (eval web-mode-set-engine "go")
-     (eval add-to-list
-           (quote auto-mode-alist)
-           (\`
-            ((\,
-              (concat default-directory "[^/]+\\.\\(i\\|p\\|t\\)\\'"))
-             . abl-mode)))
+     (eval add-to-list 'auto-mode-alist
+           `(,(concat default-directory "[^/]+\\.\\(i\\|p\\|t\\)\\'")
+             . abl-mode))
      (eval when
            (and
             (not
-             (boundp
-              (quote winny/dirlocal-hack)))
+             (boundp 'winny/dirlocal-hack))
             (buffer-file-name)
             (string-match "\\.\\(i\\|p\\|t\\)$"
                           (buffer-file-name)))
@@ -288,17 +281,15 @@ static char *gnus-pointer[] = {
            (use-local-map
             (copy-keymap text-mode-map))
            (local-set-key "<next>"
-                          (quote
-                           (lambda nil
+                          '(lambda nil
                              (interactive)
                              (forward-page)
-                             (recenter-top-bottom 0))))
+                             (recenter-top-bottom 0)))
            (local-set-key "<prev>"
-                          (quote
-                           (lambda nil
+                          '(lambda nil
                              (interactive)
                              (backward-page)
-                             (recenter-top-bottom 0)))))
+                             (recenter-top-bottom 0))))
      (eval load
            (concat
             (projectile-project-root)
@@ -309,66 +300,48 @@ static char *gnus-pointer[] = {
             (projectile-project-root)
             "private/setup"))
      (eval ansible)
-     (eval c-set-offset
-           (quote arglist-cont-nonempty)
-           (quote
-            (c-lineup-gcc-asm-reg c-lineup-arglist)))
-     (eval c-set-offset
-           (quote arglist-close)
-           0)
-     (eval c-set-offset
-           (quote arglist-intro)
-           (quote ++))
-     (eval c-set-offset
-           (quote case-label)
-           0)
-     (eval c-set-offset
-           (quote statement-case-open)
-           0)
-     (eval c-set-offset
-           (quote substatement-open)
-           0)
+     (eval c-set-offset 'arglist-cont-nonempty
+           '(c-lineup-gcc-asm-reg c-lineup-arglist))
+     (eval c-set-offset 'arglist-close 0)
+     (eval c-set-offset 'arglist-intro '++)
+     (eval c-set-offset 'case-label 0)
+     (eval c-set-offset 'statement-case-open 0)
+     (eval c-set-offset 'substatement-open 0)
      (org-export-html-style . "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/stylesheet.css\" />")
      (eval when
-           (fboundp
-            (quote rainbow-mode))
+           (fboundp 'rainbow-mode)
            (rainbow-mode 1))
      (elisp-lint-indent-specs
       (when-let . 1))
-     (eval c-set-offset
-           (quote innamespace)
-           0)
+     (eval c-set-offset 'innamespace 0)
      (eval when
-           (fboundp
-            (quote c-toggle-comment-style))
-           (c-toggle-comment-style 1)))))
- '(same-window-regexps (quote ("\\*Man .*\\*")))
+           (fboundp 'c-toggle-comment-style)
+           (c-toggle-comment-style 1))))
+ '(same-window-regexps '("\\*Man .*\\*"))
  '(scroll-bar-mode nil)
  '(sgml-basic-offset 2)
  '(show-paren-delay 0.0)
  '(show-paren-mode t)
  '(sml/col-number-format "%3c")
  '(sml/line-number-format "%4l")
- '(sml/mode-width (quote right))
+ '(sml/mode-width 'right)
  '(sml/numbers-separator ",")
  '(sml/replacer-regexp-list
-   (quote
-    (("^~/\\.emacs\\.d/elpa/" ":ELPA:")
-     ("^~/\\.emacs\\.d/" ":ED:"))))
- '(sml/theme (quote respectful))
+   '(("^~/\\.emacs\\.d/elpa/" ":ELPA:")
+     ("^~/\\.emacs\\.d/" ":ED:")))
+ '(sml/theme 'respectful)
  '(symon-mode t)
  '(term-default-bg-color "#fdf6e3")
  '(term-default-fg-color "#657b83")
  '(tmm-completion-prompt nil)
  '(tmm-mid-prompt " → ")
- '(tmm-shortcut-style (quote (downcase upcase)))
+ '(tmm-shortcut-style '(downcase upcase))
  '(tool-bar-mode nil)
  '(tooltip-mode nil)
  '(vc-annotate-background nil)
  '(vc-annotate-background-mode nil)
  '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
+   '((20 . "#dc322f")
      (40 . "#c8805d801780")
      (60 . "#bec073400bc0")
      (80 . "#b58900")
@@ -385,24 +358,23 @@ static char *gnus-pointer[] = {
      (300 . "#28669833af33")
      (320 . "#279993ccbacc")
      (340 . "#26cc8f66c666")
-     (360 . "#268bd2"))))
+     (360 . "#268bd2")))
  '(vc-annotate-very-old-color nil)
  '(visible-bell t)
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
  '(web-mode-markup-indent-offset 2)
  '(weechat-color-list
-   (quote
-    (unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496")))
+   '(unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))
  '(winum-mode t)
  '(writeroom-extra-line-spacing 8)
  '(writeroom-fringes-outside-margins t)
- '(writeroom-fullscreen-effect (quote maximized))
+ '(writeroom-fullscreen-effect 'maximized)
  '(writeroom-maximize-window nil)
  '(writeroom-mode-line t)
  '(writeroom-width 100)
- '(wttrin-default-accept-language (quote ("Accept-Language" . "en")))
- '(wttrin-default-cities (quote ("Milwaukee, WI")))
+ '(wttrin-default-accept-language '("Accept-Language" . "en"))
+ '(wttrin-default-cities '("Milwaukee, WI"))
  '(xterm-color-names
    ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#073642"])
  '(xterm-color-names-bright
