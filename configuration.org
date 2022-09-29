@@ -1273,29 +1273,6 @@ Do not show matching parenthesis in this mode.
 (add-hook 'irfc-mode-hook (lambda () (show-paren-local-mode -1)))
 #+END_SRC
 
-** Dash docs
-This uses the same documentation sources that https://devdocs.io/ uses.
-
-#+BEGIN_SRC emacs-lisp
-(use-package dash-docs
-  :ensure t
-  :init
-  (require 'dash-docs)                  ; Gives error when line not present.
-  (defun winny/dash-docs-activate-all-docsets ()
-    (interactive)
-    (loop for docset in (directory-files dash-docs-docsets-path nil "^.+\\.docset$")
-          do (dash-docs-activate-docset (string-remove-suffix ".docset" docset))))
-  (winny/dash-docs-activate-all-docsets))
-#+END_SRC
-
-Also pull in a counsel helper to make it easier to search.
-
-#+BEGIN_SRC emacs-lisp
-(use-package counsel-dash
-  :ensure t
-  :after dash-docs)
-#+END_SRC
-
 ** Better =describe-*=
 The =helpful= package takes over =C-h v=, =C-h k=, =C-h f= providing more
 descriptive output and nicer formatting.
@@ -1363,65 +1340,33 @@ See https://www.funtoo.org/Keychain
   :init
   (keychain-refresh-environment))
 #+END_SRC
+* Completion
+** Vertico
+#+begin_src emacs-lisp
+  (use-package vertico
+    :ensure t
+    :init
+    (vertico-mode))
 
-* Counsel/Ivy
-** Ivy
-#+BEGIN_SRC emacs-lisp
-(use-package ivy
-  :ensure t
-  :config
-  (defun winny/ivy-force-done ()
-    "Complete ivy with entered text ignoring completions."
-    (interactive)
-    (ivy-alt-done t))
-  (defun winny/ivy-ding (&rest ignored)
-    "Ring the bell doing nothing with IGNORED."
-    (ding t))
-  (bind-keys :map ivy-minibuffer-map
-             ("<C-return>" . winny/ivy-force-done))
-  (setq ivy-height 10
-        ivy-count-format "(%d/%d) "
-        ivy-on-del-error-function 'winny/ivy-ding
-        ivy-read-action-format-function 'ivy-read-action-format-default
-        ivy-use-virtual-buffers t)
-  :init
-  (ivy-mode 1))
-#+END_SRC
-*** ivy-prescient (ivy history)
-Keep track of ivy completions over sessions.
+  (use-package savehist
+    :init
+    (savehist-mode))
 
-#+BEGIN_SRC emacs-lisp
-(use-package ivy-prescient
-  :ensure t
-  :init
-  (ivy-prescient-mode 1))
-#+END_SRC
-** Counsel
-#+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :ensure t
-  :init
-  (counsel-mode 1))
-#+END_SRC
-*** Tramp
-#+BEGIN_SRC emacs-lisp
-(use-package counsel-tramp
-  :ensure t)
-#+END_SRC
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    :ensure t
+    ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+    :bind (("M-A" . marginalia-cycle)
+           :map minibuffer-local-map
+           ("M-A" . marginalia-cycle))
 
-*** etags
-#+BEGIN_SRC emacs-lisp
-(use-package counsel-etags
-  :ensure t)
-#+END_SRC
+    ;; The :init configuration is always executed (Not lazy!)
+    :init
 
-*** Projectile
-#+BEGIN_SRC emacs-lisp
-(use-package counsel-projectile
-  :ensure t
-  :init
-  (counsel-projectile-mode 1))
-#+END_SRC
+    ;; Must be in the :init section of use-package such that the mode gets
+    ;; enabled right away. Note that this forces loading the package.
+    (marginalia-mode))
+#+end_src
 
 * Ensure XDG_RUNTIME_DIR is set
 #+BEGIN_SRC emacs-lisp
@@ -2084,7 +2029,7 @@ Show a nice screen when emacs starts up or creates a new fram.
                 ("p" . dashboard-previous-line)
                 ("n" . dashboard-next-line))
     :init
-    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
+    (setq ;;initial-buffer-choice (lambda () (get-buffer "*dashboard*"))
           dashboard-items '((projects . 5)
                             (recents . 5)
                             (bookmarks . 5))
@@ -2230,17 +2175,6 @@ improved by applying the aforementioned visual tweaks.
 #+BEGIN_SRC emacs-lisp
 (use-package writeroom-mode
   :ensure t)
-#+END_SRC
-
-** prescient
-Same frequency of command history.  I don't believe this does anything on its
-own, but works with ivy or counsel.
-
-#+BEGIN_SRC emacs-lisp
-(use-package prescient
-  :ensure t
-  :init
-  (prescient-persist-mode 1))
 #+END_SRC
 
 ** projectile
