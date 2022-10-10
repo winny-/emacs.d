@@ -1264,7 +1264,10 @@ with others how to find docuemantion.
 In this repository.
 
 #+BEGIN_SRC emacs-lisp
-(use-package irfc)
+  (use-package irfc
+    :hook (irfc-mode
+           . (lambda ()
+               (read-only-mode 1))))      ; Make read only.
 #+END_SRC
 
 Do not show matching parenthesis in this mode.
