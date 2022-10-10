@@ -2233,7 +2233,8 @@ Syntax highlight inventory files
   (setq vterm-always-compile-module t)
 
   (use-package vterm
-    :ensure t)
+    :ensure t
+    :bind (("C-`" . vterm)))
 #+END_SRC
 * Some other functions
 
