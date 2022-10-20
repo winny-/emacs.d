@@ -425,6 +425,11 @@ Maybe I should remove this.  Haven't used a Jade template for a long time.
 
 
 #+end_src
+*** Prisma (DSL for schemas)
+#+begin_src emacs-lisp
+  (use-package prisma-mode
+    :load-path "~/.emacs.d/site-packages/emacs-prisma-mode")
+#+end_src
 
 ** Scala
 

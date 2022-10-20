@@ -4,3 +4,6 @@
 [submodule "org-textile"]
 	path = site-packages/org-textile
 	url = https://github.com/winny-/org-textile.git
+[submodule "site-packages/emacs-prisma-mode"]
+	path = site-packages/emacs-prisma-mode
+	url = https://github.com/pimeys/emacs-prisma-mode.git
