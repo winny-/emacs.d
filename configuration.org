@@ -571,6 +571,13 @@ Nice and simple.  Just install rust-mode.
 (use-package rust-mode
   :ensure t)
 #+END_SRC
+** Swift
+
+#+begin_src emacs-lisp
+  (use-package swift-mode
+    :ensure t)
+#+end_src
+
 ** JSON
 While one could use =javascript-mode=, =json-mode= restricts the syntax to just the
 JSON stuff.
