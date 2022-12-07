@@ -1,5 +1,5 @@
 #+title: Literate Programming =init.el=
-#+startup: indent
+#+startup: indent content
 #+property: header-args :results silent
 
 * Introduction
@@ -1014,17 +1014,29 @@ using =(require 'org-tempo)= --- this reimplements the old behavior.  On the
 other hand the new behavior using =C-c C-, s= is much cleaner, allowing the
 user to dispatch to any known block type from a menu.  It is one extra
 keystroke, but I think I'll live.
+
 ** Package setup
-This config uses the Emacs-bundled org-mode, but loads some Org [[https://orgmode.org/worg/org-contrib/][contrib]] files
-from this git repository.  There does not appear to be an easier way to install
-contrib files at this time.  See the Org Mode [[https://orgmode.org/install.html][installation guide]].
 
-*** org-expiry
-For easy commands to insert expiry from lisp.
+See:
 
-#+BEGIN_SRC emacs-lisp
-(use-package org-expiry)
-#+END_SRC
+- [[info:org#Headlines][org#Headlines]]
+- [[info:org#Catching invisible edits][org#Catching invisible edits]]
+
+
+#+begin_src emacs-lisp
+  (use-package org
+    :pin gnu
+    :ensure t
+    :init
+    (setq org-special-ctrl-a t
+          org-special-ctrl-k t
+          org-special-ctrl-k 'error
+          org-catch-invisible-edits t))
+
+  (use-package org-contrib
+    :ensure t
+    :after org)
+#+end_src
 
 ** Main hook
 #+BEGIN_SRC emacs-lisp
