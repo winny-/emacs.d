@@ -2216,8 +2216,10 @@ height.  It has application in other modes where reading content can be
 improved by applying the aforementioned visual tweaks.
 
 #+BEGIN_SRC emacs-lisp
-(use-package writeroom-mode
-  :ensure t)
+  (use-package writeroom-mode
+    :ensure t
+    :init
+    (setq writeroom-fullscreen-effect nil))
 #+END_SRC
 
 ** projectile
