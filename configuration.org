@@ -824,9 +824,9 @@ A better dired.
 A OFM (like midnight commander) for emacs.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package sunrise
-    :disabled
-    :load-path "~/.emacs.d/site-packages/sunrise-commander")
+  ;; (use-package sunrise
+  ;;   :disabled
+  ;;   :load-path "~/.emacs.d/site-packages/sunrise-commander")
 #+END_SRC
 ** neotree side pane
 This is a handy side pane with a navigable tree of folders and files.  This
