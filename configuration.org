@@ -1378,6 +1378,9 @@ See https://www.funtoo.org/Keychain
   (use-package vertico
     :ensure t
     :init
+    (setq read-file-name-completion-ignore-case t
+          read-buffer-completion-ignore-case t
+          completion-ignore-case t)
     (vertico-mode))
 
   (use-package savehist
