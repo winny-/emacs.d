@@ -1072,6 +1072,8 @@ See:
   ;; key.
   (define-key org-mode-map (kbd "C-c C-'") 'org-edit-special)
   (define-key org-src-mode-map (kbd "C-c C-'") 'org-edit-src-exit)
+
+  (define-key org-mode-map (kbd "C-M-u") 'org-up-element)
 #+END_SRC
 
 ** Insert created timestamp
