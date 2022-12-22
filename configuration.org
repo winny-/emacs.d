@@ -231,38 +231,39 @@ visiting definitions, and so on.  I also use =jedi-direx= which makes it easier
 to navigate python sources.
 
 #+BEGIN_SRC emacs-lisp
-(use-package python-mode
-  :ensure t)
+  (use-package python-mode
+    :ensure t)
 
-(use-package auto-virtualenvwrapper
-  :ensure t
-  :after python-mode
-  :init
-  (setq auto-virtualenvwrapper-verbose nil)
-  ;; Activate on focus in
-  (add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
-  ;; Activate on changing buffers
-  (add-hook 'window-configuration-change-hook #'auto-virtualenvwrapper-activate)
-  (add-hook 'python-mode-hook 'auto-virtualenvwrapper-activate))
+  (use-package auto-virtualenvwrapper
+    :ensure t
+    :after python-mode
+    :init
+    (setq auto-virtualenvwrapper-verbose nil)
+    ;; Activate on focus in
+    (add-hook 'focus-in-hook #'auto-virtualenvwrapper-activate)
+    ;; Activate on changing buffers
+    (add-hook 'window-configuration-change-hook #'auto-virtualenvwrapper-activate)
+    (add-hook 'python-mode-hook 'auto-virtualenvwrapper-activate))
 
-(use-package jedi
-  :ensure t
-  :after python-mode
-  :init
-  (add-hook 'python-mode-hook 'jedi:setup t)
-  :bind (:map jedi-mode-map
-              ("M-." . jedi:goto-definition)
-              ("M-," . jedi:goto-definition-pop-marker)
-              ("C-c d" . jedi:show-doc)
-              ("C-c r" . helm-jedi-related-names)))
+  (use-package jedi
+    :ensure t
+    :after python-mode
+    :init
+    (add-hook 'python-mode-hook 'jedi:setup t)
+    (setq jedi:complete-on-dot t)
+    :bind (:map jedi-mode-map
+                ("M-." . jedi:goto-definition)
+                ("M-," . jedi:goto-definition-pop-marker)
+                ("C-c d" . jedi:show-doc)
+                ("C-c r" . helm-jedi-related-names)))
 
-(use-package jedi-direx
-  :ensure t
-  :after python-mode
-  :after jedi
-  :init
-  (define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer)
-  (add-hook 'jedi-mode-hook 'jedi-direx:setup))
+  (use-package jedi-direx
+    :ensure t
+    :after python-mode
+    :after jedi
+    :init
+    (define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer)
+    (add-hook 'jedi-mode-hook 'jedi-direx:setup))
 #+END_SRC
 
 ** Ruby
