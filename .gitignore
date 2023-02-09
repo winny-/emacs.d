@@ -36,3 +36,9 @@
 .w-firstboot-initialized
 /.org-id-locations
 /places
+session.*
+/history
+/projects
+/eln-cache/
+/.lsp-session-v1
+/.dap-breakpoints
