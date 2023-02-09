@@ -448,7 +448,11 @@ being pretty strict about that sort of thing.  So that's what the hook does.
     (add-hook 'go-mode-hook
               (defun lsp-go-install-save-hooks ()
                 (add-hook 'before-save-hook #'lsp-format-buffer t t)
-                (add-hook 'before-save-hook #'lsp-organize-imports t t))))
+                (add-hook 'before-save-hook #'lsp-organize-imports t t)))
+    (add-hook 'go-mode-hook
+              (defun winny/go-hook ()
+                "My Go hook"
+                (setq-local tab-width 4))))
 #+END_SRC
 
 ** Haskell
