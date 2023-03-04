@@ -1851,6 +1851,17 @@ This unwraps a paragraph into one line.
             (looking-at-p "[[:space:]]*$"))
     (forward-line 1)))
 #+END_SRC
+
+*** Quell Shellcheck at point
+Create a line similar to =# shellcheck disable=SC1234= above the current line
+in order to calm down Shellcheck.
+#+begin_src emacs-lisp
+  (fset 'winny/shellcheck-disable
+     (kmacro-lambda-form [?\C-  ?\C-  ?\M-x ?f ?l ?y ?c ?h ?e ?c ?k ?- ?d ?i ?s ?p ?l ?a ?y ?- ?e ?r ?r ?o ?r ?- ?a ?t ?- ?p ?o ?i ?n ?t ?\C-m ?\C-h ?e ?\C-x ?o ?\M-> ?\C-p ?\C-s ?\[ ?\C-m ?\C-  ?\M-f ?\M-w ?q ?\C-a ?\C-o ?\C-i ?# ?  ?s ?h ?e ?l ?l ?c ?h ?e ?c ?k ?  ?d ?i ?s ?a ?b ?l ?e ?= ?\C-y ?\C-u ?\C-  ?\C-u ?\C- ] 0 "%d"))
+  (add-hook 'sh-mode-hook
+            (defun winny--bind-shellcheck-disable ()
+              (global-set-key (kbd "C-c ! k") 'winny/shellcheck-disable)))
+#+end_src
 ** Snippets
 Using [[https://github.com/joaotavora/yasnippet][Yasnippets]].  See the [[http://joaotavora.github.io/yasnippet/][documentation]].
 
