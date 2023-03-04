@@ -141,7 +141,7 @@ This function is called by `org-babel-execute-src-block'"
     ;; actually execute the source-code block either in a session or
     ;; possibly by dropping it to a temporary file and evaluating the
     ;; file.
-    ;; 
+    ;;
     ;; for session based evaluation the functions defined in
     ;; `org-babel-comint' will probably be helpful.
     ;;

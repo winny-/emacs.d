@@ -358,27 +358,27 @@ details.  For other licenses and consulting, please contact the author.")
                element?
                nil]
     [tt ([p - pre-content? -]
-         ...) 
+         ...)
         element?
         scribble-tt-face]
     [subscript ([p - pre-content? -]
-                ...) 
+                ...)
                element?
                nil]
     [superscript ([p - pre-content? -]
-                  ...) 
+                  ...)
                  element?
                  nil]
     [smaller ([p - pre-content? -]
-              ...) 
+              ...)
              element?
              nil]
     [larger ([p - pre-content? -]
-             ...) 
+             ...)
             element?
             nil]
     [emph ([p - pre-content? -]
-           ...) 
+           ...)
           element?
           scribble-emph-face]
     [linebreak ()
@@ -388,7 +388,7 @@ details.  For other licenses and consulting, please contact the author.")
             element?
             nil]
     [literal ([p - string? -]
-              ...) 
+              ...)
              element?
              nil]
     [image
@@ -485,7 +485,7 @@ details.  For other licenses and consulting, please contact the author.")
 
     [racketinput ([p - datum? -] ...) any/c nil]
     [RACKETINPUT ([p - datum? -] ...) any/c nil]
-    
+
     [racketmod ([k file string? "#f"]
                 [p -    datum?  -]
                 ...)
@@ -526,7 +526,7 @@ details.  For other licenses and consulting, please contact the author.")
 
     [var  ([p - datum? -] ...) element? nil]
     [svar ([p - datum? -] ...) element? nil]
-    
+
     ;; TODO: Possibly add support for all the "scheme" backword-compatibility
     ;; identifiers.
 
@@ -579,26 +579,26 @@ details.  For other licenses and consulting, please contact the author.")
 
 (defvar scribble-mode-syntax-table
   (let ((st (make-syntax-table)))
-    
+
     (modify-syntax-entry ?   " " st)
     (modify-syntax-entry ?\t " " st)
     (modify-syntax-entry ?\f " " st)
     (modify-syntax-entry ?\n ">" st)
-    
+
     (modify-syntax-entry ?\" "." st)
-    
+
     (modify-syntax-entry ?\@ "_ 1" st)
     (modify-syntax-entry ?\# "_ 1" st)
     (modify-syntax-entry ?\: "_ 1" st)
     (modify-syntax-entry ?\; ". 2" st)
-    
+
     (modify-syntax-entry ?\( "()" st)
     (modify-syntax-entry ?\) ")(" st)
     (modify-syntax-entry ?\[ "(]" st)
     (modify-syntax-entry ?\] ")[" st)
     (modify-syntax-entry ?\{ "(}" st)
     (modify-syntax-entry ?\} "){" st)
-    
+
     st))
 
 ;;------------------------------------------------------------- Forms Reference
@@ -673,7 +673,7 @@ details.  For other licenses and consulting, please contact the author.")
 
 ;;---------------------------------------------------------------------- Keymap
 
-(defvar scribble-mode-map 
+(defvar scribble-mode-map
   (let ((km (make-sparse-keymap)))
     (define-key km (kbd "M-TAB") 'completion-at-point)
     (define-key km [menu-bar Scribble] (cons "Scribble" scribble-mode-menu))
@@ -731,20 +731,20 @@ details.  For other licenses and consulting, please contact the author.")
                                      ,@face-to-namerxs-alist)))))
                        scribble-forms)
                  face-to-namerxs-alist))
-    
+
     ("\\(@\\)\\(PLaneT\\)"
      (1 'scribble-at-keyword-face)
      (2 'scribble-planet-face))
-    
+
     ;; TODO: Is this right?
     ;;
     ;; ("\\(@\\)@"
     ;;  (1 'scribble-at-keyword-face))
-    
+
     ("\\(@#reader\\)[ ]+\\([^\r\n]+\\)"
      (1 'scribble-at-keyword-face)
      (2 'scribble-at-keyword-face))
-    
+
     ("\\`\\(#lang\\)[ ]+\\([^\r\n]+\\)"
      (1 'scribble-at-keyword-face)
      (2 'scribble-at-keyword-face))))
@@ -768,39 +768,39 @@ details.  For other licenses and consulting, please contact the author.")
 ;;-------------------------------------------------------------------- Quickref
 
 ;; TODO: !!! this needs work since eldoc was forked out of this.
-;; 
+;;
 ;; (defun scribble-form-type-to-quickref (type)
 ;;   (propertize (scribble-form-type-to-racket type)
 ;;               'face 'scribble-quickref-type-face))
-;; 
-;; (defconst scribble-quickref-dotdotdot 
+;;
+;; (defconst scribble-quickref-dotdotdot
 ;;   (propertize "..." 'face 'scribble-quickref-meta-face))
-;; 
+;;
 ;; (defconst scribble-quickref-space
 ;;   (propertize " " 'face 'scribble-quickref-default-face))
-;; 
+;;
 ;; (defconst scribble-quickref-open-paren
 ;;   (propertize "(" 'face 'scribble-quickref-literal-face))
-;; 
+;;
 ;; (defconst scribble-quickref-close-paren
 ;;   (propertize ")" 'face 'scribble-quickref-literal-face))
-;; 
+;;
 ;; (defconst scribble-quickref-open-optional
 ;;   (propertize "[" 'face 'scribble-quickref-meta-face))
-;; 
+;;
 ;; (defconst scribble-quickref-close-optional
 ;;   (propertize "]" 'face 'scribble-quickref-meta-face))
-;; 
+;;
 ;; (defconst scribble-quickref-space-colon-space
 ;;   (concat scribble-quickref-space
 ;;           (propertize ":" 'face 'scribble-quickref-meta-face)
 ;;           scribble-quickref-space))
-;; 
+;;
 ;; (defconst scribble-quickref-space-equal-space
 ;;   (concat scribble-quickref-space
 ;;           (propertize "=" 'face 'scribble-quickref-meta-face)
 ;;           scribble-quickref-space))
-;; 
+;;
 ;; (defun scribble-form-arg-to-quickref (arg)
 ;;   (if (eq arg '...)
 ;;       scribble-quickref-dotdotdot
@@ -820,7 +820,7 @@ details.  For other licenses and consulting, please contact the author.")
 ;;                    (if name-str
 ;;                        `(,type-ps
 ;;                          ,scribble-quickref-space-colon-space
-;;                          ,(propertize name-str 
+;;                          ,(propertize name-str
 ;;                                       'face
 ;;                                       'scribble-quickref-arg-face))
 ;;                      `(,type-ps))))
@@ -840,7 +840,7 @@ details.  For other licenses and consulting, please contact the author.")
 ;;                     ,scribble-quickref-space-equal-space
 ;;                     ,@fmt))
 ;;                (reverse fmt))))))
-;; 
+;;
 ;; (defun scribble-form-quickref-text (form)
 ;;   ;; TODO: !!! working on this
 ;;   (let* ((at (propertize "@" 'face 'scribble-quickref-at-face))
@@ -870,7 +870,7 @@ details.  For other licenses and consulting, please contact the author.")
 
 ;;------------------------------------------------------------------------ ElDoc
 
-(defconst scribble-eldoc-dotdotdot 
+(defconst scribble-eldoc-dotdotdot
   (propertize "..." 'face 'scribble-eldoc-meta-face))
 
 (defconst scribble-eldoc-space
@@ -1000,7 +1000,7 @@ details.  For other licenses and consulting, please contact the author.")
 
 (defconst scribble-completion-table (scribble-build-completion-table))
 
-(defconst scribble-completion-at-point-tail 
+(defconst scribble-completion-at-point-tail
   (list scribble-completion-table
         ;; :annotation-function 'scribble-completion-annotate-function
         ))
@@ -1060,7 +1060,7 @@ details.  For other licenses and consulting, please contact the author.")
   (interactive)
   (scribble-buffer-display
    "*About Scribble Mode*"
-   (function 
+   (function
     (lambda ()
       (insert (propertize scribble-mode-title 'face 'bold)
               "\n\n"
@@ -1084,7 +1084,7 @@ details.  For other licenses and consulting, please contact the author.")
   (use-local-map scribble-mode-map)
 
   (set-syntax-table scribble-mode-syntax-table)
-  
+
   (setq fill-column 79)
 
   ;; Comments:
@@ -1097,7 +1097,7 @@ details.  For other licenses and consulting, please contact the author.")
 
   ;; TODO: comment-indent-function
 
-  ;; TODO: indent-line-function 
+  ;; TODO: indent-line-function
 
   ;; TODO: abbrev
 
@@ -1109,7 +1109,7 @@ details.  For other licenses and consulting, please contact the author.")
        scribble-imenu-generic-expression)
   (set (make-local-variable 'imenu-case-fold-search) nil)
   (imenu-add-to-menubar "Imenu")
-  
+
   ;; ElDoc:
   (set (make-local-variable 'eldoc-documentation-function)
        'scribble-eldoc-documentation-function)
