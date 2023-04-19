@@ -1482,16 +1482,22 @@ A rather nice incremental search.
 * Flyspell/flycheck/etc
 
 ** Flyspell
-Check spelling of strings and comments in source code.
-
-#+BEGIN_SRC emacs-lisp
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-#+END_SRC
-
 Check spelling of prose in writing modes.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'text-mode-hook 'flyspell-mode)
 #+END_SRC
+
+And make it less distracting because jeeeeeeeeeeeeeeeez!
+
+#+begin_src emacs-lisp
+  (require 'flyspell)
+  (setq flyspell-persistent-highlight nil)
+
+  ;; https://emacs.stackexchange.com/questions/450/intelligent-spell-checking-in-org-mode
+  (add-to-list 'ispell-skip-region-alist '(":\\(properties\\|LOGBOOK\\|PROPERTIES\\|LOGBOOK\\):" . ":END:"))
+  (add-to-list 'ispell-skip-region-alist '("#\\+\\(BEGIN_SRC\\|begin_src\\)" . "#\\+\\(END_SRC\\|end_src\\)"))
+
+#+end_src
 
 ** flycheck
 Enable it globally.
