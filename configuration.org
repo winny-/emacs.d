@@ -223,36 +223,13 @@ I install this via my distro's package manager, so no =use-package= here.
 #+END_SRC
 
 ** Python
-The python support is a bit complicated.  I use =python-mode= from MELPA for
-the major mode.  Then I use =auto-virtualenvwrapper= to automatically set up
-virtual environments whenever a =venv/= directory exists in the project
-directory.  For some added batteries I use jedi which adds code completion,
-visiting definitions, and so on.  I also use =jedi-direx= which makes it easier
-to navigate python sources.
+
+I've given up on jedi.  I am not a fan.  It doesn't work like you expect it to,
+and is very moody.  TODO: look into setting up Python LSP.
 
 #+BEGIN_SRC emacs-lisp
   (use-package python-mode
     :ensure t)
-
-  (use-package jedi
-    :ensure t
-    :after python-mode
-    :init
-    (add-hook 'python-mode-hook 'jedi:setup t)
-    (setq jedi:complete-on-dot t)
-    :bind (:map jedi-mode-map
-                ("M-." . jedi:goto-definition)
-                ("M-," . jedi:goto-definition-pop-marker)
-                ("C-c d" . jedi:show-doc)
-                ("C-c r" . helm-jedi-related-names)))
-
-  (use-package jedi-direx
-    :ensure t
-    :after python-mode
-    :after jedi
-    :init
-    (define-key python-mode-map "\C-cx" 'jedi-direx:pop-to-buffer)
-    (add-hook 'jedi-mode-hook 'jedi-direx:setup))
 #+END_SRC
 
 ** Ruby
