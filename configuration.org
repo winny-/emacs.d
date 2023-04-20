@@ -2230,6 +2230,12 @@ project.  A project root can be defined as a git repository, a folder with a
   (projectile-mode 1))
 #+END_SRC
 
+** systemd
+#+begin_src emacs-lisp
+  (use-package systemd
+    :ensure t)
+#+end_src
+
 ** ansible
 Helper stuff for ansible.
 
