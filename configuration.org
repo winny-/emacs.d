@@ -400,6 +400,7 @@ Maybe I should remove this.  Haven't used a Jade template for a long time.
 *** Prisma (DSL for schemas)
 #+begin_src emacs-lisp
   (use-package prisma-mode
+    :after (lsp)
     :load-path "~/.emacs.d/site-packages/emacs-prisma-mode")
 #+end_src
 
@@ -518,6 +519,7 @@ See also [[Groovy][groovy-mode]] for syntax highlighting.
 *** Java LSP
 #+begin_src emacs-lisp
   (use-package lsp-java
+    :after (lsp)
     :ensure t
     :init (add-hook 'java-mode-hook 'lsp))
 #+end_src
@@ -619,13 +621,19 @@ Also adds major modes for git attributes and git config files.
 The markdown markup language.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package markdown-mode
+  (use-package edit-indirect
     :ensure t
-    :config
-    (setq markdown-asymmetric-header t)
     :init
-    (define-key markdown-mode-map (kbd "C-c C-'") 'markdown-edit-code-block)
+    (require 'edit-indirect)
     (define-key edit-indirect-mode-map (kbd "C-c C-'") 'edit-indirect-commit))
+
+  (use-package markdown-mode
+    :after (edit-indirect)
+    :ensure t
+    :init
+    (require 'markdown-mode)
+    (setq markdown-asymmetric-header t)
+    (define-key markdown-mode-map (kbd "C-c C-'") 'markdown-edit-code-block))
 #+END_SRC
 ** Unison profiles
 The unison synchronization tool has a somewhat weird syntax, so I wrote a major
@@ -665,8 +673,12 @@ Set default style and use tabs in C files by default.
 ** Perl
 *** perldoc support
 #+BEGIN_SRC emacs-lisp
+  (use-package helm
+    :ensure t)
+
   (use-package helm-perldoc
     :ensure t
+    :after (helm)
     :init
     (helm-perldoc:setup))
 #+END_SRC
@@ -1273,7 +1285,7 @@ until a workaround can be determined.
 
 #+BEGIN_SRC emacs-lisp
   (use-package forge
-    :disable
+    :disabled
     :ensure t)
 #+END_SRC
 
