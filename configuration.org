@@ -42,19 +42,22 @@ From https://wilkesley.org/~ian/xah/emacs/elisp_datetime.html
   (winny/load-file-when-present "~/.emacs.d/host-pre-init.el")
 #+END_SRC
 
-* Customize
-Load customize settings from a different file than =init.el=.
-
-#+BEGIN_SRC emacs-lisp
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
-#+END_SRC
-
-* Make some changes ignoring Customize
+* Basic settings
 Hardcode some settings that I wish to never change in any Emacs setup.
 
 #+begin_src emacs-lisp
-  (setq mode-require-final-newline t)
+  (setq mode-require-final-newline t
+        column-number-mode t
+        blink-cursor-mode t
+        auto-revert-verbose nil
+        async-shell-command-buffer 'new-buffer
+        Man-notify-method 'friendly
+        help-window-select 'other
+        tool-bar-mode nil
+        tooltip-mode nil
+        scroll-bar-mode nil
+        show-paren-mode t
+        show-paren-delay 0.0)
 #+end_src
 
 * Set up load path
@@ -312,8 +315,10 @@ Mark the dotnet core =.DotSettings= files as xml.
 
 *** Coffee script
 #+BEGIN_SRC emacs-lisp
-(use-package coffee-mode
-  :ensure t)
+  (use-package coffee-mode
+    :ensure t
+    :init
+    (setq coffee-tab-width 2))
 #+END_SRC
 
 *** HTML/template support
@@ -436,7 +441,9 @@ being pretty strict about that sort of thing.  So that's what the hook does.
 
 #+begin_src emacs-lisp
   (use-package haskell-mode
-    :ensure t)
+    :ensure t
+    :init
+    (setq haskell-interactive-popup-errors nil))
 #+end_src
 
 ** Ocaml
@@ -920,6 +927,11 @@ My goto theme.
   (use-package tao-theme
     :ensure t)
 #+end_src
+*** Others for the moods
+#+begin_src emacs-lisp
+    (use-package uwu-theme
+      :ensure t)
+#+end_src
 
 ** A facility to streamline theme selection
 #+BEGIN_SRC emacs-lisp
@@ -1167,12 +1179,26 @@ For use with Redmine and friends.
 
 ** Babel (code evaluation)
 
+*** Async execution
+#+begin_src elisp
+  (use-package ob-async
+    :ensure t
+    :init
+    (require 'ob-async))
+#+end_src
+
 *** BASIC support (tinybasic.rkt)
 
 Quick and dirty org-mode support for my BASIC dialect.
 
 #+begin_src emacs-lisp
   (use-package ob-basic)
+#+end_src
+
+*** Bash support
+
+#+begin_src elisp
+  (org-babel-do-load-languages 'org-babel-load-languages '((shell . t)))
 #+end_src
 
 * Code folding
@@ -1946,12 +1972,14 @@ Manage RSS feeds in [[file:elfeed.org][elfeed.org]].
      -1))
 #+END_SRC
 
-** Flash mode-line when a bell occurs
+** Bell
 #+BEGIN_SRC emacs-lisp
-(use-package mode-line-bell
-  :ensure t
-  :init
-  (mode-line-bell-mode 1))
+  (use-package mode-line-bell
+    :ensure t
+    :init
+    (mode-line-bell-mode 1))
+
+  (setq visible-bell t)
 #+END_SRC
 * Buffer management
 

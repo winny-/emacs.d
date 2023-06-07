@@ -1,4 +1,4 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*- 
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
@@ -154,10 +154,10 @@
  (rear-context-string)
  (position . 1))
 ("org-capture-last-stored"
- (filename . "~/docs/unsorted.org")
- (front-context-string . "**** rackfest 20")
- (rear-context-string . "06-05 Wednesday\n")
- (position . 50))
+ (filename . "~/docs/journal/journal.org")
+ (front-context-string . "**** 06:16 CST\nI")
+ (rear-context-string . "23-01-20 Friday\n")
+ (position . 23722))
 ("(org) In-buffer settings"
  (front-context-string . "f\n\n     Then the")
  (rear-context-string . "-mode’ turned of")

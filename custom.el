@@ -7,7 +7,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(Man-notify-method 'friendly)
  '(TeX-view-program-selection
    '(((output-dvi has-no-display-manager)
       "dvi2tty")
@@ -20,12 +19,7 @@
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#000000" "#8b0000" "#00ff00" "#ffa500" "#7b68ee" "#dc8cc3" "#93e0e3" "#dcdccc"])
- '(async-shell-command-buffer 'new-buffer)
- '(auto-revert-verbose nil)
- '(blink-cursor-mode t)
  '(bookmark-save-flag 1)
- '(coffee-tab-width 2)
- '(column-number-mode t)
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
  '(compilation-message-face 'default)
@@ -59,11 +53,6 @@
      ("Asia/Hong_Kong" "Hong Kong")
      ("Asia/Tokyo" "Tokyo")))
  '(doc-view-resolution 144)
- '(eclim-executable "/usr/lib/eclipse/eclim")
- '(eclimd-autostart-with-default-workspace nil)
- '(eclimd-default-workspace "~/workspace-eclim")
- '(eclimd-executable nil)
- '(editorconfig-mode t)
  '(emms-mode-line-icon-image-cache
    '(image :type xpm :ascent center :data "/* XPM */
 static char *note[] = {
@@ -114,9 +103,7 @@ static char *gnus-pointer[] = {
    '(nntp "news.easynews.com"
           (nntp-open-connection-function nntp-open-ssl-stream)
           (nntp-port-number 563)))
- '(haskell-interactive-popup-errors nil)
  '(helm-dash-browser-func 'eww)
- '(help-window-select 'other)
  '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-foreground-color "#586e75")
  '(highlight-tail-colors
@@ -176,10 +163,6 @@ static char *gnus-pointer[] = {
    '(("Wikipedia" "https://en.wikipedia.org/w/" "username" "password" nil "Main Page")
      ("NetHackWiki" "https://nethackwiki.com/w/" "username" "password" nil "")))
  '(menu-bar-mode nil)
- '(mingus-mpd-config-file "~/.config/mpd/mpd.conf")
- '(mingus-mpd-root "/mnt/elements/music/")
- '(minions-mode nil)
- '(mode-line-bell-mode t)
  '(nrepl-message-colors
    '("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4"))
  '(org-agenda-files '("~/docs/orgs/todo.org"))
@@ -214,7 +197,7 @@ static char *gnus-pointer[] = {
  '(org-latex-image-default-width ".8\\linewidth")
  '(org-latex-inputenc-alist '(("\"utf8\"" . "\"utf8x\"")))
  '(package-selected-packages
-   '(all-the-icons-completion marginalia vertico terraform-mode whole-line-or-region yasnippet-snippets org-bullets borland-blue-theme ledger-mode ox-hugo sed-mode ssh-config-mode csproj-mode rg password-store which-key hl-todo counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line steam swiper tuareg use-package winum yaml-mode bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii))
+   '(uwu-theme spacemacs-theme ob-async lispy nftables-mode org-contrib swift-mode all-the-icons-completion marginalia vertico terraform-mode whole-line-or-region yasnippet-snippets org-bullets borland-blue-theme ledger-mode ox-hugo sed-mode ssh-config-mode csproj-mode rg password-store which-key hl-todo counsel-etags counsel-tramp counsel-dash ivy-hydra jedi-direx expand-region vimish-fold helm-projectile helm-mode-manager kotlin-mode svelte-mode markdown web-server ansible prescient forge pass esup yafolding ebf cyberpunk-theme graphviz-dot-mode js-mode flycheck helpful flymake-shellcheck jade-mode paren-face god-mode ivy-prescient eink-theme nix-mode chronometer dashboard all-the-icons default-text-scale fast-scroll elfeed elfeed-org package-build mutt-mode meson-mode nhexl-mode basic-mode plantuml-mode counsel-projectile cyberpunk-2019-theme counsel captain org-trello mag-menu paredit-menu proceed editorconfig helm-dash leuven-theme libmpdel minions monokai-theme mpdel npm-mode olivetti org-tree-slide pdf-tools racket-mode smart-mode-line steam swiper tuareg use-package winum yaml-mode bind-key caml ivy rich-minority faceup tablist navigel dash-docs python-mode speed-type dired-sidebar protobuf-mode alect-themes rfc-mode sokoban ix sprunge webpaste inverse-acme-theme nofrils-acme-theme parchment-theme paredit material-theme dracula-theme ansi neotree flappymacs cloc clojure-mode ox-slack htmlize flymake-racket flycheck-haskell auto-virtualenvwrapper jedi chronos dictionary epresent 0blayout debbugs dockerfile-mode erlang shut-up epl git commander f dash s clippy ox-twbs epc json-mode mediawiki mode-line-bell rainbow-delimiters sicp mines rubik cask darkroom fill-column-indicator rainbow-mode gitignore-mode gitignore-templates fireplace wttrin dark-souls mingus libmpdee free-keys decide magithub buffer-move helm-systemd cmake-mode scala-mode sml-mode edit-server keychain-environment django-mode discover smex company-emacs-eclim company eclim gnu-apl-mode go-mode pkgbuild-mode benchmark-init transmission rust-mode pydoc-info pydoc pacmacs lua-mode image-dired+ image+ highlight-indentation haskell-mode gist enh-ruby-mode djvu dired+ csv-mode csharp-mode crosshairs conkeror-minor-mode coffee-mode browse-kill-ring ascii))
  '(pdf-view-midnight-colors '("#655370" . "#fbf8ef"))
  '(plantuml-default-exec-mode 'executable)
  '(pos-tip-background-color "#eee8d5")
@@ -318,10 +301,7 @@ static char *gnus-pointer[] = {
            (fboundp 'c-toggle-comment-style)
            (c-toggle-comment-style 1))))
  '(same-window-regexps '("\\*Man .*\\*"))
- '(scroll-bar-mode nil)
  '(sgml-basic-offset 2)
- '(show-paren-delay 0.0)
- '(show-paren-mode t)
  '(sml/col-number-format "%3c")
  '(sml/line-number-format "%4l")
  '(sml/mode-width 'right)
@@ -336,8 +316,6 @@ static char *gnus-pointer[] = {
  '(tmm-completion-prompt nil)
  '(tmm-mid-prompt " → ")
  '(tmm-shortcut-style '(downcase upcase))
- '(tool-bar-mode nil)
- '(tooltip-mode nil)
  '(vc-annotate-background nil)
  '(vc-annotate-background-mode nil)
  '(vc-annotate-color-map
@@ -360,21 +338,27 @@ static char *gnus-pointer[] = {
      (340 . "#26cc8f66c666")
      (360 . "#268bd2")))
  '(vc-annotate-very-old-color nil)
- '(visible-bell t)
+ '(warning-suppress-types '((comp)))
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
  '(web-mode-markup-indent-offset 2)
  '(weechat-color-list
    '(unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))
  '(winum-mode t)
+ '(world-clock-list
+   '(("America/Los_Angeles" "Seattle")
+     ("America/Chicago" "Chicago")
+     ("America/New_York" "New York")
+     ("Europe/London" "London")
+     ("Europe/Paris" "Paris")
+     ("Asia/Hong_Kong" "Hong Kong")
+     ("Asia/Tokyo" "Tokyo")))
  '(writeroom-extra-line-spacing 8)
  '(writeroom-fringes-outside-margins t)
  '(writeroom-fullscreen-effect 'maximized)
  '(writeroom-maximize-window nil)
  '(writeroom-mode-line t)
  '(writeroom-width 100)
- '(wttrin-default-accept-language '("Accept-Language" . "en"))
- '(wttrin-default-cities '("Milwaukee, WI"))
  '(xterm-color-names
    ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#073642"])
  '(xterm-color-names-bright
