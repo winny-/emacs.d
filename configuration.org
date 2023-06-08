@@ -205,6 +205,14 @@ And a locally installed =scribble.el= for scribble markup.
 (use-package scribble)
 #+END_SRC
 
+** Fennel
+#+begin_src emacs-lisp
+  (use-package fennel-mode
+    :ensure t
+    :init
+    (add-to-list 'auto-mode-alist '("\\.fnl\\'" . fennel-mode)))
+#+end_src
+
 ** Common Lisp
 #+BEGIN_SRC emacs-lisp
   (use-package slime
