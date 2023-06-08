@@ -47,17 +47,20 @@ Hardcode some settings that I wish to never change in any Emacs setup.
 
 #+begin_src emacs-lisp
   (setq mode-require-final-newline t
-        column-number-mode t
-        blink-cursor-mode t
         auto-revert-verbose nil
         async-shell-command-buffer 'new-buffer
         Man-notify-method 'friendly
         help-window-select 'other
-        tool-bar-mode nil
-        tooltip-mode nil
-        scroll-bar-mode nil
-        show-paren-mode t
-        show-paren-delay 0.0)
+        show-paren-delay 0.0
+        custom-file "/dev/null")          ; XXX Windows
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (column-number-mode 1)
+  (blink-cursor-mode 1)
+  (show-paren-mode 1)
+  (setq custom-safe-themes t)
 #+end_src
 
 * Set up load path
@@ -814,7 +817,8 @@ If FILE already exists, signal an error."
 A better dired.
 
 #+BEGIN_SRC emacs-lisp
-(use-package dired+)
+  (use-package dired+
+    :disabled)
 #+END_SRC
 ** sunrise commander
 A OFM (like midnight commander) for emacs.
