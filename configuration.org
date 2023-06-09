@@ -944,7 +944,6 @@ My goto theme.
   :ensure t)
 #+END_SRC
 
-#+RESULTS:
 *** tao
 
 #+begin_src emacs-lisp
@@ -953,17 +952,39 @@ My goto theme.
 #+end_src
 *** Others for the moods
 #+begin_src emacs-lisp
-    (use-package uwu-theme
-      :ensure t)
+  (use-package uwu-theme
+    :ensure t)
+
+  (use-package abyss-theme
+    :ensure t)
+#+end_src
+*** Modeline
+
+#+begin_src emacs-lisp
+  (use-package nerd-icons
+    :ensure t)
+  (use-package doom-modeline
+    :ensure t
+    :after (nerd-icons)
+    :init (doom-modeline-mode 1))
 #+end_src
 
 ** A facility to streamline theme selection
 #+BEGIN_SRC emacs-lisp
   (load "switch-theme.el" t t)
-  (setq winny/default-theme 'cyberpunk)
+  (setq winny/default-theme 'abyss)
   (use-package smart-mode-line
     :ensure t
+    :disaled
     :init
+    (require smart-mode-line)
+    (setq sml/col-number-format "%3c"
+          sml/line-number-format "%4l"
+          sml/mode-width 'right
+          sml/numbers-separator ","
+          sml/replacer-regexp-list '(("^~/\\.emacs\\.d/elpa/" ":ELPA:")
+                                     ("^~/\\.emacs\\.d/" ":ED:"))
+          sml/theme 'respectful)
     (add-hook 'winny/after-theme-switch-hook 'sml/setup t t))
 #+END_SRC
 ** Helper to describe theme
@@ -2098,11 +2119,6 @@ Highlight color codes.
 #+BEGIN_SRC emacs-lisp
 (use-package rainbow-mode
   :ensure t)
-#+END_SRC
-
-Highlight the current line.  This can cause issues with font-lock, so YMMV.
-#+BEGIN_SRC emacs-lisp
-(global-hl-line-mode 1)
 #+END_SRC
 
 * Dashboard
