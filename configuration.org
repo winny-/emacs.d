@@ -52,7 +52,9 @@ Hardcode some settings that I wish to never change in any Emacs setup.
         Man-notify-method 'friendly
         help-window-select 'other
         show-paren-delay 0.0
-        custom-file "/dev/null")          ; XXX Windows
+        custom-file "/dev/null"           ; XXX Windows
+        custom-safe-themes t
+        warning-suppress-types '((comp)))
   (tool-bar-mode -1)
   (tooltip-mode -1)
   (scroll-bar-mode -1)
@@ -60,7 +62,7 @@ Hardcode some settings that I wish to never change in any Emacs setup.
   (column-number-mode 1)
   (blink-cursor-mode 1)
   (show-paren-mode 1)
-  (setq custom-safe-themes t)
+
 #+end_src
 
 * Set up load path

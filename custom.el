@@ -329,7 +329,6 @@ static char *gnus-pointer[] = {
      (340 . "#26cc8f66c666")
      (360 . "#268bd2")))
  '(vc-annotate-very-old-color nil)
- '(warning-suppress-types '((comp)))
  '(web-mode-code-indent-offset 2)
  '(web-mode-css-indent-offset 2)
  '(web-mode-markup-indent-offset 2)
