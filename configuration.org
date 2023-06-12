@@ -977,7 +977,7 @@ My goto theme.
   (setq winny/default-theme 'abyss)
   (use-package smart-mode-line
     :ensure t
-    :disaled
+    :disabled
     :init
     (require smart-mode-line)
     (setq sml/col-number-format "%3c"
