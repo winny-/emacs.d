@@ -2336,7 +2336,9 @@ Syntax highlight inventory files
 
   (use-package vterm
     :ensure t
-    :bind (("C-`" . vterm)))
+    :bind (("C-`" . vterm))
+    :init
+    (setq vterm-set-bold-hightbright t))
 #+END_SRC
 * Some other functions
 
