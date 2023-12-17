@@ -42,3 +42,4 @@ session.*
 /eln-cache/
 /.lsp-session-v1
 /.dap-breakpoints
+/straight
