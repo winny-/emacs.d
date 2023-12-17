@@ -93,13 +93,22 @@ Set up packaging sources.
     (message "First boot-only initialization complete."))
 #+END_SRC
 
-And load up use-package logic.
-#+BEGIN_SRC emacs-lisp
-  (eval-when-compile
-    ;; Following line is not needed if use-package.el is in ~/.emacs.d
-    (package-install 'use-package)
-    (require 'use-package))
-#+END_SRC
+#+begin_src emacs-lisp
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 6))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+
+  (straight-use-package 'use-package)
+#+end_src
 
 ** TODO =use-package-always-ensure=
 Set =use-package-always-ensure= to =t=... if one can figure out how to load
@@ -343,7 +352,7 @@ web-mode is pretty great.  It supports all the cool template types.
   :config
   ;; web-mode
   (add-to-auto-mode-alist 'web-mode "php" "phtml" "tpl" "[agj]sp" "as[cp]x"
-                          "erb" "mustache" "d?html" "jsx")
+                          "erb" "mustache" "d?html")
   (defadvice web-mode-highlight-part (around tweak-jsx activate)
     (if (equal web-mode-content-type "jsx")
       (let ((web-mode-enable-part-face nil))
@@ -357,7 +366,12 @@ web-mode is pretty great.  It supports all the cool template types.
 ;;                            (setq web-mode-code-indent-offset 2)))
   )
 #+END_SRC
+*** TSX/JSX
+#+begin_src emacs-lisp
+  (straight-use-package '(tsi :type git :host github :repo "orzechowskid/tsi.el"))
 
+  (straight-use-package '(tsx-mode :type git :host github :repo "orzechowskid/tsx-mode.el" :branch "emacs28"))
+#+end_src
 *** Svelte
 A pretty cool framework for modern component web applications.
 
@@ -974,7 +988,7 @@ My goto theme.
 ** A facility to streamline theme selection
 #+BEGIN_SRC emacs-lisp
   (load "switch-theme.el" t t)
-  (setq winny/default-theme 'abyss)
+  (setq winny/default-theme 'cyberpunk)
   (use-package smart-mode-line
     :ensure t
     :disabled
@@ -1067,7 +1081,8 @@ See:
     (setq org-special-ctrl-a t
           org-special-ctrl-k t
           org-special-ctrl-k 'error
-          org-catch-invisible-edits t))
+          org-catch-invisible-edits t
+          org-startup-folded 'fold))
 
   (use-package org-contrib
     :ensure t
@@ -2011,7 +2026,7 @@ Manage RSS feeds in [[file:elfeed.org][elfeed.org]].
 #+BEGIN_SRC emacs-lisp
   (display-battery-mode
    ;; Show battery status only if the system can use a battery.
-   (if (and (boundp 'battery-status-function)
+   (if (and (fboundp 'battery-status-function)
             (lexical-let ((ac-line-status
                            (alist-get ?L (funcall battery-status-function))))
               (and ac-line-status (not (equal "N/A" ac-line-status)))))
