@@ -166,17 +166,6 @@ static char *gnus-pointer[] = {
  '(nrepl-message-colors
    '("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4"))
  '(org-agenda-files '("~/docs/orgs/todo.org"))
- '(org-capture-templates
-   '(("s" "Snippet" entry
-      (file+datetree "~/docs/unsorted.org")
-      (file "~/.emacs.d/org-capture-templates/unsorted.org"))
-     ("j" "Journal Entry" entry
-      (file+datetree "~/docs/journal/journal.org")
-      (file "~/.emacs.d/org-capture-templates/journal-item.org"))
-     ("t" "Todo list item" entry
-      (file+headline "~/docs/todo/todo.org" "Incoming")
-      (file "~/.emacs.d/org-capture-templates/todo-item.org"))))
- '(org-default-notes-file "~/docs/notes.org")
  '(org-hide-emphasis-markers nil)
  '(org-indent-mode-turns-on-hiding-stars t)
  '(org-latex-hyperref-template

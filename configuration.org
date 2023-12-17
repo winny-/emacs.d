@@ -1082,8 +1082,18 @@ See:
           org-special-ctrl-k t
           org-special-ctrl-k 'error
           org-catch-invisible-edits t
-          org-startup-folded 'fold))
-
+          org-startup-folded 'fold
+          org-capture-templates
+          '(("a" "Anything" entry
+             (file+datetree "~/files/notes/unsorted.org")
+             (file "~/.emacs.d/org-capture-templates/unsorted.org"))
+            ("j" "Journal Entry" entry
+             (file+datetree "~/files/writings/journal/journal.org")
+             (file "~/.emacs.d/org-capture-templates/journal-item.org"))
+            ("t" "Todo list item" entry
+             (file+headline "~/files/notes/todo.org" "Inbox")
+             (file "~/.emacs.d/org-capture-templates/todo-item.org")))
+          org-default-notes-file "~/files/notes/unsorted.org"))
   (use-package org-contrib
     :ensure t
     :after org)
