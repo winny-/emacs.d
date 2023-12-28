@@ -347,24 +347,28 @@ Mark the dotnet core =.DotSettings= files as xml.
 web-mode is pretty great.  It supports all the cool template types.
 
 #+BEGIN_SRC emacs-lisp
-(use-package web-mode
-  :ensure t
-  :config
-  ;; web-mode
-  (add-to-auto-mode-alist 'web-mode "php" "phtml" "tpl" "[agj]sp" "as[cp]x"
-                          "erb" "mustache" "d?html")
-  (defadvice web-mode-highlight-part (around tweak-jsx activate)
-    (if (equal web-mode-content-type "jsx")
-      (let ((web-mode-enable-part-face nil))
-        ad-do-it)
-      ad-do-it))
-  (setq web-mode-auto-close-style 2
-        web-mode-enable-auto-closing t)
-;; (add-hook 'web-mode-hook (lambda ()
-;;                            (setq web-mode-markup-indent-offset 2)
-;;                            (setq web-mode-css-indent-offset 2)
-;;                            (setq web-mode-code-indent-offset 2)))
-  )
+  (use-package web-mode
+    :ensure t
+    :config
+    ;; web-mode
+    (add-to-auto-mode-alist 'web-mode "php" "phtml" "tpl" "[agj]sp" "as[cp]x"
+                            "erb" "mustache" "d?html")
+    (defadvice web-mode-highlight-part (around tweak-jsx activate)
+      (if (equal web-mode-content-type "jsx")
+        (let ((web-mode-enable-part-face nil))
+          ad-do-it)
+        ad-do-it))
+    (setq web-mode-auto-close-style 2
+          web-mode-enable-auto-closing t
+          web-mode-code-indent-offset 2
+          web-mode-css-indent-offset 2
+          web-mode-markup-indent-offset 2
+          )
+  ;; (add-hook 'web-mode-hook (lambda ()
+  ;;                            (setq web-mode-markup-indent-offset 2)
+  ;;                            (setq web-mode-css-indent-offset 2)
+  ;;                            (setq web-mode-code-indent-offset 2)))
+    )
 #+END_SRC
 *** TSX/JSX
 #+begin_src emacs-lisp
@@ -1240,14 +1244,16 @@ For use with Redmine and friends.
     :load-path "~/.emacs.d/site-packages/org-textile")
 #+end_src
 
-** Prettier bullets
-#+BEGIN_SRC emacs-lisp
-    (use-package org-bullets
-      :ensure t
-      :hook ((org-mode
-              .
-              org-bullets-mode)))
-#+END_SRC
+** Modern org
+
+Cleaner org-mode.
+
+#+begin_src emacs-lisp
+  (use-package org-modern
+    :ensure t
+    :init
+    (with-eval-after-load 'org (global-org-modern-mode)))
+#+end_src
 
 ** Babel (code evaluation)
 
@@ -1257,14 +1263,6 @@ For use with Redmine and friends.
     :ensure t
     :init
     (require 'ob-async))
-#+end_src
-
-*** BASIC support (tinybasic.rkt)
-
-Quick and dirty org-mode support for my BASIC dialect.
-
-#+begin_src emacs-lisp
-  (use-package ob-basic)
 #+end_src
 
 *** Bash support
