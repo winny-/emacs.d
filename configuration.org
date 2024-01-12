@@ -1103,6 +1103,18 @@ See:
     :after org)
 #+end_src
 
+** org-cliplink
+
+=C-c C-y= is bound to something that I've never used related to timekeeping.
+
+#+begin_src emacs-lisp
+  (use-package org-cliplink
+    :ensure t
+    :after org
+    :init
+    (define-key org-mode-map (kbd "C-c C-y") 'org-cliplink))
+#+end_src
+
 ** Main hook
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-mode-hook (defun winny/org-hook ()
@@ -1215,16 +1227,17 @@ See:
 Pretty bootstrap based HTML export.
 
 #+BEGIN_SRC emacs-lisp
-(use-package ox-twbs
-  :ensure t)
+  (use-package ox-twbs
+    :ensure t
+    :after ox)
 #+END_SRC
 *** ox-hugo
 Export to hugo markdown.  Great for blogging.
 
 #+BEGIN_SRC emacs-lisp
-(use-package ox-hugo
-  :ensure t
-  :after ox)
+  (use-package ox-hugo
+    :ensure t
+    :after ox)
 #+END_SRC
 **** Helper commands to get productive
 
@@ -1236,14 +1249,6 @@ Export to hugo markdown.  Great for blogging.
     (org-previous-visible-heading 1)
     (org-meta-return))
 #+end_src
-*** ox-textile
-For use with Redmine and friends.
-
-#+begin_src emacs-lisp
-  (use-package ox-textile
-    :load-path "~/.emacs.d/site-packages/org-textile")
-#+end_src
-
 ** Modern org
 
 Cleaner org-mode.
@@ -1261,6 +1266,7 @@ Cleaner org-mode.
 #+begin_src elisp
   (use-package ob-async
     :ensure t
+    :after org
     :init
     (require 'ob-async))
 #+end_src
