@@ -1087,6 +1087,8 @@ See:
           org-special-ctrl-k 'error
           org-catch-invisible-edits t
           org-startup-folded 'fold
+          user-full-name "Winston Weinert (winny)"
+          user-mail-address "hello@winny.tech"
           org-capture-templates
           '(("a" "Anything" entry
              (file+datetree "~/files/notes/unsorted.org")
@@ -2284,20 +2286,6 @@ template.
 #+end_src
 
 * Other packages / support stuff
-
-** default-text-scale
-With default-text-scale resizing the buffer text is done with =C-M--= and
-=C-M-==.  The text size changes applies to *all* buffers not just the current
-one.  It does not replace using =C-x C--= and =C-x C-+= as those adjust the
-text size *only* in the *current* buffer.  Sometimes it's nice to resize text
-in all buffers.
-
-#+BEGIN_SRC emacs-lisp
-(use-package default-text-scale
-  :ensure t
-  :init
-  (default-text-scale-mode 1))
-#+END_SRC
 
 ** writeroom-mode
 This improves the presentation of emacs so it's less distracting when writing
