@@ -1087,6 +1087,8 @@ See:
           org-special-ctrl-k 'error
           org-catch-invisible-edits t
           org-startup-folded 'fold
+          ;; https://emacs.stackexchange.com/questions/64222/insert-link-to-a-heading-with-id
+          org-id-link-to-org-use-id 'create-if-interactive
           user-full-name "Winston Weinert (winny)"
           user-mail-address "hello@winny.tech"
           org-capture-templates
