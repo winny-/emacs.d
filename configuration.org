@@ -57,7 +57,7 @@ Hardcode some settings that I wish to never change in any Emacs setup.
         warning-suppress-types '((comp)))
   (tool-bar-mode -1)
   (tooltip-mode -1)
-  (scroll-bar-mode -1)
+  (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (menu-bar-mode -1)
   (column-number-mode 1)
   (blink-cursor-mode 1)
