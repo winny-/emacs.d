@@ -1094,6 +1094,7 @@ See:
           org-startup-folded 'fold
           ;; https://emacs.stackexchange.com/questions/64222/insert-link-to-a-heading-with-id
           org-id-link-to-org-use-id 'create-if-interactive
+          org-image-actual-width 450
           user-full-name "Winston Weinert (winny)"
           user-mail-address "hello@winny.tech"
           org-capture-templates
@@ -1269,7 +1270,7 @@ Cleaner org-mode.
     (with-eval-after-load 'org (global-org-modern-mode)))
 #+end_src
 
-** Babel (code evaluation)
+** Code Evaluation with Babel
 
 *** Async execution
 #+begin_src elisp
