@@ -1442,6 +1442,13 @@ Prefix argument POS should be a location it the buffer."
 ** Describe a theme
 See [[Helper to describe theme][here]].
 
+* Wordsmithing
+
+** Dictionary lookup
+#+begin_src emacs-lisp
+  (use-package dictionary
+    :ensure t)
+#+end_src
 * Direnv
 #+begin_src elisp
   (use-package direnv
