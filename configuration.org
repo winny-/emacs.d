@@ -60,9 +60,11 @@ Hardcode some settings that I wish to never change in any Emacs setup.
   (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (menu-bar-mode -1)
   (column-number-mode 1)
+  ;; Blink cursor for about ten seconds with a calm 3/4 second interval.
   (blink-cursor-mode 1)
+  (setq blink-cursor-interval 0.75
+        blink-cursor-blinks (ceiling (/ 10.0 blink-cursor-interval)))
   (show-paren-mode 1)
-
 #+end_src
 
 * Set up load path
