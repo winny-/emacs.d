@@ -54,7 +54,8 @@ Hardcode some settings that I wish to never change in any Emacs setup.
         show-paren-delay 0.0
         custom-file "/dev/null"           ; XXX Windows
         custom-safe-themes t
-        warning-suppress-types '((comp)))
+        warning-suppress-types '((comp))
+        display-time-24hr-format t)
   (tool-bar-mode -1)
   (tooltip-mode -1)
   (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
