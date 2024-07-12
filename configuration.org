@@ -1457,7 +1457,12 @@ See [[Helper to describe theme][here]].
   (use-package direnv
     :ensure t
     :config
-    (direnv-mode))
+    ;; Some modes like TRAMP stop working completely if direnv-mode is enabled
+    ;; without direnv in PATH.
+    (direnv-mode (cond
+                  ((executable-find "direnv") 1)
+                  (t (message "direnv executable missable.  Deactivating direnv-mode.")
+                     -1))))
 #+end_src
 * Pull in ssh-agent via keychain
 See https://www.funtoo.org/Keychain
