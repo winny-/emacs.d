@@ -7,3 +7,7 @@
 [submodule "site-packages/emacs-prisma-mode"]
 	path = site-packages/emacs-prisma-mode
 	url = https://github.com/pimeys/emacs-prisma-mode.git
+[submodule "site-packages/all-the-icons-completion"]
+	path = site-packages/all-the-icons-completion
+	url = git@github.com:maxecharel/all-the-icons-completion.git
+	branch = contrib

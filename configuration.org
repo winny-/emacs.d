@@ -6,7 +6,9 @@
 This is an literate programming =init.el=.  Read Harry's [[https://harryrschwartz.com/2016/02/15/switching-to-a-literate-emacs-configuration][brief tutorial]] on how
 this works and how to do it yourself.
 
-* Helper for loading optional elisp files
+* Utility stuff
+
+** Helper for loading optional elisp files
 #+BEGIN_SRC emacs-lisp
     (defun winny/load-file-when-present (file)
       "Load FILE when it's present.
@@ -20,7 +22,6 @@ this works and how to do it yourself.
                nil)))
 #+END_SRC
 
-* Utility stuff
 
 ** Full ISO 8601
 From https://wilkesley.org/~ian/xah/emacs/elisp_datetime.html
@@ -111,6 +112,10 @@ Set up packaging sources.
     (load bootstrap-file nil 'nomessage))
 
   (straight-use-package 'use-package)
+  (require 'use-package)
+  (require 'cl)                           ; lexical-let fails to autoload so
+                                          ; require it to be safe.
+  (setq use-package-always-defer t)       ; Lazy load all packages.
 #+end_src
 
 ** TODO =use-package-always-ensure=
@@ -122,7 +127,9 @@ stuff from =site-lisp= and =site-packages= with this setting.
 Load the locally maintained is-wsl package which is used later in this file.
 
 #+BEGIN_SRC emacs-lisp
-(use-package is-wsl)
+  (use-package is-wsl
+    ;; Tried adding a ;;;#autoload in the is-wsl.el file.  No dice.
+    :demand t)
 #+END_SRC
 * Better frame title
 Give the desktop window title a nicer look.
@@ -893,36 +900,36 @@ of changes to el files.  No need to restart emacs.  Or partially re-evaluate,
 only to realize it didn't work as you expected.
 
 #+BEGIN_SRC emacs-lisp
-(defun winny/reload-feature (feature &optional force) ; Why the HECK is this
-                                                      ; not standard?
-  "Reload FEATURE optionally FORCE the `unload-feature' call."
-  (interactive
-   (list
-    (read-feature "Unload feature: " t)
-    current-prefix-arg))
-  (let ((f (feature-file feature)))
-    (unload-feature feature force)
-    (load f)))
+  (defun winny/reload-feature (feature &optional force) ; Why the HECK is this
+                                                        ; not standard?
+    "Reload FEATURE optionally FORCE the `unload-feature' call."
+    (interactive
+     (list
+      (read-feature "Unload feature: " t)
+      current-prefix-arg))
+    (let ((f (feature-file feature)))
+      (unload-feature feature force)
+      (load f)))
 
-(require 'loadhist)                     ; For `file-provides'
-(defun winny/reload-major-mode ()
-  "Reload the current major mode.
+  (require 'loadhist)                     ; For `file-provides'
+  (defun winny/reload-major-mode ()
+    "Reload the current major mode.
 
-TODO: This should be generalized to any feature, and will
-re-enable any minor or major modes present in the feature's
-file."
-  (interactive)
-  (letrec ((mode major-mode)
-           (f (cdr (find-function-library mode)))
-           (buffers (loop for b in (buffer-list)
-                          when (eq (buffer-local-value 'major-mode b) mode)
-                          collect b)))
-    (loop for feature in (file-provides f)
-          do (unload-feature feature t))
-    (load f)
-    (loop for b in buffers
-          do (with-current-buffer b
-               (funcall mode)))))
+  TODO: This should be generalized to any feature, and will
+  re-enable any minor or major modes present in the feature's
+  file."
+    (interactive)
+    (letrec ((mode major-mode)
+             (f (cdr (find-function-library mode)))
+             (buffers (cl-loop for b in (buffer-list)
+                            when (eq (buffer-local-value 'major-mode b) mode)
+                            collect b)))
+      (cl-loop for feature in (file-provides f)
+            do (unload-feature feature t))
+      (load f)
+      (cl-loop for b in buffers
+            do (with-current-buffer b
+                 (funcall mode)))))
 #+END_SRC
 * =custom-mode= helpers
 Add the following keys to help with navigating =custom-mode=:
@@ -990,9 +997,11 @@ My goto theme.
 
 #+begin_src emacs-lisp
   (use-package nerd-icons
-    :ensure t)
+    :ensure t
+    :demand t)
   (use-package doom-modeline
     :ensure t
+    :demand t
     :after (nerd-icons)
     :init (doom-modeline-mode 1))
 #+end_src
@@ -1242,6 +1251,7 @@ Pretty bootstrap based HTML export.
 #+BEGIN_SRC emacs-lisp
   (use-package ox-twbs
     :ensure t
+    :demand t
     :after ox)
 #+END_SRC
 *** ox-hugo
@@ -1250,6 +1260,7 @@ Export to hugo markdown.  Great for blogging.
 #+BEGIN_SRC emacs-lisp
   (use-package ox-hugo
     :ensure t
+    :demand t
     :after ox)
 #+END_SRC
 **** Helper commands to get productive
@@ -1279,9 +1290,16 @@ Cleaner org-mode.
 #+begin_src elisp
   (use-package ob-async
     :ensure t
-    :after org
+    :after (org)
     :init
     (require 'ob-async))
+#+end_src
+
+And a quick code sample to validate ob-async works.
+
+#+begin_src sh :async
+  sleep 10
+  echo 'Were you able to use emacs?'
 #+end_src
 
 *** Bash support
@@ -1295,29 +1313,29 @@ Use =M-g f= to fold the region.  Use =M-g d= to delete the fold under point.
 Use =M-g t= to toggle the fold at point.
 
 #+BEGIN_SRC emacs-lisp
-(use-package vimish-fold
-  :ensure t
-  :after expand-region
-  :init
-  (defun winny/vimish-fold-defun ()
-    "Fold the defun around point."
-    (interactive)
-    (lexical-let ((r (save-excursion (er/mark-defun) (list (region-beginning) (region-end)))))
-      (vimish-fold (car r) (cadr r))))
-  (defun winny/vimish-fold-delete (entire-buffer)
-    "Fold region or entire buffer when ENTIRE-BUFFER is not nil."
-    (interactive "P")
-    (if entire-buffer
-      (vimish-fold-delete-all)
-      (vimish-fold-delete)))
-  (global-set-key (kbd "M-g f") #'vimish-fold)
-  (global-set-key (kbd "M-g M-f") #'vimish-fold)
-  (global-set-key (kbd "M-g u") #'vimish-fold-unfold)
-  (global-set-key (kbd "M-g M-u") #'vimish-fold-unfold)
-  (global-set-key (kbd "M-g t") #'vimish-fold-toggle)
-  (global-set-key (kbd "M-g M-t") #'vimish-fold-toggle)
-  (global-set-key (kbd "M-g d") #'vimish-fold-delete)
-  (global-set-key (kbd "M-g M-d") #'vimish-fold-delete))
+  (use-package vimish-fold
+    :ensure t
+    :demand t
+    :init
+    (defun winny/vimish-fold-defun ()
+      "Fold the defun around point."
+      (interactive)
+      (lexical-let ((r (save-excursion (er/mark-defun) (list (region-beginning) (region-end)))))
+        (vimish-fold (car r) (cadr r))))
+    (defun winny/vimish-fold-delete (entire-buffer)
+      "Fold region or entire buffer when ENTIRE-BUFFER is not nil."
+      (interactive "P")
+      (if entire-buffer
+        (vimish-fold-delete-all)
+        (vimish-fold-delete)))
+    (global-set-key (kbd "M-g f") #'vimish-fold)
+    (global-set-key (kbd "M-g M-f") #'vimish-fold)
+    (global-set-key (kbd "M-g u") #'vimish-fold-unfold)
+    (global-set-key (kbd "M-g M-u") #'vimish-fold-unfold)
+    (global-set-key (kbd "M-g t") #'vimish-fold-toggle)
+    (global-set-key (kbd "M-g M-t") #'vimish-fold-toggle)
+    (global-set-key (kbd "M-g d") #'vimish-fold-delete)
+    (global-set-key (kbd "M-g M-d") #'vimish-fold-delete))
 #+END_SRC
 
 * VCS/Git support
@@ -1336,6 +1354,7 @@ you are good to go.
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
+    :demand t
     :bind (("C-x g" . magit-status)
            ("C-x M-g" . magit-dispatch)
            ("C-x M-c" . magit-clone)
@@ -1343,7 +1362,7 @@ you are good to go.
            ("C-c u" . magit-rev-parent))
     :init
     (fset 'magit-rev-parent
-     (kmacro-lambda-form [?\M-< ?\C-s ?p ?a ?r ?e ?n ?t ?: return return] 0 "%d")))
+          (kmacro-lambda-form [?\M-< ?\C-s ?p ?a ?r ?e ?n ?t ?: return return] 0 "%d")))
 #+END_SRC
 
 ** Git LFS
@@ -1351,6 +1370,7 @@ you are good to go.
 #+begin_src emacs-lisp
   (use-package magit-lfs
     :ensure t
+    :demand t
     :after magit)
 #+end_src
 
@@ -1388,9 +1408,10 @@ In this repository.
 
 #+BEGIN_SRC emacs-lisp
   (use-package irfc
+    :demand t
     :hook (irfc-mode
            . (lambda ()
-               (read-only-mode)         ; Make read only.
+               (read-only-mode)           ; Make read only.
                (show-paren-local-mode -1))))
 #+END_SRC
 
@@ -1399,11 +1420,12 @@ The =helpful= package takes over =C-h v=, =C-h k=, =C-h f= providing more
 descriptive output and nicer formatting.
 
 #+BEGIN_SRC emacs-lisp
-(use-package helpful
-  :ensure t
-  :bind (("C-h v" . helpful-variable)
-         ("C-h k" . helpful-key)
-         ("C-h f" . helpful-callable)))
+  (use-package helpful
+    :ensure t
+    :demand t
+    :bind (("C-h v" . helpful-variable)
+           ("C-h k" . helpful-key)
+           ("C-h f" . helpful-callable)))
 #+END_SRC
 
 ** Show keys in the current mode-map
@@ -1484,6 +1506,10 @@ See https://www.funtoo.org/Keychain
           completion-ignore-case t)
     (vertico-mode))
 
+  (use-package all-the-icons
+    :ensure t
+    :demand t)
+
   (use-package savehist
     :init
     (savehist-mode))
@@ -1491,6 +1517,7 @@ See https://www.funtoo.org/Keychain
   ;; Enable rich annotations using the Marginalia package
   (use-package marginalia
     :ensure t
+    :demand t
     ;; Either bind `marginalia-cycle' globally or only in the minibuffer
     :bind (("M-A" . marginalia-cycle)
            :map minibuffer-local-map
@@ -1504,7 +1531,8 @@ See https://www.funtoo.org/Keychain
     (marginalia-mode))
 
   (use-package all-the-icons-completion
-    :ensure t
+    :demand t
+    :load-path "~/.emacs.d/site-packages/all-the-icons-completion"
     :after (marginalia all-the-icons)
     :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
     :init
@@ -1820,7 +1848,7 @@ Type the subsequent highlighted character when prompted.  Viola!
 #+begin_src emacs-lisp
   (use-package ace-jump-mode
     :ensure t
-    :config
+    :init
     (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
     (define-key global-map (kbd "C-c C-SPC") 'ace-jump-mode))
 #+end_src
@@ -2026,19 +2054,6 @@ Manage RSS feeds in [[file:elfeed.org][elfeed.org]].
   :init
   (elfeed-org))
 #+END_SRC
-* Transmission
-
-#+BEGIN_SRC emacs-lisp
-  (use-package transmission
-    :disabled
-    :init
-    (defun winny/transmission-add-magnet-uri ()
-      "Add a magnet URI"
-      (interactive)
-      (transmission-add (read-string "Magnet URI: ")))
-    :bind (:map transmission-mode-map
-                ("A" . winny/transmission-add-magnet-uri)))
-#+END_SRC
 * Shebang improvements
 ** Make shebanged files executable on save
 #+BEGIN_SRC emacs-lisp
@@ -2065,7 +2080,7 @@ Manage RSS feeds in [[file:elfeed.org][elfeed.org]].
 #+BEGIN_SRC emacs-lisp
   (display-battery-mode
    ;; Show battery status only if the system can use a battery.
-   (if (and (fboundp 'battery-status-function)
+   (if (and (fboundp battery-status-function)
             (lexical-let ((ac-line-status
                            (alist-get ?L (funcall battery-status-function))))
               (and ac-line-status (not (equal "N/A" ac-line-status)))))
