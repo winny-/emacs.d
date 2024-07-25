@@ -77,6 +77,9 @@ git repository.
 #+END_SRC
 
 * Package Setup
+:PROPERTIES:
+:ID:       5d4b6eed-de5d-4388-b842-ca278b130298
+:END:
 Set up packaging sources.
 
 #+BEGIN_SRC emacs-lisp
@@ -1049,6 +1052,44 @@ My goto theme.
 #+END_SRC
 * Emacs Performance and debugging
 
+** Reduce startup time
+My Thinkpad x31 is 20 years old so it helps to cut down on excess resources.
+
+*** =use-package-always-defer=
+See =use-package= setup code [[id:5d4b6eed-de5d-4388-b842-ca278b130298][here]].  When =use-package-always-defer= is set to a
+non-nil value, =use-package= will set up [[info:elisp#Autoload][autoloads]] (code stubs bound to keys
+and declared in the function definition space) instead of loading the entire
+package.  This results in serious startup time savings.  This also saves a lot
+on memory usage, since I don't always reach for the featureful packages within
+this configuration.
+
+If a package truly is necessary at startup, consider adding a =:demand t=
+parameter to the =use-package= form.
+
+**** Resources saved
+Quick and dirty tests performed on the Thinkpad x31.
+
+| =use-package-always-defer= | Statup time |
+|----------------------------+-------------|
+| nil                        | 52 seconds  |
+| t                          | 25 seconds  |
+*** =with-eval-after-load=
+Instead of running code during startup, consider deferring execution until a
+particular feature is provided.  See an example [[id:f966d2f0-f2c6-4914-b64c-78daf6a5b2df][here]].
+*** ESUP - Emacs Start Up Profiler
+
+Try =M-x esup RET=.  ESUP will spawn a new Emacs process.  Once the new Emacs
+finished initialization, exit it, then review the startup time breakdown in the
+original Emacs frame.
+
+#+BEGIN_SRC emacs-lisp
+(use-package esup
+  :ensure t
+  ;; To use MELPA Stable use ":pin mepla-stable",
+  :pin melpa
+  :commands (esup))
+#+END_SRC
+
 ** Profiler
 Bind the emacs profiler to some keys under the =C-x M-p= map.
 
@@ -1057,16 +1098,6 @@ Bind the emacs profiler to some keys under the =C-x M-p= map.
 (global-set-key (kbd "C-x M-p s") 'profiler-start)
 (global-set-key (kbd "C-x M-p q") 'profiler-stop)
 (global-set-key (kbd "C-x M-p r") 'profiler-report)
-#+END_SRC
-
-** ESUP - Emacs Start Up Profiler
-
-#+BEGIN_SRC emacs-lisp
-(use-package esup
-  :ensure t
-  ;; To use MELPA Stable use ":pin mepla-stable",
-  :pin melpa
-  :commands (esup))
 #+END_SRC
 
 ** Debug on error or quit
@@ -1248,14 +1279,18 @@ See:
 #+END_SRC
 ** Export stuff
 *** ox-latex
+:PROPERTIES:
+:ID:       f966d2f0-f2c6-4914-b64c-78daf6a5b2df
+:END:
 #+BEGIN_SRC emacs-lisp
-(require 'ox-latex)
-(add-to-list 'org-latex-classes
-             '("beamer"
-               "\\documentclass\[presentation\]\{beamer\}"
-               ("\\section\{%s\}" . "\\section*\{%s\}")
-               ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
-               ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+  (with-eval-after-load 'ox
+    (require 'ox-latex)
+    (add-to-list 'org-latex-classes
+                 '("beamer"
+                   "\\documentclass\[presentation\]\{beamer\}"
+                   ("\\section\{%s\}" . "\\section*\{%s\}")
+                   ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+                   ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}"))))
 #+END_SRC
 *** ox-twbs
 Pretty bootstrap based HTML export.
