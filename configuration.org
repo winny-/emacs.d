@@ -774,7 +774,19 @@ Set default style and use tabs in C files by default.
   (use-package nftables-mode
     :ensure t)
 #+end_src
+* Calculator
+See [[info:calc#Top][calc#Top]].  Try =C-x * ?= (=calc-mode-dispatch=).  Or dive in with =C-x * Q=
+to "math" it up in the minibuffer then place the result in the kill-ring
+(clipboard).  Or use =C-x * C= to open the typical stack calculator.  (By the
+way the =Q= or =C= in the last two key sequences can be lower cased --- both
+work!)
 
+** Do not copy line numbers
+Suppress the line number in copying cells.  See [[info:calc#Killing From Stack][calc#Killing From Stack]].
+
+#+begin_src emacs-lisp
+  (setq calc-kill-line-numbering nil)
+#+end_src
 * Hex editing
 #+begin_src emacs-lisp
   (use-package nhexl-mode
