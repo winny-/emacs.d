@@ -790,6 +790,27 @@ Suppress the line number in copying cells.  See [[info:calc#Killing From Stack][
 #+begin_src emacs-lisp
   (setq calc-kill-line-numbering nil)
 #+end_src
+* TRAMP
+See [[info:tramp#Top][tramp#Top]].
+** Do not ask to save TRAMP credentials
+Suppress =Save auth info to file ~/.authinfo? [y/n/N/e/?]=.  See [[info:tramp#Password handling][tramp#Password handling]].
+#+begin_src elisp
+  (setq auth-source-save-behavior nil)
+#+end_src
+** Find the current buffer as root via TRAMP
+#+BEGIN_SRC emacs-lisp
+  (defun winny/find-current-buffer-as-root ()
+    "Find the current buffer as root using TRAMP sudo."
+    (interactive)
+    (when (file-remote-p default-directory)
+      (error "Already a TRAMP buffer.  Giving up"))
+    (let ((path (expand-file-name
+                 (if (eq major-mode 'dired-mode)
+                   default-directory       ; Dired does not use buffer-file-name to represent a path
+                   buffer-file-name))))
+      (find-alternate-file (concat "/sudo:root@localhost:" path))))
+#+END_SRC
+
 * Hex editing
 #+begin_src emacs-lisp
   (use-package nhexl-mode
@@ -2508,20 +2529,6 @@ Great for experimenting with keyboard shortcuts.
       (eval
        `(define-key ,map ,key func)))
     (funcall (intern name) t)))
-#+END_SRC
-
-** Find the current buffer as root
-#+BEGIN_SRC emacs-lisp
-  (defun winny/find-current-buffer-as-root ()
-    "Find the current buffer as root using TRAMP sudo."
-    (interactive)
-    (when (file-remote-p default-directory)
-      (error "Already a TRAMP buffer.  Giving up"))
-    (let ((path (expand-file-name
-                 (if (eq major-mode 'dired-mode)
-                   default-directory       ; Dired does not use buffer-file-name to represent a path
-                   buffer-file-name))))
-      (find-alternate-file (concat "/sudo:root@localhost:" path))))
 #+END_SRC
 
 ** Hide fringes
