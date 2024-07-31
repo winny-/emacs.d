@@ -9,13 +9,37 @@ this works and how to do it yourself.
 ** How to work with this file
 After reading the previously hyperlinked tutorial there are a few files and
 functions to know about.
+*** Running code before and after this file
+
+Define a function to load elisp files if present, then call it immediately for
+the preamble elisp file and towards the end of this document for the postamble
+elisp file.
+
+#+BEGIN_SRC emacs-lisp
+    (defun winny/load-file-when-present (file)
+      "Load FILE when it's present.
+
+  This suppresses an error caused by missing file.  It only prints
+  out an error when the file throws an error."
+      (condition-case err
+          (load file nil t t)
+        (file-missing nil)                  ; Ignore missing optional file
+        (error (message "Failed to load %s: %s" file (error-message-string err))
+               nil)))
+#+END_SRC
+
+**** Running code before this file (Load =host-pre-init.el=)
+:PROPERTIES:
+:ID:       2f47eae1-31b0-400e-bec7-064b664d7e3c
+:END:
+
+#+BEGIN_SRC emacs-lisp
+  (winny/load-file-when-present "~/.emacs.d/host-pre-init.el")
+#+END_SRC
 
 
-*** Running code before this file
 
-See [[id:2f47eae1-31b0-400e-bec7-064b664d7e3c][Load =host-pre-init.el=]].
-
-*** Running code after this file
+**** Running code after this file
 
 See [[id:bc8e3b89-4454-4767-8bcb-46031a2832e5][Load =host-post-init.el=]].
 
@@ -32,31 +56,7 @@ Try =winny/reload-configuration=.  (It is defined in [[file:init.el][=init.el=]]
     (find-file (concat user-emacs-directory "configuration.org")))
 #+end_src
 
-* Load =host-pre-init.el=
-:PROPERTIES:
-:ID:       2f47eae1-31b0-400e-bec7-064b664d7e3c
-:END:
-
-#+BEGIN_SRC emacs-lisp
-  (winny/load-file-when-present "~/.emacs.d/host-pre-init.el")
-#+END_SRC
-
 * Utility stuff
-
-** Helper for loading optional elisp files
-#+BEGIN_SRC emacs-lisp
-    (defun winny/load-file-when-present (file)
-      "Load FILE when it's present.
-
-  This suppresses an error caused by missing file.  It only prints
-  out an error when the file throws an error."
-      (condition-case err
-          (load file nil t t)
-        (file-missing nil)                  ; Ignore missing optional file
-        (error (message "Failed to load %s: %s" file (error-message-string err))
-               nil)))
-#+END_SRC
-
 
 ** Full ISO 8601
 From https://wilkesley.org/~ian/xah/emacs/elisp_datetime.html
