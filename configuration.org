@@ -6,6 +6,41 @@
 This is an literate programming =init.el=.  Read Harry's [[https://harryrschwartz.com/2016/02/15/switching-to-a-literate-emacs-configuration][brief tutorial]] on how
 this works and how to do it yourself.
 
+** How to work with this file
+After reading the previously hyperlinked tutorial there are a few files and
+functions to know about.
+
+
+*** Running code before this file
+
+See [[id:2f47eae1-31b0-400e-bec7-064b664d7e3c][Load =host-pre-init.el=]].
+
+*** Running code after this file
+
+See [[id:bc8e3b89-4454-4767-8bcb-46031a2832e5][Load =host-post-init.el=]].
+
+*** Reloading this configuration
+
+Try =winny/reload-configuration=.  (It is defined in [[file:init.el][=init.el=]].)
+
+*** Quickly visit this file
+
+#+begin_src elisp
+  (defun winny/visit-configuration ()
+    "Visit configuration.org"
+    (interactive)
+    (find-file (concat user-emacs-directory "configuration.org")))
+#+end_src
+
+* Load =host-pre-init.el=
+:PROPERTIES:
+:ID:       2f47eae1-31b0-400e-bec7-064b664d7e3c
+:END:
+
+#+BEGIN_SRC emacs-lisp
+  (winny/load-file-when-present "~/.emacs.d/host-pre-init.el")
+#+END_SRC
+
 * Utility stuff
 
 ** Helper for loading optional elisp files
@@ -37,11 +72,6 @@ From https://wilkesley.org/~ian/xah/emacs/elisp_datetime.html
     (interactive)
     (insert (winny/iso-8601)))
 #+end_src
-
-* Load =host-pre-init.el=
-#+BEGIN_SRC emacs-lisp
-  (winny/load-file-when-present "~/.emacs.d/host-pre-init.el")
-#+END_SRC
 
 * Basic settings
 Hardcode some settings that I wish to never change in any Emacs setup.
@@ -2578,6 +2608,9 @@ the buffer (thereby discarding the edits).
 #+end_src
 
 * Load =host-post-init.el=
+:PROPERTIES:
+:ID:       bc8e3b89-4454-4767-8bcb-46031a2832e5
+:END:
 #+BEGIN_SRC emacs-lisp
   (winny/load-file-when-present "~/.emacs.d/host-post-init.el")
 #+END_SRC
