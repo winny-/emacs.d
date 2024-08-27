@@ -2092,11 +2092,28 @@ This unwraps a paragraph into one line.
 Create a line similar to =# shellcheck disable=SC1234= above the current line
 in order to calm down Shellcheck.
 #+begin_src emacs-lisp
-  (fset 'winny/shellcheck-disable
-     (kmacro-lambda-form [?\C-  ?\C-  ?\M-x ?f ?l ?y ?c ?h ?e ?c ?k ?- ?d ?i ?s ?p ?l ?a ?y ?- ?e ?r ?r ?o ?r ?- ?a ?t ?- ?p ?o ?i ?n ?t ?\C-m ?\C-h ?e ?\C-x ?o ?\M-> ?\C-p ?\C-s ?\[ ?\C-m ?\C-  ?\M-f ?\M-w ?q ?\C-a ?\C-o ?\C-i ?# ?  ?s ?h ?e ?l ?l ?c ?h ?e ?c ?k ?  ?d ?i ?s ?a ?b ?l ?e ?= ?\C-y ?\C-u ?\C-  ?\C-u ?\C- ] 0 "%d"))
+  (require 'cl)
+
+  (defun winny--extract-shellcheck-error (err)
+    (and-let* (((eq (flycheck-error-checker err) 'sh-shellcheck)))
+      (flycheck-error-id err)))
+  (defun winny/shellcheck-disable-at-point ()
+    "Insert \"# shellcheck disable=SC...\" line to silence shellcheck errors."
+    (interactive)
+    (save-match-data
+      (save-excursion
+        (and-let* ((errs
+                    (cl-loop for err in (flycheck-overlay-errors-in (pos-bol) (pos-eol))
+                             if (winny--extract-shellcheck-error err)
+                             collect (winny--extract-shellcheck-error err))))
+          (beginning-of-line)
+          (insert (format "# shellcheck disable=%s"
+                          (mapconcat 'identity errs ",")))
+          (indent-according-to-mode)
+          (newline-and-indent)))))
   (add-hook 'sh-mode-hook
             (defun winny--bind-shellcheck-disable ()
-              (global-set-key (kbd "C-c ! k") 'winny/shellcheck-disable)))
+              (global-set-key (kbd "C-c ! k") 'winny/shellcheck-disable-at-point)))
 #+end_src
 ** Snippets
 Using [[https://github.com/joaotavora/yasnippet][Yasnippets]].  See the [[http://joaotavora.github.io/yasnippet/][documentation]].
