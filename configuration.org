@@ -1371,6 +1371,17 @@ Export to hugo markdown.  Great for blogging.
     (org-previous-visible-heading 1)
     (org-meta-return))
 #+end_src
+** Storing links
+Try =C-c l= =org-store-link= in a buffer.  Tested working in all file-backed
+buffers.  Works in Info buffers.  See [[info:org#Handling Links][org#Handling Links]].
+
+With the following code, one can store manpage links.  See [[info:org#Adding Hyperlink Types][org#Adding Hyperlink
+Types]].
+#+begin_src elisp
+  (with-eval-after-load 'ol
+    (require 'ol-man))
+#+end_src
+
 ** Modern org
 
 Cleaner org-mode.
