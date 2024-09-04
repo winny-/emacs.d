@@ -1030,7 +1030,7 @@ Use a Negative ARG to navigate forwards."
   (interactive "p")
   (winny/forward-child-widget (- arg)))
 
-(define-key custom-mode-map "^" 'Custom-goto-parent)
+(define-key custom-mode-map (kbd "^") 'Custom-goto-parent)
 (define-key custom-mode-map (kbd "M-n") 'winny/forward-child-widget)
 (define-key custom-mode-map (kbd "M-p") 'winny/backward-child-widget)
 (define-key custom-mode-map (kbd "M-RET") 'Custom-newline)
@@ -1647,8 +1647,9 @@ See https://www.funtoo.org/Keychain
     :demand t
     :load-path "~/.emacs.d/site-packages/all-the-icons-completion"
     :after (marginalia all-the-icons)
-    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
     :init
+    (require 'all-the-icons-completion)
+    (add-hook 'marginalia-mode #'all-the-icons-completion-marginalia-setup)
     (all-the-icons-completion-mode))
 #+end_src
 
