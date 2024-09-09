@@ -2108,7 +2108,8 @@ This unwraps a paragraph into one line.
 Create a line similar to =# shellcheck disable=SC1234= above the current line
 in order to calm down Shellcheck.
 #+begin_src emacs-lisp
-  (require 'cl)
+  (require 'cl)                           ; for cl-loop
+  (require 'sh-script)                    ; For sh-mode-map
 
   (defun winny--extract-shellcheck-error (err)
     (and-let* (((eq (flycheck-error-checker err) 'sh-shellcheck)))
@@ -2129,7 +2130,7 @@ in order to calm down Shellcheck.
           (newline-and-indent)))))
   (add-hook 'sh-mode-hook
             (defun winny--bind-shellcheck-disable ()
-              (global-set-key (kbd "C-c ! k") 'winny/shellcheck-disable-at-line)))
+              (define-key sh-mode-map (kbd "C-c ! k") 'winny/shellcheck-disable-at-line)))
 #+end_src
 ** Snippets
 Using [[https://github.com/joaotavora/yasnippet][Yasnippets]].  See the [[http://joaotavora.github.io/yasnippet/][documentation]].
