@@ -1422,6 +1422,15 @@ And a quick code sample to validate ob-async works.
 #+begin_src elisp
   (org-babel-do-load-languages 'org-babel-load-languages '((python . t)))
 #+end_src
+
+** Quickly access notes
+#+begin_src elisp
+  (use-package deft
+    :ensure t
+    :demand t
+    :config (setq deft-directory "~/files/notes"
+                  deft-extensions '("org")))
+#+end_src
 * Code folding
 Use =M-g f= to fold the region.  Use =M-g d= to delete the fold under point.
 Use =M-g t= to toggle the fold at point.
