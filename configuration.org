@@ -1207,9 +1207,10 @@ See:
           '(("a" "Anything" entry
              (file+datetree "~/files/notes/unsorted.org")
              (file "~/.emacs.d/org-capture-templates/unsorted.org"))
-            ("j" "Journal Entry" entry
+            ("j" "Journal Entry" plain
              (file+datetree "~/files/writings/journal/journal.org")
-             (file "~/.emacs.d/org-capture-templates/journal-item.org"))
+             "%?"
+             :empty-lines 1)
             ("t" "Todo list item" entry
              (file+headline "~/files/notes/todo.org" "Inbox")
              (file "~/.emacs.d/org-capture-templates/todo-item.org")))
