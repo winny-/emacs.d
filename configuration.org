@@ -1881,7 +1881,9 @@ Navigate history of window/buffer/frame layout.  Use =C-c <left>= to go to
 previous layout, and =C-c <right>= to go to next layout.
 
 #+BEGIN_SRC emacs-lisp
-(winner-mode 1)
+  (winner-mode 1)
+
+  (define-key global-map (kbd "C-,") 'winner-undo)
 #+END_SRC
 
 ** Speed up scrolling
