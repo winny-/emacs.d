@@ -1387,7 +1387,7 @@ Cleaner org-mode.
 #+end_src
 
 ** Code Evaluation with Babel
-
+Refer to [[https://orgmode.org/worg/library-of-babel.html][The Library of Babel]] and [[https://orgmode.org/worg/org-contrib/babel/languages/index.html#langs][Babel: Languages]].
 *** Async execution
 #+begin_src elisp
   (use-package ob-async
@@ -1415,6 +1415,10 @@ And a quick code sample to validate ob-async works.
   (org-babel-do-load-languages 'org-babel-load-languages '((python . t)))
 #+end_src
 
+*** Perl support
+#+begin_src elisp
+  (org-babel-do-load-languages 'org-babel-load-languages '((perl . t)))
+#+end_src
 ** Quickly access notes
 #+begin_src elisp
   (use-package deft
