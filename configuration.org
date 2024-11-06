@@ -1038,7 +1038,7 @@ Use a Negative ARG to navigate forwards."
 * Theme-ing
 ** The themes
 *** cyberpunk
-My goto theme.
+My favorite theme despite occasional low contrast.
 
 #+BEGIN_SRC emacs-lisp
 (use-package cyberpunk-theme
@@ -1049,14 +1049,6 @@ My goto theme.
 
 #+begin_src emacs-lisp
   (use-package tao-theme
-    :ensure t)
-#+end_src
-*** Others for the moods
-#+begin_src emacs-lisp
-  (use-package uwu-theme
-    :ensure t)
-
-  (use-package abyss-theme
     :ensure t)
 #+end_src
 *** Modeline
@@ -1075,7 +1067,7 @@ My goto theme.
 ** A facility to streamline theme selection
 #+BEGIN_SRC emacs-lisp
   (load "switch-theme.el" t t)
-  (setq winny/default-theme 'cyberpunk)
+  (setq winny/default-theme 'modus-vivendi)
   (use-package smart-mode-line
     :ensure t
     :disabled
