@@ -2630,6 +2630,19 @@ Enable =narrow-to-region=
 (put 'narrow-to-region 'disabled nil)
 #+END_SRC
 
+* For the fun of it
+
+** Snowcrash
+
+White noise for the whole family.
+
+[[file:misc/snowcrash.webm]]
+
+#+begin_src emacs-lisp
+  (use-package snowcrash
+    :demand t)
+#+end_src
+
 * Emacs daemon/server quick keys
 Like =with-editor=, set up =server.el= (see =server-visit-files=) with =C-c
 C-c= to "commit" save and close the buffer, and =C-c C-k= to revert and close
