@@ -9,17 +9,22 @@
 
 (defun snowcrash--draw ()
   "Draw snowcrash in the current buffer."
-  (with-current-buffer (get-buffer snowcrash--buffer-name)
-    (read-only-mode -1)
-    (erase-buffer)
-    (dotimes (lines (1- (window-total-height nil 'floor)))
-      (dotimes (columns (1- (window-total-width nil 'floor)))
-        (insert-char (nth (random (length snowcrash--symbols))
-                          snowcrash--symbols)))
-      (unless (= lines (- (window-total-height nil t) 2))
-        (newline)))
-    (goto-char (point-min))
-    (read-only-mode 1)))
+  (and-let* ((windows (get-buffer-window-list snowcrash--buffer-name))
+             (lines (1- (cl-loop for window in windows
+                                   minimize (window-total-height window 'floor))))
+             (columns (1- (cl-loop for window in windows
+                                       minimize (window-total-width window 'floor)))))
+    (with-current-buffer (get-buffer snowcrash--buffer-name)
+      (read-only-mode -1)
+      (erase-buffer)
+      (dotimes (i lines)
+        (dotimes (j columns)
+          (insert-char (nth (random (length snowcrash--symbols))
+                            snowcrash--symbols)))
+        (unless (= i (1- lines))
+          (newline)))
+      (goto-char (point-min))
+      (read-only-mode 1))))
 
 (defun snowcrash--tick ()
   (snowcrash--draw)
@@ -35,7 +40,8 @@
   (when (and (eq major-mode 'snowcrash-mode)
              snowcrash--timer)
     (cancel-timer snowcrash--timer)
-    (setq snowcrash--timer nil)))
+    (setq snowcrash--timer nil)
+    (remove-hook 'quit-window-hook #'snowcrash--quit-window-hook)))
 
 (define-derived-mode
   snowcrash-mode
