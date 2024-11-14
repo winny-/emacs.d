@@ -750,17 +750,13 @@ Set default style and use tabs in C files by default.
   (add-to-auto-mode-alist 'sql-mode "qvs")
 #+end_src
 ** Perl
-*** perldoc support
-#+BEGIN_SRC emacs-lisp
-  (use-package helm
-    :ensure t)
+See [[http://xahlee.info/emacs/emacs/emacs_perl_vs_cperl_mode.html][Xah -- Emacs: perl-mode vs cperl-mode]].
 
-  (use-package helm-perldoc
-    :ensure t
-    :after (helm)
+#+begin_src emacs-lisp
+  (use-package cperl-mode
     :init
-    (helm-perldoc:setup))
-#+END_SRC
+    (setq cperl-indent-level 4))
+#+end_src
 ** Erlang
 #+BEGIN_SRC emacs-lisp
   (use-package erlang
