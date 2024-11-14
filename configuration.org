@@ -1059,7 +1059,16 @@ My favorite theme despite occasional low contrast.
     :after (nerd-icons)
     :init (doom-modeline-mode 1))
 #+end_src
-
+** Auto-Dark for Emacs
+[[https://github.com/LionyxML/auto-dark-emacs][GitHub - LionyxML/auto-dark-emacs: Auto-Dark-Emacs is an auto changer between...]]
+#+begin_src emacs-lisp
+  (use-package auto-dark
+    :ensure t
+    :custom
+    (auto-dark-themes '((modus-vivendi) (modus-operandi)))
+    :init
+    (auto-dark-mode))
+#+end_src
 ** A facility to streamline theme selection
 #+BEGIN_SRC emacs-lisp
   (load "switch-theme.el" t t)
