@@ -745,10 +745,6 @@ Set default style and use tabs in C files by default.
   (use-package meson-mode
     :ensure t)
 #+end_src
-** Qlik
-#+begin_src emacs-lisp
-  (add-to-auto-mode-alist 'sql-mode "qvs")
-#+end_src
 ** Perl
 See [[http://xahlee.info/emacs/emacs/emacs_perl_vs_cperl_mode.html][Xah -- Emacs: perl-mode vs cperl-mode]].
 
