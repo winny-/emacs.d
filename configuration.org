@@ -799,6 +799,11 @@ See [[http://xahlee.info/emacs/emacs/emacs_perl_vs_cperl_mode.html][Xah -- Emacs
   (use-package nftables-mode
     :ensure t)
 #+end_src
+** bpftrace
+#+begin_src emacs-lisp
+  (use-package bpftrace-mode
+    :ensure t)
+#+end_src
 * Calculator
 See [[info:calc#Top][calc#Top]].  Try =C-x * ?= (=calc-mode-dispatch=).  Or dive in with =C-x * Q=
 to "math" it up in the minibuffer then place the result in the kill-ring
