@@ -50,10 +50,14 @@ Try =winny/reload-configuration=.  (It is defined in [[file:init.el][=init.el=]]
 *** Quickly visit this file
 
 #+begin_src elisp
-  (defun winny/visit-configuration ()
+  (defun winny/visit-configuration (&optional other-window)
     "Visit configuration.org"
-    (interactive)
-    (find-file (concat user-emacs-directory "configuration.org")))
+    (interactive "P")
+    (funcall
+     (if other-window
+       #'find-file-other-window
+       #'find-file)
+     (concat user-emacs-directory "configuration.org")))
 #+end_src
 
 * Utility stuff
