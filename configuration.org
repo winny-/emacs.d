@@ -1377,6 +1377,14 @@ Export to hugo markdown.  Great for blogging.
     (org-previous-visible-heading 1)
     (org-meta-return))
 #+end_src
+*** ox-epub
+Quick and dirty publishing to e-readers.  So cozy.
+#+begin_src emacs-lisp
+  (use-package ox-epub
+    :ensure t
+    :demand t
+    :after ox)
+#+end_src
 ** Storing links
 Try =C-c l= =org-store-link= in a buffer.  Tested working in all file-backed
 buffers.  Works in Info buffers.  See [[info:org#Handling Links][org#Handling Links]].
