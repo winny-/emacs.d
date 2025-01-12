@@ -485,7 +485,11 @@ Maybe I should remove this.  Haven't used a Jade template for a long time.
     :after (lsp)
     :load-path "~/.emacs.d/site-packages/emacs-prisma-mode")
 #+end_src
-
+*** PHP
+#+begin_src emacs-lisp
+  (use-package php-mode
+    :ensure t)
+#+end_src
 ** Scala
 
 =scalpp= was a file extension I used for cpp prerocessed code.  =cool= was a
