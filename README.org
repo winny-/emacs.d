@@ -1,10 +1,11 @@
 * winny's personal .emacs.d
 
-  Things are messy and personal. This should read as an artifact of
-  how yet another Emacs user configures Emacs.
+[[file:misc/emacs-light.png]]
+[[file:misc/emacs-dark.png]]
 
-  Recently I redid my =init.el= as a literate programming org-mode file.  It
-  lives at [[file:configuration.org][configuration.org]].
+  Things are messy and personal. This should read as an artifact of
+  how yet another Emacs user configures Emacs.  Most code exists in org-mode
+  markup files.  Check out [[file:configuration.org][configuration.org]].
 
 * License
   Unless otherwise specified in the file or here, files are licensed
