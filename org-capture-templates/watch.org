@@ -1,0 +1,6 @@
+* PLANNED %?
+:PROPERTIES:
+:IMDB:
+:DATE: %u
+:END:
+

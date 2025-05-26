@@ -1210,6 +1210,9 @@ See:
              (file+datetree "~/files/writings/journal/journal.org")
              (file "~/.emacs.d/org-capture-templates/journal.org")
              :empty-lines 1)
+            ("w" "Watch list item" entry
+             (file+headline "~/files/notes/watch.org" "Org Capture")
+             (file "~/.emacs.d/org-capture-templates/watch.org"))
             ("t" "Todo list item" entry
              (file+headline "~/files/notes/todo.org" "Inbox")
              (file "~/.emacs.d/org-capture-templates/todo-item.org")))
