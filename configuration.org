@@ -729,12 +729,20 @@ The markdown markup language.
     (define-key markdown-mode-map (kbd "C-c C-'") 'markdown-edit-code-block))
 #+END_SRC
 ** Unison profiles
+:PROPERTIES:
+:ID:       895cfaae-d6b2-47f9-b284-89e61a0d80e1
+:END:
 The unison synchronization tool has a somewhat weird syntax, so I wrote a major
 mode to highlight it more accurately.
 
 #+BEGIN_SRC emacs-lisp
 (use-package unison)
 #+END_SRC
+** NetHack RC Major mode
+Based on [[id:895cfaae-d6b2-47f9-b284-89e61a0d80e1][conf-unison-mode]].  For NetHack RC files.  See [[https://nethackwiki.com/wiki/Options][Options - NetHack Wiki]].
+#+begin_src emacs-lisp
+  (use-package nethackrc-mode)
+#+end_src
 ** C mode
 *** All C-like
 I can't remember what this does.
