@@ -1184,6 +1184,7 @@ See:
 
 - [[info:org#Headlines][org#Headlines]]
 - [[info:org#Catching invisible edits][org#Catching invisible edits]]
+- [[info:org#Capture templates][org#Capture templates]]
 
 
 #+begin_src emacs-lisp
@@ -1200,14 +1201,14 @@ See:
           org-id-link-to-org-use-id 'create-if-interactive
           org-image-actual-width 450
           user-full-name "Winston Weinert (winny)"
-          user-mail-address "hello@winny.tech"
+          user-mail-address "orgmode@winny.tech"
           org-capture-templates
           '(("a" "Anything" entry
              (file+datetree "~/files/notes/unsorted.org")
              (file "~/.emacs.d/org-capture-templates/unsorted.org"))
-            ("j" "Journal Entry" plain
+            ("j" "Journal Entry" entry
              (file+datetree "~/files/writings/journal/journal.org")
-             "%?"
+             (file "~/.emacs.d/org-capture-templates/journal.org")
              :empty-lines 1)
             ("t" "Todo list item" entry
              (file+headline "~/files/notes/todo.org" "Inbox")

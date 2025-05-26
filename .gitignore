@@ -43,3 +43,4 @@ session.*
 /.lsp-session-v1
 /.dap-breakpoints
 /straight
+bookmarks
