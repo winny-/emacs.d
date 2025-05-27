@@ -1548,6 +1548,13 @@ with others how to find docuemantion.
 (bind-key "y" #'Info-copy-current-node-name Info-mode-map)
 #+END_SRC
 
+#+begin_src emacs-lisp
+  (use-package info-colors
+    :ensure t
+    :init
+    (add-hook 'Info-selection-hook 'info-colors-fontify-node))
+#+end_src
+
 ** RFC reader (irfc)
 In this repository.
 
