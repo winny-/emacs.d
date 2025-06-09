@@ -1081,7 +1081,11 @@ My favorite theme despite occasional low contrast.
     ;; valid dark/light mode detection method.  Not all computers work with this
     ;; major mode.  Eat the error and carry on.
     (condition-case dark-err
-        (auto-dark-mode 1)
+        (progn
+          (auto-dark-mode 1)
+          ;; Ensure Emacs uses light theme on startup (my default theme is a dark
+          ;; theme.)
+          (auto-dark--set-theme auto-dark--last-dark-mode-state))
       (error (message "Could not activate auto-dark-mode.  Carry on."))))
 #+end_src
 ** Helper to describe theme
