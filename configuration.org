@@ -1215,7 +1215,7 @@ See:
           user-full-name "Winston Weinert (winny)"
           user-mail-address "orgmode@winny.tech"
           org-capture-templates
-          '(("a" "Anything" entry
+          '(("n" "Note" entry
              (file+datetree "~/files/notes/unsorted.org")
              (file "~/.emacs.d/org-capture-templates/unsorted.org"))
             ("j" "Journal Entry" entry
