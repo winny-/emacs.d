@@ -109,6 +109,20 @@ Hardcode some settings that I wish to never change in any Emacs setup.
   (setq-default line-spacing .15)
 #+end_src
 
+** display-buffer-alist
+See [[https://old.reddit.com/r/emacs/comments/179t67l/window_management_share_your_displaybufferalist/][Window Management - share your display-buffer-alist : emacs]]
+#+begin_src emacs-lisp
+  (add-to-list 'display-buffer-alist
+               '("\\*Man"
+                 (display-buffer-same-window)))
+  (add-to-list 'display-buffer-alist
+               '("\\*Calendar*"
+                 (display-buffer-at-bottom)))
+  (add-to-list 'display-buffer-alist
+               '("\\CAPTURE-.*\.org"
+                 (display-buffer-same-window)))
+#+end_src
+
 * Set up load path
 This way packages can be installed from submodules or tracked directly in my
 git repository.
@@ -1511,7 +1525,9 @@ you are good to go.
            ("C-c u" . magit-rev-parent))
     :init
     (fset 'magit-rev-parent
-          (kmacro-lambda-form [?\M-< ?\C-s ?p ?a ?r ?e ?n ?t ?: return return] 0 "%d")))
+          (kmacro-lambda-form [?\M-< ?\C-s ?p ?a ?r ?e ?n ?t ?: return return] 0 "%d"))
+    (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-topleft-v1
+          magit-bury-buffer-function 'magit-restore-window-configuration))
 #+END_SRC
 
 ** Git LFS
@@ -1559,16 +1575,14 @@ with others how to find docuemantion.
     (add-hook 'Info-selection-hook 'info-colors-fontify-node))
 #+end_src
 
-** RFC reader (irfc)
-In this repository.
+** RFC reader (rfc)
 
 #+BEGIN_SRC emacs-lisp
-  (use-package irfc
-    :demand t
-    :hook (irfc-mode
-           . (lambda ()
-               (read-only-mode)           ; Make read only.
-               (show-paren-local-mode -1))))
+  (use-package rfc-mode
+    :ensure t
+    :init
+    (add-to-list 'display-buffer-alist '(("\\\*rfc.*")
+                                         (display-buffer-reuse-window))))
 #+END_SRC
 
 ** Better =describe-*=
@@ -2641,6 +2655,40 @@ Great for experimenting with keyboard shortcuts.
     (interactive "D")
     (setq default-directory target))
 #+end_src
+
+* LLM / GPT
+
+** gptel
+
+Check out this introduction --- [[https://www.youtube.com/watch?v=bsRnh_brggM&t=789s][Every LLM in Emacs, with gptel - YouTube]].
+
+Purportedly *not* a free thing.  Purportedly you need to pay separately from
+ChatGPT Plus/Pro.  See [[https://openai.com/api/pricing/][Pricing | OpenAI]].  Probably consider a local model
+before putting any money into this.
+
+#+begin_src emacs-lisp
+  (use-package gptel
+    :ensure t)
+#+end_src
+
+*** ⚠ Not quite finished yet ⚠
+
+Next, you'll want to set up [[info:auth#Help for users][auth sources]] (or directly set variable =gptel-api-key=).
+
+Create [[file:~/.netrc][=~/.netrc=]] with permissions so only your current user may read the file.
+(Fix permissions: =(chmod "~/.netrc" #o600)=.)  Next create a =machine= entry
+for your LLM API hostname.  Generate an API Key for ChatGPT [[https://platform.openai.com/settings/organization/api-keys][here]].
+
+#+begin_src authinfo :tangle no
+  # This file contains secrets!  Beware!
+
+  # Example for ChatGPT.
+  machine api.openai.com
+    user apikey
+    secret YOUR-API-KEY-HERE
+#+end_src
+
+Not working?  Eval =(auth-source-forget-all-cached)= and try again.
 
 * Narrow
 Enable =narrow-to-region=
