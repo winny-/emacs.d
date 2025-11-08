@@ -112,6 +112,7 @@ Hardcode some settings that I wish to never change in any Emacs setup.
 ** display-buffer-alist
 See [[https://old.reddit.com/r/emacs/comments/179t67l/window_management_share_your_displaybufferalist/][Window Management - share your display-buffer-alist : emacs]]
 #+begin_src emacs-lisp
+  (setq display-buffer-alist nil)
   (add-to-list 'display-buffer-alist
                '("\\*Man"
                  (display-buffer-same-window)))
@@ -1214,38 +1215,41 @@ See:
 
 
 #+begin_src emacs-lisp
-  (use-package org
-    :pin gnu
-    :ensure t
-    :init
-    (setq org-special-ctrl-a t
-          org-special-ctrl-k t
-          org-special-ctrl-k 'error
-          org-catch-invisible-edits t
-          org-startup-folded 'fold
-          ;; https://emacs.stackexchange.com/questions/64222/insert-link-to-a-heading-with-id
-          org-id-link-to-org-use-id 'create-if-interactive
-          org-image-actual-width 450
-          user-full-name "Winston Weinert (winny)"
-          user-mail-address "orgmode@winny.tech"
-          org-capture-templates
-          '(("n" "Note" entry
-             (file+datetree "~/files/notes/unsorted.org")
-             (file "~/.emacs.d/org-capture-templates/unsorted.org"))
-            ("j" "Journal Entry" entry
-             (file+datetree "~/files/writings/journal/journal.org")
-             (file "~/.emacs.d/org-capture-templates/journal.org")
-             :empty-lines 1)
-            ("w" "Watch list item" entry
-             (file+headline "~/files/notes/watch.org" "Org Capture")
-             (file "~/.emacs.d/org-capture-templates/watch.org"))
-            ("t" "Todo list item" entry
-             (file+headline "~/files/notes/todo.org" "Inbox")
-             (file "~/.emacs.d/org-capture-templates/todo-item.org")))
-          org-default-notes-file "~/files/notes/unsorted.org"))
-  (use-package org-contrib
-    :ensure t
-    :after org)
+      (use-package org
+        :pin gnu
+        :ensure t
+        :init
+        (setq org-special-ctrl-a t
+              org-special-ctrl-k t
+              org-special-ctrl-k 'error
+              org-catch-invisible-edits t
+              org-startup-folded 'fold
+              ;; https://emacs.stackexchange.com/questions/64222/insert-link-to-a-heading-with-id
+              org-id-link-to-org-use-id 'create-if-interactive
+              org-image-actual-width 450
+              user-full-name "Winston Weinert (winny)"
+              user-mail-address "orgmode@winny.tech"
+              org-capture-templates
+              '(("n" "Note" entry
+                 (file+datetree "~/files/notes/unsorted.org")
+                 (file "~/.emacs.d/org-capture-templates/unsorted.org"))
+                ("j" "Journal Entry" entry
+                 (file+datetree "~/files/writings/journal/journal.org")
+                 (file "~/.emacs.d/org-capture-templates/journal.org")
+                 :empty-lines 1)
+                ("w" "Watch list item" entry
+                 (file+headline "~/files/notes/watch.org" "Org Capture")
+                 (file "~/.emacs.d/org-capture-templates/watch.org"))
+                ("b" "Blog post" entry
+                 (file+headline "~/files/writings/blogs.org" "Org Capture")
+                 (file "~/.emacs.d/org-capture-templates/blog.org"))
+                ("t" "Todo list item" entry
+                 (file+headline "~/files/notes/todo.org" "Inbox")
+                 (file "~/.emacs.d/org-capture-templates/todo-item.org")))
+              org-default-notes-file "~/files/notes/unsorted.org"))
+      (use-package org-contrib
+        :ensure t
+        :after org)
 #+end_src
 
 ** org-cliplink

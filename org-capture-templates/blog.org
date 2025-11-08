@@ -1,0 +1,7 @@
+* %^{title} %^g
+:PROPERTIES:
+:EXPORT_DATE: %(winny/iso-8601)
+:EXPORT_FILE_NAME: %^{filename}
+:END:
+
+  %?
