@@ -44,3 +44,4 @@ session.*
 /.dap-breakpoints
 /straight
 bookmarks
+/ielm-history.eld
