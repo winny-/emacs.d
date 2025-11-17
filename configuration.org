@@ -1079,12 +1079,7 @@ My favorite theme despite occasional low contrast.
   (use-package tao-theme
     :ensure t)
 #+end_src
-** A facility to streamline theme selection
-#+BEGIN_SRC emacs-lisp
-  (load "switch-theme.el" t t)
-  (setq winny/default-theme 'modus-vivendi)
-#+END_SRC
-** Auto-Dark for Emacs
+** Configure automatic light & dark themes for Emacs
 [[https://github.com/LionyxML/auto-dark-emacs][GitHub - LionyxML/auto-dark-emacs: Auto-Dark-Emacs is an auto changer between...]]
 #+begin_src emacs-lisp
   (use-package auto-dark
@@ -1092,16 +1087,7 @@ My favorite theme despite occasional low contrast.
     :custom
     (auto-dark-themes '((modus-vivendi) (modus-operandi)))
     :init
-    ;; This major mode initialization will signal an error if it cannot find a
-    ;; valid dark/light mode detection method.  Not all computers work with this
-    ;; major mode.  Eat the error and carry on.
-    (condition-case dark-err
-        (progn
-          (auto-dark-mode 1)
-          ;; Ensure Emacs uses light theme on startup (my default theme is a dark
-          ;; theme.)
-          (auto-dark--set-theme auto-dark--last-dark-mode-state))
-      (error (message "Could not activate auto-dark-mode.  Carry on."))))
+    (auto-dark-mode 1))
 #+end_src
 ** Helper to describe theme
 #+BEGIN_SRC emacs-lisp
