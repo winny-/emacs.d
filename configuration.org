@@ -445,12 +445,6 @@ web-mode is pretty great.  It supports all the cool template types.
   ;;                            (setq web-mode-code-indent-offset 2)))
     )
 #+END_SRC
-*** TSX/JSX
-#+begin_src emacs-lisp
-  (straight-use-package '(tsi :type git :host github :repo "orzechowskid/tsi.el"))
-
-  (straight-use-package '(tsx-mode :type git :host github :repo "orzechowskid/tsx-mode.el" :branch "emacs28"))
-#+end_src
 *** Svelte
 A pretty cool framework for modern component web applications.
 
