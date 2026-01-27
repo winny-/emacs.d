@@ -307,6 +307,13 @@ I install this via my distro's package manager, so no =use-package= here.
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq word-wrap t)))
 #+END_SRC
+
+** Asciidoc
+#+begin_src emacs-lisp
+  (use-package adoc-mode
+    :ensure t)
+#+end_src
+
 ** Lua
 #+BEGIN_SRC emacs-lisp
 (use-package lua-mode
