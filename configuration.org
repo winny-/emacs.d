@@ -951,7 +951,7 @@ excessively long delay (tens of seconds) in a directory with 4000 entries.
     (add-hook 'dired-mode-hook 'auto-revert-mode))
 #+END_SRC
 
-*** Add =C-c n= to create an empty file
+*** =C-c n= creates an empty file
 #+BEGIN_SRC emacs-lisp
 (eval-after-load 'dired
   '(progn
@@ -978,6 +978,21 @@ If FILE already exists, signal an error."
            (dired-add-file new)
            (dired-move-to-filename))))))
 #+END_SRC
+
+*** =C-.= enqueues mpv playback
+
+#+BEGIN_SRC emacs-lisp
+  (eval-after-load 'dired
+    '(progn
+       (define-key dired-mode-map (kbd "C-.") 'winny/dired-enqueue-mpv)
+       (defun winny/dired-enqueue-mpv ()
+         "Enuqueue to MPV"
+         (interactive)
+         (dired-do-shell-command "mpv-add *" nil (dired-get-marked-files)))))
+#+END_SRC
+
+
+
 ** dired+
 A better dired.
 
