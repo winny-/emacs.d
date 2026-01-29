@@ -567,7 +567,34 @@ being pretty strict about that sort of thing.  So that's what the hook does.
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :ensure t
-    :bind-keymap (("C-'" . lsp-command-map)))
+    :bind-keymap (("C-'" . lsp-command-map))
+    :init
+    (add-hook 'c-mode-hook #'lsp-deferred)
+    (add-hook 'c++-mode-hook #'lsp-deferred)
+    (setq lsp-keep-workspace-alive nil))
+#+end_src
+*** And lsp-ui for navigation
+#+begin_src emacs-lisp
+  (use-package lsp-ui
+    :ensure t
+    :after lsp-mode
+    :config
+    (setq lsp-ui-imenu-enable t
+          lsp-ui-imenu-auto-refresh t)
+    :bind (:map lsp-ui-imenu-mode-map
+              ("n" . next-line)
+              ("p" . previous-line))
+    :init
+    (defun winny/lsp-ui-imenu-refresh ()
+                "Refresh lsp-ui-imenu."
+                (when (and (bound-and-true-p lsp-mode)
+                           (get-buffer lsp-ui-imenu-buffer-name))
+                  (condition-case err (lsp-ui-imenu--refresh)
+                    (imenu-unavailable    ; Prevent imenu from soft-locking Emacs.
+                     ;; TODO close window that contained lsp-ui-imenu's buffer
+                     nil))))
+    (add-hook 'buffer-list-update-hook #'winny/lsp-ui-imenu-refresh)
+    (add-hook 'lsp-mode-hook #'winny/lsp-ui-imenu-refresh))
 #+end_src
 ** Packaging language modes
 
@@ -1182,6 +1209,25 @@ When ON-QUIT is non-nil toggle debug on quit instead."
 
 (global-set-key (kbd "C-x \\") 'winny/toggle-debug-on-error-or-quit)
 #+END_SRC
+
+** Panic key
+Rescue Emacs from soft-locking.  Typically =C-g= or =C-]= spammed enough
+rescues Emacs.  Apparently hooking into buffer management can break buffer
+switching, therefore break most functionality including the debugger.  The
+easiest solution is to prune the errant code and restart Emacs.  Sometimes I
+just want to regain control, though 🦾!
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-M-\\")
+                  (defun winny/rescue-emacs ()
+                    "REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEESCUE EEEEEEMACS"
+                    (interactive)
+                    (setq post-command-hook nil
+                          pre-command-hook nil
+                          after-change-functions nil
+                          buffer-list-update-hook nil)
+                    (message "RESCUE: major hooks nuked for this session.  Run M-x winny/reload-configuration RET to restore.")))
+#+end_src
+
 * org-mode
 Ye ole fabulous productivity tool.
 
