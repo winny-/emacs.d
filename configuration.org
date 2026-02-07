@@ -193,13 +193,19 @@ Load the locally maintained is-wsl package which is used later in this file.
 Give the desktop window title a nicer look.
 
 #+BEGIN_SRC emacs-lisp
-(setq-default frame-title-format '("Emacs! "
-                                   (:eval (if buffer-file-name
-                                            (replace-regexp-in-string (regexp-quote (or (getenv "HOME") "")) "~" buffer-file-name)
-                                            (buffer-name)))
-                                   " [%m] { "
-                                   (:eval (string-join (mapcar #'(lambda (w) (buffer-name (window-buffer w))) (window-list)) ", "))
-                                   " }"))
+  (setq-default frame-title-format
+                '("Emacs! "
+                  (:eval
+                   (if buffer-file-name
+                     (replace-regexp-in-string
+                      (regexp-quote (or (getenv "HOME") ""))
+                      "~"
+                      buffer-file-name)
+                     (buffer-name)))
+                  " [%m]"
+                  (:eval
+                   (if (files--buffers-needing-to-be-saved nil)
+                     " *DIRTY*"))))
 #+END_SRC
 
 * Backup files
