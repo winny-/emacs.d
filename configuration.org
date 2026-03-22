@@ -330,13 +330,19 @@ I install this via my distro's package manager, so no =use-package= here.
 
 ** Python
 
-I've given up on jedi.  I am not a fan.  It doesn't work like you expect it to,
-and is very moody.  TODO: look into setting up Python LSP.
-
 #+BEGIN_SRC emacs-lisp
   (use-package python-mode
     :ensure t)
 #+END_SRC
+
+** Cython
+
+#+begin_src emacs-lisp
+  (use-package cython-mode
+    :ensure t
+    :init
+    (add-to-list 'auto-mode-alist '("\\.py[xd]\\'" . cython-mode)))
+#+end_src
 
 ** Ruby
 The default ruby mode is not very nice.  So use =enh-ruby-mode=.
