@@ -1570,11 +1570,13 @@ Use =M-g t= to toggle the fold at point.
 
 * VCS/Git support
 
-When following a symlink into a git repo, display a warning, but don't prompt
-if it is okay.
+Always follow symlinks.  Resolve =buffer-file-name= and =default-directory=.
+Shows =magit-status= where my dotfiles git repository is when accessing
+=~/bin/*= files directly.
 
 #+begin_src emacs-lisp
-  (setq vc-follow-symlinks nil)
+  (setq vc-follow-symlinks t
+        find-file-visit-truename t)
 #+end_src
 
 ** Magit
