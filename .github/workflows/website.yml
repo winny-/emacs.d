@@ -20,7 +20,7 @@ jobs:
 
       - name: Publish
         run: |
-          emacs --batch --script ./misc/publish.el
+          emacs-nox --batch --script ./misc/publish.el
 
       - name: Publish to GitHub Pages
         uses: actions/upload-pages-artifact@v3
