@@ -20,6 +20,9 @@ jobs:
 
       - name: Publish
         run: |
+          dpkg -l | awk '$1 == "ii" && $2 ~ /emacs|elpa/'
+          echo
+          echo
           emacs-nox --batch --script ./misc/publish.el
 
       - name: Publish to GitHub Pages
