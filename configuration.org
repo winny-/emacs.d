@@ -1287,7 +1287,7 @@ See:
           ;; https://emacs.stackexchange.com/questions/64222/insert-link-to-a-heading-with-id
           org-id-link-to-org-use-id 'create-if-interactive
           org-image-actual-width 450
-          user-full-name "Winston Weinert (winny)"
+          user-full-name "Winston James (winny)"
           user-mail-address "orgmode@winny.tech"
           org-capture-templates
           '(("n" "Note" entry
