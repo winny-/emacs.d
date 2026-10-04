@@ -1,13 +1,4 @@
-
-# Table of Contents
-
-1.  [This project has moved to GitLab](#orgf62e47e)
-2.  [winny's personal .emacs.d](#orgdff7935)
-3.  [License](#orgb83e3d6)
-
-
-
-<a id="orgf62e47e"></a>
+<a id="org5e912db"></a>
 
 # This project has moved to GitLab
 
@@ -37,7 +28,7 @@ informing impacted users.  👎 GitHub 👎
 👎 GitHub 👎
 
 
-<a id="orgdff7935"></a>
+<a id="orgd8449b1"></a>
 
 # winny's personal .emacs.d
 
@@ -53,7 +44,7 @@ markup files.
 See [configuration.org](configuration.md).
 
 
-<a id="orgb83e3d6"></a>
+<a id="orge190881"></a>
 
 # License
 
