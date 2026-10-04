@@ -3,9 +3,13 @@
 [[file:misc/emacs-light.png]]
 [[file:misc/emacs-dark.png]]
 
-  Things are messy and personal. This should read as an artifact of
-  how yet another Emacs user configures Emacs.  Most code exists in org-mode
-  markup files.  Check out [[file:configuration.org][configuration.org]].
+Check out [[file:configuration.org][configuration.org]].
+
+Things are messy and personal. This should read as an artifact of
+how yet another Emacs user configures Emacs.  Most code exists in org-mode
+markup files.
+
+See [[file:configuration.org][configuration.org]].
 
 * License
   Unless otherwise specified in the file or here, files are licensed
