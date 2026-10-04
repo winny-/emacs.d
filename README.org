@@ -1,3 +1,30 @@
+#+toc: nil
+* This project has moved to GitLab
+Check it out [[https://gitlab.com/winny/emacs-d][here]].
+
+Had issues coaxing GitHub actions to emit *any* diagnostic output.  I only see
+error codes.  What to do with such a destructive DevEx besides migrate off
+GitHub?  👎 GitHub 👎
+
+It was also very unkind that they removed the org-mode text renderer without
+informing impacted users.  👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
 * winny's personal .emacs.d
 
 [[file:misc/emacs-light.png]]

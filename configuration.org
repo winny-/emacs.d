@@ -2,6 +2,33 @@
 #+startup: indent content
 #+property: header-args :results silent
 
+
+* This project has moved to GitLab
+Check it out [[https://gitlab.com/winny/emacs-d][here]].
+
+Had issues coaxing GitHub actions to emit *any* diagnostic output.  I only see
+error codes.  What to do with such a destructive DevEx besides migrate off
+GitHub?  👎 GitHub 👎
+
+It was also very unkind that they removed the org-mode text renderer without
+informing impacted users.  👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
+👎 GitHub 👎
+
 * Introduction
 This is an literate programming =init.el=.  Read Harry's [[https://harryrschwartz.com/2016/02/15/switching-to-a-literate-emacs-configuration][brief tutorial]] on how
 this works and how to do it yourself.
