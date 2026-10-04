@@ -1,0 +1,26 @@
+stages:
+  - test
+  - deploy
+
+pre-commit:
+  stage: test
+  image: registry.gitlab.com/winny/pre-commit-docker:latest
+  variables:
+    PRE_COMMIT_HOME: .pre-commit-cache
+  cache:
+    - key:
+        files: [.pre-commit-config.yaml]
+      paths: [.pre-commit-cache]
+  script:
+    - pre-commit run -a
+
+publish:
+  stage: deploy
+  image: debian:trixie
+  script:
+    - apt-get update
+    - apt-get install -y emacs-nox
+    - emacs --batch --script publish.el
+  artifacts:
+    paths:
+      - public/
